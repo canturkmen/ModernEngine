@@ -1,0 +1,6 @@
+﻿  SandboxApp.cpp
+E:\dev\ModernEngine\ModernEngine\src\ModernEngine\Log.h(18,54): warning C4251: 'ModernEngine::Log::s_CoreLogger': class 'std::shared_ptr<spdlog::logger>' needs to have dll-interface to be used by clients of class 'ModernEngine::Log'
+E:\dev\ModernEngine\ModernEngine\vendor\spdlog\include\spdlog\details\registry.h(34): message : see declaration of 'std::shared_ptr<spdlog::logger>'
+E:\dev\ModernEngine\ModernEngine\src\ModernEngine\Log.h(19,56): warning C4251: 'ModernEngine::Log::s_ClientLogger': class 'std::shared_ptr<spdlog::logger>' needs to have dll-interface to be used by clients of class 'ModernEngine::Log'
+E:\dev\ModernEngine\ModernEngine\vendor\spdlog\include\spdlog\details\registry.h(34): message : see declaration of 'std::shared_ptr<spdlog::logger>'
+  Sandbox.vcxproj -> E:\dev\ModernEngine\bin\Debug-windows-{cfg.architecture}\Sandbox\Sandbox.exe
