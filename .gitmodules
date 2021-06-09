@@ -1,0 +1,3 @@
+[submodule "ModernEngine/vendor/spdlog"]
+	path = ModernEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog
