@@ -12,17 +12,17 @@ project "ModernEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("intermediate/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "mnpch.h"
-	pchsource "ModernEngine/src/mnpch.cpp"
-
 	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-	includedirs {"%{prj.name}/vendor/spdlog/include"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include"}
+
+	pchheader "mnpch.h"
+	pchsource "ModernEngine/src/mnpch.cpp"
 
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "on"
-		systemversion "10.0"
+		systemversion "latest"
 
 		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL"}
 
@@ -68,7 +68,7 @@ project "Sandbox"
 	filter "system:windows"
 		cppdialect "C++17"
 		staticruntime "On"
-		systemversion "10.0"
+		systemversion "latest"
 
 		defines
 		{

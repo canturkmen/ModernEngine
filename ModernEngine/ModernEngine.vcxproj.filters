@@ -25,6 +25,12 @@
     <ClInclude Include="src\ModernEngine\Events\Event.h">
       <Filter>ModernEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Events\KeyEvent.h">
+      <Filter>ModernEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Events\MouseEvent.h">
+      <Filter>ModernEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Log.h">
       <Filter>ModernEngine</Filter>
     </ClInclude>
