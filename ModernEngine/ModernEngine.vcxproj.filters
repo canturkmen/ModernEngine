@@ -4,6 +4,9 @@
     <Filter Include="ModernEngine">
       <UniqueIdentifier>{60620D60-4CC5-9C04-F54A-D5BAE18C6887}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ModernEngine\Events">
+      <UniqueIdentifier>{44A210C7-B003-EED4-3971-3487A5D12494}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModernEngine.h" />
@@ -16,9 +19,16 @@
     <ClInclude Include="src\ModernEngine\EntryPoint.h">
       <Filter>ModernEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h">
+      <Filter>ModernEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Events\Event.h">
+      <Filter>ModernEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Log.h">
       <Filter>ModernEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\mnpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
@@ -27,5 +37,6 @@
     <ClCompile Include="src\ModernEngine\Log.cpp">
       <Filter>ModernEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\mnpch.cpp" />
   </ItemGroup>
 </Project>

@@ -55,28 +55,29 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-{cfg.architecture}\ModernEngine\</OutDir>
-    <IntDir>..\intermediateDebug-windows-{cfg.architecture}\ModernEngine\</IntDir>
+    <OutDir>..\bin\Debug-windows-x86_64\ModernEngine\</OutDir>
+    <IntDir>..\intermediate\Debug-windows-x86_64\ModernEngine\</IntDir>
     <TargetName>ModernEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release-windows-{cfg.architecture}\ModernEngine\</OutDir>
-    <IntDir>..\intermediateRelease-windows-{cfg.architecture}\ModernEngine\</IntDir>
+    <OutDir>..\bin\Release-windows-x86_64\ModernEngine\</OutDir>
+    <IntDir>..\intermediate\Release-windows-x86_64\ModernEngine\</IntDir>
     <TargetName>ModernEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-{cfg.architecture}\ModernEngine\</OutDir>
-    <IntDir>..\intermediateDist-windows-{cfg.architecture}\ModernEngine\</IntDir>
+    <OutDir>..\bin\Dist-windows-x86_64\ModernEngine\</OutDir>
+    <IntDir>..\intermediate\Dist-windows-x86_64\ModernEngine\</IntDir>
     <TargetName>ModernEngine</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>mnpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>MN_PLATFORM_WINDOWS;MN_BUILD_DLL;MN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -88,15 +89,16 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>..\bin\Debug-windows-{cfg.architecture}\ModernEngine\ModernEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Debug-windows-x86_64\ModernEngine\ModernEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Debug-windows-{cfg.architecture}\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Debug-windows-{cfg.architecture}\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>mnpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>MN_PLATFORM_WINDOWS;MN_BUILD_DLL;MN_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -112,15 +114,16 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\Release-windows-{cfg.architecture}\ModernEngine\ModernEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Release-windows-x86_64\ModernEngine\ModernEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Release-windows-{cfg.architecture}\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Release-windows-{cfg.architecture}\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>mnpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>MN_PLATFORM_WINDOWS;MN_BUILD_DLL;MN_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -136,10 +139,10 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>..\bin\Dist-windows-{cfg.architecture}\ModernEngine\ModernEngine.lib</ImportLibrary>
+      <ImportLibrary>..\bin\Dist-windows-x86_64\ModernEngine\ModernEngine.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Dist-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Dist-windows-{cfg.architecture}\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-{cfg.architecture}\ModernEngine\ModernEngine.dll ..\bin\Dist-windows-{cfg.architecture}\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Dist-windows-x86_64\ModernEngine\ModernEngine.dll\ (xcopy /Q /E /Y /I ..\bin\Dist-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Dist-windows-x86_64\ModernEngine\ModernEngine.dll ..\bin\Dist-windows-x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -147,11 +150,17 @@
     <ClInclude Include="src\ModernEngine\Application.h" />
     <ClInclude Include="src\ModernEngine\Core.h" />
     <ClInclude Include="src\ModernEngine\EntryPoint.h" />
+    <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\ModernEngine\Events\Event.h" />
     <ClInclude Include="src\ModernEngine\Log.h" />
+    <ClInclude Include="src\mnpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Log.cpp" />
+    <ClCompile Include="src\mnpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

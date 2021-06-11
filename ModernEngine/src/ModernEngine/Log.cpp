@@ -1,3 +1,4 @@
+#include "mnpch.h"
 #include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
@@ -15,5 +16,4 @@ namespace ModernEngine {
 		s_ClientLogger = spdlog::stderr_color_mt("APP");
 		s_ClientLogger->set_level(spdlog::level::trace);
 	}
-
 }
