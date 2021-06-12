@@ -37,14 +37,17 @@ project "ModernEngine"
 
 	filter "configurations:Debug" 
 		defines "MN_DEBUG"
+		buildoptions "/MDd"
 		symbols "on"
 
 	filter "configurations:Release"
 		defines "MN_RELEASE"
+		buildoptions "/MD"
 		optimize "on"
 
 	filter "configurations:Dist"
 		defines "MN_DIST"
+		buildoptions "/MD"
 		optimize "on"
 
 project "Sandbox"

@@ -7,6 +7,12 @@
     <Filter Include="ModernEngine\Events">
       <UniqueIdentifier>{44A210C7-B003-EED4-3971-3487A5D12494}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ModernEngine.h" />
@@ -31,21 +37,39 @@
     <ClInclude Include="src\ModernEngine\Events\MouseEvent.h">
       <Filter>ModernEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Layer.h">
+      <Filter>ModernEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\LayerStack.h">
+      <Filter>ModernEngine</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Log.h">
       <Filter>ModernEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Window.h">
+      <Filter>ModernEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\mnpch.h" />
-    <ClInclude Include="src\ModernEngine\Window.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
       <Filter>ModernEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModernEngine\Layer.cpp">
+      <Filter>ModernEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\LayerStack.cpp">
+      <Filter>ModernEngine</Filter>
+    </ClCompile>
     <ClCompile Include="src\ModernEngine\Log.cpp">
       <Filter>ModernEngine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\mnpch.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>
