@@ -18,10 +18,10 @@ namespace ModernEngine {
 		int m_Button;
 	};
 
-	class MN_API MouseButtonPressed : public MouseButtonEvent
+	class MN_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressed(int button)
+		MouseButtonPressedEvent(int button)
 			:MouseButtonEvent(button) {}
 
 		EVENT_CLASS_TYPE(MouseButtonPressed)
@@ -34,10 +34,10 @@ namespace ModernEngine {
 		}
 	};
 
-	class MN_API MouseButtonReleased : public MouseButtonEvent
+	class MN_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleased(int button)
+		MouseButtonReleasedEvent(int button)
 			:MouseButtonEvent(button) {}
 
 		EVENT_CLASS_TYPE(MouseButtonReleased)
