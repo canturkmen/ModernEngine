@@ -6,8 +6,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "ModernEngine/vendor/GLFW/include"
+IncludeDir["Glad"] = "ModernEngine/vendor/GLAD/include"
 
 include "ModernEngine/vendor/GLFW"
+include "ModernEngine/vendor/Glad"
 
 project "ModernEngine"
 	location "ModernEngine"
@@ -19,9 +21,9 @@ project "ModernEngine"
 
 	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}"}
 
-	links { "GLFW", "opengl32.lib" }
+	links { "GLFW", "Glad", "opengl32.lib",}
 
 	pchheader "mnpch.h"
 	pchsource "ModernEngine/src/mnpch.cpp"
@@ -31,7 +33,7 @@ project "ModernEngine"
 		staticruntime "on"
 		systemversion "latest"
 
-		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL"}
+		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL", "GLFW_INCLUDE_NONE"}
 
 		postbuildcommands {("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")}
 
