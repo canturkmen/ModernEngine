@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "ModernEngine/Log.h"
+
 #ifdef MN_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

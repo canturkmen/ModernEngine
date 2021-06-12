@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "ModernEngine/Core.h"
 
 namespace ModernEngine {
 
@@ -66,7 +66,7 @@ namespace ModernEngine {
 		Event& m_Event;
 	};
 
-	std::ostream& operator<<(std::ostream& os, const Event& e)
+	inline std::ostream& operator<<(std::ostream& os, const Event& e)
 	{
 		return os << e.Debug();
 	}

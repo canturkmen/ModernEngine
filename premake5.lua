@@ -4,6 +4,11 @@ workspace "ModernEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "ModernEngine/vendor/GLFW/include"
+
+include "ModernEngine/vendor/GLFW"
+
 project "ModernEngine"
 	location "ModernEngine"
 	kind "SharedLib"
@@ -14,7 +19,9 @@ project "ModernEngine"
 
 	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}"}
+
+	links { "GLFW", "opengl32.lib" }
 
 	pchheader "mnpch.h"
 	pchsource "ModernEngine/src/mnpch.cpp"

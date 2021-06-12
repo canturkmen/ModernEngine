@@ -1,15 +1,14 @@
 #include "mnpch.h"
 #include "Application.h"
 #include "Log.h"
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
+
+#include "GLFW/glfw3.h"
 
 namespace ModernEngine {
 
 	Application::Application()
 	{
-
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -19,22 +18,11 @@ namespace ModernEngine {
 
 	void Application::Run()
 	{
-		WindowCloseEvent CloseEvent;
-		KeyPressedEvent PressedEvent(67, 2);
-		MouseMovedEvent MovedEvent(20, 40);
-
-		if (CloseEvent.IsInCategory(EventCategoryApplication) || CloseEvent.IsInCategory(EventCategoryInput))
-			MN_CORE_TRACE(CloseEvent);
-
-		if (PressedEvent.IsInCategory(EventCategoryKeyboard) || PressedEvent.IsInCategory(EventCategoryInput))
-			MN_CORE_INFO(PressedEvent);
-
-		if (MovedEvent.IsInCategory(EventCategoryKeyboard))
-			MN_CORE_TRACE(MovedEvent);
-		else
-			MN_CORE_ERROR("Wrong event category !");
-
-		while (true);
+		while (m_Running)
+		{
+			glClearColor(0, 0, 1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+			m_Window->OnUpdate();
+		}
 	}
-
 }

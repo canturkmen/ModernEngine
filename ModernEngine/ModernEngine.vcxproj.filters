@@ -35,6 +35,8 @@
       <Filter>ModernEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\mnpch.h" />
+    <ClInclude Include="src\ModernEngine\Window.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
@@ -44,5 +46,6 @@
       <Filter>ModernEngine</Filter>
     </ClCompile>
     <ClCompile Include="src\mnpch.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>
