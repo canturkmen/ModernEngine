@@ -91,12 +91,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "MN_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "MN_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "MN_DIST"
+		buildoptions "/MD"
 		optimize "On"

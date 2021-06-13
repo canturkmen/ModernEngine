@@ -9,7 +9,7 @@ namespace ModernEngine {
 		None = 0,
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
@@ -45,14 +45,16 @@ namespace ModernEngine {
 	class EventDispatcher
 	{
 		template<typename T>
-		using EventFunc = std::function<bool(T&)>;
-
+		using EventFn = std::function<bool(T&)>;
 	public:
-		EventDispatcher(Event& e)
-			: m_Event(e) {}
+		EventDispatcher(Event& event)
+			: m_Event(event)
+		{
+
+		}
 
 		template<typename T>
-		bool Dispatch(EventFunc<T> func)
+		bool Dispatch(EventFn<T> func)
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
@@ -61,7 +63,6 @@ namespace ModernEngine {
 			}
 			return false;
 		}
-
 	private:
 		Event& m_Event;
 	};

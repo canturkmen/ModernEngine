@@ -2,7 +2,6 @@
 
 #include "Core.h"
 #include "Window.h"
-#include "ImGui/ImGuiLayer.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 
@@ -26,7 +25,7 @@ namespace ModernEngine {
 	private:
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
-		bool CloseWindowsWindow(WindowCloseEvent e);
+		bool OnCloseWindow(WindowCloseEvent& e);
 
 		LayerStack m_LayerStack;
 

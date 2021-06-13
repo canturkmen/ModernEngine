@@ -54,4 +54,20 @@ namespace ModernEngine {
 			return ss.str();
 		}
 	};
+
+	class MN_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keycode)
+			: KeyEvent(keycode) {}
+
+		EVENT_CLASS_TYPE(KeyTyped)
+
+		std::string Debug() const override
+		{
+			std::stringstream ss;
+			ss << "KeyTypedEvent: " << m_KeyCode;
+			return ss.str();
+		}
+	};
 }

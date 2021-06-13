@@ -6,7 +6,7 @@
 
 namespace ModernEngine {
 
-	#define	BIND_EVENT_FN(x)  std::bind(&Application::x, this, std::placeholders::_1)
+	#define BIND_EVENT_FN(x)  std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_AppInstance = nullptr;
 
@@ -38,11 +38,9 @@ namespace ModernEngine {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(CloseWindowsWindow));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnCloseWindow));
 
-		MN_CORE_TRACE("{0}", e);
-
-		for (std::vector<Layer*>::iterator it = m_LayerStack.begin(); it != m_LayerStack.begin();)
+		for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
 			if (e.m_Handled)
@@ -64,7 +62,7 @@ namespace ModernEngine {
 		}
 	}
 
-	bool Application::CloseWindowsWindow(WindowCloseEvent e)
+	bool Application::OnCloseWindow(WindowCloseEvent& e)
 	{
 		m_Running = false;
 		return true;
