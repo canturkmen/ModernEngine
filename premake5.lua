@@ -1,5 +1,6 @@
 workspace "ModernEngine"
 	architecture "x64"
+	startproject "Sandbox"
 	configurations {"Debug", "Release", "Dist"}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -9,14 +10,20 @@ IncludeDir["GLFW"] = "ModernEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "ModernEngine/vendor/GLAD/include"
 IncludeDir["ImGui"] = "ModernEngine/vendor/imgui"
 
+
+group "Dependencies"
+
 include "ModernEngine/vendor/GLFW"
 include "ModernEngine/vendor/Glad"
 include "ModernEngine/vendor/imgui"
+
+group ""
 
 project "ModernEngine"
 	location "ModernEngine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("intermediate/" .. outputdir .. "/%{prj.name}")
@@ -32,32 +39,32 @@ project "ModernEngine"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "on"
 		systemversion "latest"
 
 		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL", "GLFW_INCLUDE_NONE"}
 
-		postbuildcommands {("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")}
+		postbuildcommands {("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")}
 
 	filter "configurations:Debug" 
 		defines "MN_DEBUG"
-		buildoptions "/MDd"
-		symbols "on"
+		runtime "Debug"
+		symbols "On"
 
 	filter "configurations:Release"
 		defines "MN_RELEASE"
-		buildoptions "/MD"
-		optimize "on"
+		runtime "Release"
+		optimize "On"
 
 	filter "configurations:Dist"
 		defines "MN_DIST"
-		buildoptions "/MD"
-		optimize "on"
+		buildoptions "Release"
+		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("intermediate/" .. outputdir .. "/%{prj.name}")
@@ -81,7 +88,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -91,15 +97,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "MN_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "MN_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "MN_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"

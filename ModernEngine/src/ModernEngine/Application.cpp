@@ -26,13 +26,11 @@ namespace ModernEngine {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
-		overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -40,7 +38,7 @@ namespace ModernEngine {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnCloseWindow));
 
-		for (std::vector<Layer*>::iterator it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
 			(*--it)->OnEvent(e);
 			if (e.m_Handled)

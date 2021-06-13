@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef MN_PLATFORM_WINDOWS
+
 extern ModernEngine::Application* ModernEngine::CreateApplication();
 
 int main(int argc, char** argv)
@@ -12,3 +14,5 @@ int main(int argc, char** argv)
 	app->Run();
 	delete app;
 }
+
+#endif
