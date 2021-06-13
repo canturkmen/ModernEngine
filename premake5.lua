@@ -7,9 +7,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "ModernEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "ModernEngine/vendor/GLAD/include"
+IncludeDir["ImGui"] = "ModernEngine/vendor/imgui"
 
 include "ModernEngine/vendor/GLFW"
 include "ModernEngine/vendor/Glad"
+include "ModernEngine/vendor/imgui"
 
 project "ModernEngine"
 	location "ModernEngine"
@@ -21,9 +23,9 @@ project "ModernEngine"
 
 	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}"}
 
-	links { "GLFW", "Glad", "opengl32.lib",}
+	links { "GLFW", "opengl32.lib", "Glad", "ImGui"}
 
 	pchheader "mnpch.h"
 	pchsource "ModernEngine/src/mnpch.cpp"
