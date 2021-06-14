@@ -1,12 +1,11 @@
 #include <ModernEngine.h>
 
-
 class Sandbox : public ModernEngine::Application
 {
 public:
 	Sandbox()
 	{
-		
+
 	}
 
 	~Sandbox()

@@ -3,6 +3,8 @@
 #include "Core.h"
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
+#include "Input.h"
+#include "KeyCodes.h"
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 

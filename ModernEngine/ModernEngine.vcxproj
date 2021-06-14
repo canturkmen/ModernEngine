@@ -159,12 +159,16 @@
     <ClInclude Include="src\ModernEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\ModernEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\ModernEngine\Input.h" />
+    <ClInclude Include="src\ModernEngine\KeyCodes.h" />
     <ClInclude Include="src\ModernEngine\Layer.h" />
     <ClInclude Include="src\ModernEngine\LayerStack.h" />
     <ClInclude Include="src\ModernEngine\Log.h" />
+    <ClInclude Include="src\ModernEngine\MouseButtonCodes.h" />
     <ClInclude Include="src\ModernEngine\Window.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\mnpch.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp" />
@@ -177,6 +181,7 @@
     <ClCompile Include="src\mnpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

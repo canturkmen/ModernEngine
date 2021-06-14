@@ -64,6 +64,9 @@ namespace ModernEngine {
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
+			if (ModernEngine::Input::IsKeyPressed(MN_KEY_TAB))
+				MN_INFO("Tab key is pressed !");
+
 			m_Window->OnUpdate();
 		}
 	}
