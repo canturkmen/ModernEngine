@@ -9,7 +9,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "ModernEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "ModernEngine/vendor/GLAD/include"
 IncludeDir["ImGui"] = "ModernEngine/vendor/imgui"
-
+IncludeDir["glm"] = "ModernEngine/vendor/glm"
 
 group "Dependencies"
 
@@ -28,9 +28,9 @@ project "ModernEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("intermediate/" .. outputdir .. "/%{prj.name}")
 
-	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp"}
+	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp", "%{prj.name}/vendor/glm/glm/**.hpp", "%{prj.name}/vendor/glm/glm/**.ini"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}"}
 
 	links { "GLFW", "opengl32.lib", "Glad", "ImGui"}
 
@@ -78,7 +78,8 @@ project "Sandbox"
 	includedirs
 	{
 		"ModernEngine/vendor/spdlog/include",
-		"ModernEngine/src"
+		"ModernEngine/src",
+		"%{IncludeDir.glm}" 
 	}
 
 	links

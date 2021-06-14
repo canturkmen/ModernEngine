@@ -8,3 +8,6 @@
 	path = ModernEngine/vendor/imgui
 	url = https://github.com/canturkmen/imgui
     	branch = docking
+[submodule "ModernEngine/vendor/glm"]
+	path = ModernEngine/vendor/glm
+	url = https://github.com/g-truc/glm
