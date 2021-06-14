@@ -58,9 +58,6 @@
     <ClInclude Include="src\ModernEngine\Window.h">
       <Filter>ModernEngine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h">
-      <Filter>Platform\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
       <Filter>ModernEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\ImGui\ImGuiBuild.cpp">
+      <Filter>ModernEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp">
       <Filter>ModernEngine\ImGui</Filter>
@@ -81,9 +81,6 @@
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Log.cpp">
       <Filter>ModernEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
-      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>

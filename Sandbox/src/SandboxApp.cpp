@@ -6,7 +6,7 @@ class Sandbox : public ModernEngine::Application
 public:
 	Sandbox()
 	{
-		PushOverlay(new ModernEngine::ImGuiLayer());
+		
 	}
 
 	~Sandbox()

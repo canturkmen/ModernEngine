@@ -24,7 +24,6 @@ namespace ModernEngine {
 		MouseButtonPressedEvent(int button)
 			:MouseButtonEvent(button) {}
 
-		EVENT_CLASS_TYPE(MouseButtonPressed)
 
 		std::string Debug() const override
 		{
@@ -32,6 +31,8 @@ namespace ModernEngine {
 			ss << "MouseButtonPressed:  " << m_Button;
 			return ss.str();
 		}
+
+		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
 	class MN_API MouseButtonReleasedEvent : public MouseButtonEvent
@@ -60,7 +61,7 @@ namespace ModernEngine {
 		inline float GetMouseYPostition() const { return m_MousePosY; }
 
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 		std::string Debug() const override
 		{
@@ -83,7 +84,7 @@ namespace ModernEngine {
 		inline float GetYOffset() const { return m_YOffset; }
 
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 		std::string Debug() const override
 		{

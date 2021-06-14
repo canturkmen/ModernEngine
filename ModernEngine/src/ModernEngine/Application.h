@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace ModernEngine {
 
@@ -24,6 +25,7 @@ namespace ModernEngine {
 
 	private:
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool OnCloseWindow(WindowCloseEvent& e);
 

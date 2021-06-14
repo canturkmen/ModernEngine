@@ -7,3 +7,4 @@
 [submodule "ModernEngine/vendor/imgui"]
 	path = ModernEngine/vendor/imgui
 	url = https://github.com/canturkmen/imgui
+    	branch = docking

@@ -32,8 +32,6 @@ namespace ModernEngine {
 		m_Data.Width = props.Width;
 		m_Data.Title = props.Title;
 
-		MN_CORE_INFO("Creating window {0}: ({1}, {2})", props.Title, props.Width, props.Height);
-
 		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
@@ -128,7 +126,7 @@ namespace ModernEngine {
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent e(xOffset, yOffset);
+			MouseScrolledEvent e((float)xOffset, float(yOffset));
 			data.EventCallback(e);
 		});
 

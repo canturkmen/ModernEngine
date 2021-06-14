@@ -32,6 +32,7 @@ namespace ModernEngine {
 		virtual bool IsVsync() const = 0;
 		virtual void SetEventCallback(const EventCallbackFunc& CallbackFunc) = 0;
 
+		virtual void* GetNativeWindow() const = 0;
 		static Window* Create(const WindowProps& props = WindowProps());
 	};
 
