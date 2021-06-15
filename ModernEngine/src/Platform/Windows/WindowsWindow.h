@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ModernEngine/Window.h"
+#include "ModernEngine/Renderer/GraphicsContext.h"
 #include "GLFW/glfw3.h"
 
 namespace ModernEngine {
@@ -28,6 +29,7 @@ namespace ModernEngine {
 
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{

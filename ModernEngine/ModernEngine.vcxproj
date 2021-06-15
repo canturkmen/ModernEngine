@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Application.h" />
     <ClInclude Include="src\ModernEngine\Core.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="src\ModernEngine\Events\Event.h" />
     <ClInclude Include="src\ModernEngine\Events\KeyEvent.h" />
     <ClInclude Include="src\ModernEngine\Events\MouseEvent.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\ModernEngine\Input.h" />
     <ClInclude Include="src\ModernEngine\KeyCodes.h" />
@@ -438,6 +440,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\ModernEngine\Application.cpp" />
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp" />
