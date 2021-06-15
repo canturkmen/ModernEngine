@@ -16,7 +16,7 @@ namespace ModernEngine {
 		Application();
 		virtual ~Application();
 	
-		void Run();
+		void Run(); 
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
