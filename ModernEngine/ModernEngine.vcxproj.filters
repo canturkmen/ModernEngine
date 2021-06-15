@@ -929,6 +929,7 @@
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
@@ -959,5 +960,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp" />
   </ItemGroup>
 </Project>

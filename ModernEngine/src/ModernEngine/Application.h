@@ -7,6 +7,7 @@
 #include "KeyCodes.h"
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Renderer/Shader.h"
 
 namespace ModernEngine {
 
@@ -36,7 +37,8 @@ namespace ModernEngine {
 		unsigned int m_VertexArray;
 		unsigned int m_VertexBuffer;
 		unsigned int m_IndexBuffer;
-
+		std::unique_ptr<Shader> m_Shader;
+		 
 	private:
 		static Application* s_AppInstance;
 	};
