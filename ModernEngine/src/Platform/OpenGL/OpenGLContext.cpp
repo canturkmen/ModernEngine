@@ -16,6 +16,10 @@ namespace ModernEngine {
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		MN_CORE_ASSERT(status, "Failed to initialize Glad ");
+
+		MN_CORE_INFO("GPU Info: {0}", glGetString(GL_VENDOR));
+		MN_CORE_INFO("Renderer Info: {0}", glGetString(GL_RENDERER));
+		MN_CORE_INFO("Version Info: {0}", glGetString(GL_VERSION));
 	}
 
 	void ModernEngine::OpenGLContext::SwapBuffers()
