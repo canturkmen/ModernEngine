@@ -8,6 +8,7 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace ModernEngine {
 
@@ -35,10 +36,10 @@ namespace ModernEngine {
 		LayerStack m_LayerStack;
 
 		unsigned int m_VertexArray;
-		unsigned int m_VertexBuffer;
-		unsigned int m_IndexBuffer;
 		std::unique_ptr<Shader> m_Shader;
-		 
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+
 	private:
 		static Application* s_AppInstance;
 	};

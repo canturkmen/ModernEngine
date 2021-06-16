@@ -930,6 +930,9 @@
     <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Shader.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Buffer.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Application.cpp">
@@ -961,5 +964,8 @@
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
   </ItemGroup>
 </Project>
