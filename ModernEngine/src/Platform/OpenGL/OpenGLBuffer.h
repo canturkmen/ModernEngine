@@ -13,8 +13,11 @@ namespace ModernEngine {
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
 
+		inline virtual void SetBufferLayout(const BufferLayout& layout) override { m_BufferLayout = layout; }
+		inline virtual const BufferLayout& GetBufferLayout() const override { return m_BufferLayout; }
 
 	private:
+		BufferLayout m_BufferLayout;
 		uint32_t m_RendererID;
 	};
 
