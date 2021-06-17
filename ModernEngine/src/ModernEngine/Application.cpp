@@ -11,6 +11,7 @@ namespace ModernEngine {
 	
 
 	Application::Application()
+		:m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		s_AppInstance = this;
 
@@ -54,11 +55,13 @@ namespace ModernEngine {
 				out vec3 v_Position; 
 				out vec4 v_Color;
 
+				uniform mat4 u_ViewProjectionMatrix;
+
 				void main()
 				{
 					v_Position = a_Position;
 					v_Color = a_Color;
-					gl_Position = vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -112,10 +115,12 @@ namespace ModernEngine {
 		
 				out vec3 v_Position; 
 
+				uniform mat4 u_ViewProjectionMatrix;
+
 				void main()
 				{
 					v_Position = a_Position;
-					gl_Position = vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -165,13 +170,10 @@ namespace ModernEngine {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			Renderer::BeginScene(m_Camera);
 
-			m_RectangleShader->Bind();
-			Renderer::Submit(m_RectangleVertexArray);
-
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
+			Renderer::Submit(m_RectangleVertexArray, m_RectangleShader);
+			Renderer::Submit(m_VertexArray, m_Shader);
 
 			Renderer::EndScene();
 

@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h" />
@@ -449,6 +450,7 @@
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp" />
