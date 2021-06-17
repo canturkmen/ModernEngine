@@ -1,32 +1,14 @@
 #include "mnpch.h"
 #include "Application.h"
 #include "Log.h"
-#include <glad/glad.h>
+#include "Renderer/Renderer.h"
 
 namespace ModernEngine {
 
 	#define BIND_EVENT_FN(x)  std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_AppInstance = nullptr;
-
-	static GLenum ShaderDataTypeToOpenGLType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case ShaderDataType::Int:		return GL_INT;
-			case ShaderDataType::Int2:		return GL_INT;
-			case ShaderDataType::Int3:		return GL_INT;
-			case ShaderDataType::Int4:		return GL_INT;
-			case ShaderDataType::Float:		return GL_FLOAT;
-			case ShaderDataType::Float2:	return GL_FLOAT;
-			case ShaderDataType::Float3:	return GL_FLOAT;
-			case ShaderDataType::Float4:	return GL_FLOAT;
-			case ShaderDataType::Mat3:		return GL_FLOAT;
-			case ShaderDataType::Mat4:		return GL_FLOAT;
-			case ShaderDataType::Bool:		return GL_BOOL;
-		}
-		return 0;
-	}
+	
 
 	Application::Application()
 	{
@@ -153,11 +135,6 @@ namespace ModernEngine {
 		m_RectangleShader.reset(new Shader(rectangleVertexSrc, rectangleFragmentSrc));
 	}
 
-	Application::~Application()
-	{
-
-	}
-
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
@@ -185,16 +162,18 @@ namespace ModernEngine {
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
 
 			m_RectangleShader->Bind();
-			m_RectangleVertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_RectangleVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_RectangleVertexArray);
 
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

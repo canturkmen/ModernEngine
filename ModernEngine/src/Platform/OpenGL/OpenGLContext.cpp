@@ -5,13 +5,13 @@
 
 namespace ModernEngine {
 
-	ModernEngine::OpenGLContext::OpenGLContext(GLFWwindow* windowhandle)
+	OpenGLContext::OpenGLContext(GLFWwindow* windowhandle)
 		: m_WindowHandle(windowhandle)
 	{
 		MN_CORE_ASSERT(windowhandle, "Window Handle is Null");
 	}
 
-	void ModernEngine::OpenGLContext::Init()
+	void OpenGLContext::Init()
 	{
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -22,7 +22,7 @@ namespace ModernEngine {
 		MN_CORE_INFO("Version Info: {0}", glGetString(GL_VERSION));
 	}
 
-	void ModernEngine::OpenGLContext::SwapBuffers()
+	void OpenGLContext::SwapBuffers()
 	{
 		glfwSwapBuffers(m_WindowHandle);
 	}

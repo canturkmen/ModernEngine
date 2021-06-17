@@ -8,9 +8,4 @@ namespace ModernEngine {
 	{
 
 	}
-
-	ModernEngine::Layer::~Layer()
-	{
-
-	}
 }
