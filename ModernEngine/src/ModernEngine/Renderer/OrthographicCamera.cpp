@@ -17,4 +17,4 @@ namespace ModernEngine {
 		m_ViewMatrix = glm::inverse(transform);
 		m_ViewProjectionMatrix = m_ViewMatrix * m_ProjectionMatrix;
 	}
-}
+}                           

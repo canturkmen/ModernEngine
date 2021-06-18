@@ -3,7 +3,7 @@
 
 namespace ModernEngine {
 
-	ModernEngine::Layer::Layer(const std::string& name /*= "Layer"*/)
+	Layer::Layer(const std::string& name /*= "Layer"*/)
 		: m_DebugName(name)
 	{
 
