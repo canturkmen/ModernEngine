@@ -1,6 +1,9 @@
 #include "ModernEngine.h"
 #include "imgui/imgui.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
+
 class ExampleLayer : public ModernEngine::Layer
 {
 public:
@@ -42,12 +45,13 @@ public:
 				out vec4 v_Color;
 
 				uniform mat4 u_ViewProjectionMatrix;
+				uniform mat4 u_Transform;
 
 				void main()
 				{
 					v_Position = a_Position;
 					v_Color = a_Color;
-					gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -69,10 +73,10 @@ public:
 		m_Shader.reset(new ModernEngine::Shader(vertexSrc, fragmentSrc));
 
 		float rectangeVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 
 		m_RectangleVertexArray.reset(ModernEngine::VertexArray::Create());
@@ -101,11 +105,12 @@ public:
 				out vec3 v_Position; 
 
 				uniform mat4 u_ViewProjectionMatrix;
+				uniform mat4 u_Transform;
 
 				void main()
 				{
 					v_Position = a_Position;
-					gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -150,8 +155,19 @@ public:
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
-		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_RectangleShader);
-		ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		for (int y = 0; y < 10; y++)
+		{
+			for (int x = 0; x < 10; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_RectangleShader, transform);
+			}
+		}
+
+		// ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
 
 		ModernEngine::Renderer::EndScene();
 	}
