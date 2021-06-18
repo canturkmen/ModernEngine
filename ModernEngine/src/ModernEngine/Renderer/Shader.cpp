@@ -123,6 +123,12 @@ namespace ModernEngine {
 		glUseProgram(0);
 	}
 
+	void Shader::UploadShaderFloat4(const std::string& name, const glm::vec4& Color)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform4f(location, Color.x, Color.y, Color.z, Color.w);
+	}
+
 	void Shader::UploadShaderMat4(const std::string& name, const glm::mat4& ViewProjectionMatrix)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());

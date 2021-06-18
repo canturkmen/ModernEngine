@@ -121,9 +121,11 @@ public:
 
 				in vec3 v_Position;
 
+				uniform vec4 u_Color;
+
 				void main()
 				{
-					color = vec4(0.2, 0.8, 0.5, 1.0);
+					color = u_Color;
 				}
 			)";
 
@@ -155,7 +157,9 @@ public:
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::vec4 redColor( { 0.8, 0.3, 0.2, 1.0 } );
+		glm::vec4 greenColor({ 0.2, 0.8, 0.5, 1.0 } );
 
 		for (int y = 0; y < 10; y++)
 		{
@@ -163,6 +167,10 @@ public:
 			{
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				if (x % 2 == 0)
+					m_RectangleShader->UploadShaderFloat4("u_Color", redColor);
+				else
+					m_RectangleShader->UploadShaderFloat4("u_Color", greenColor);
 				ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_RectangleShader, transform);
 			}
 		}
@@ -176,7 +184,7 @@ private:
 	std::shared_ptr<ModernEngine::VertexArray> m_VertexArray;
 	std::shared_ptr<ModernEngine::Shader> m_Shader;
 
-	std::shared_ptr<ModernEngine::VertexArray> m_RectangleVertexArray;
+	std::shared_ptr<ModernEngine::VertexArray> m_RectangleVertexArray; 
 	std::shared_ptr<ModernEngine::Shader> m_RectangleShader;
 
 	ModernEngine::OrthographicCamera m_Camera;

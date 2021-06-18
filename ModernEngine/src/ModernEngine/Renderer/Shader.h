@@ -13,6 +13,7 @@ namespace ModernEngine {
 		void Bind() const;
 		void UnBind() const;
 
+		void UploadShaderFloat4(const std::string& name, const glm::vec4& Color);
 		void UploadShaderMat4(const std::string& name, const glm::mat4& ViewProjectionMatrix);
 
 	private:
