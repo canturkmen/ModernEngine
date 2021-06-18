@@ -1,7 +1,9 @@
 #include "ModernEngine.h"
 #include "imgui/imgui.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 class ExampleLayer : public ModernEngine::Layer
@@ -70,7 +72,7 @@ public:
 				}
 			)";
 
-		m_Shader.reset(new ModernEngine::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(ModernEngine::Shader::Create(vertexSrc, fragmentSrc));
 
 		float rectangeVertices[3 * 4] = {
 			-0.5f, -0.5f, 0.0f,
@@ -97,7 +99,7 @@ public:
 		m_RectangeIndexBuffer.reset(ModernEngine::IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
 		m_RectangleVertexArray->SetIndexBuffer(m_RectangeIndexBuffer);
 
-		std::string rectangleVertexSrc = R"(
+		std::string flatColorVertexShader = R"(
 				#version 330 core
 			
 				layout(location = 0) in vec3 a_Position;	
@@ -114,22 +116,22 @@ public:
 				}
 			)";
 
-		std::string rectangleFragmentSrc = R"(
+		std::string flatColorFragmentShader = R"(
 				#version 330 core
 
 				layout(location = 0) out vec4 color;
 
 				in vec3 v_Position;
 
-				uniform vec4 u_Color;
+				uniform vec3 u_Color;
 
 				void main()
 				{
-					color = u_Color;
+					color = vec4(u_Color, 1.0);
 				}
 			)";
 
-		m_RectangleShader.reset(new ModernEngine::Shader(rectangleVertexSrc, rectangleFragmentSrc));
+		m_FlatColorShader.reset(ModernEngine::Shader::Create(flatColorVertexShader, flatColorFragmentShader));
 	}
 
 	void OnUpdate(ModernEngine::DeltaTime dt) override
@@ -158,8 +160,11 @@ public:
 		m_Camera.SetRotation(m_CameraRotation);
 
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-		glm::vec4 redColor( { 0.8, 0.3, 0.2, 1.0 } );
-		glm::vec4 greenColor({ 0.2, 0.8, 0.5, 1.0 } );
+		glm::vec4 redColor({ 0.8, 0.3, 0.2, 1.0 });
+		glm::vec4 greenColor({ 0.2, 0.8, 0.5, 1.0 });
+
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_FlatColorShader)->UploadShaderFloat3("u_Color", m_SquareColor);
 
 		for (int y = 0; y < 10; y++)
 		{
@@ -167,11 +172,7 @@ public:
 			{
 				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				if (x % 2 == 0)
-					m_RectangleShader->UploadShaderFloat4("u_Color", redColor);
-				else
-					m_RectangleShader->UploadShaderFloat4("u_Color", greenColor);
-				ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_RectangleShader, transform);
+				ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_FlatColorShader, transform);
 			}
 		}
 
@@ -180,12 +181,20 @@ public:
 		ModernEngine::Renderer::EndScene();
 	}
 
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
+	}
+
+
 private:
 	std::shared_ptr<ModernEngine::VertexArray> m_VertexArray;
 	std::shared_ptr<ModernEngine::Shader> m_Shader;
 
 	std::shared_ptr<ModernEngine::VertexArray> m_RectangleVertexArray; 
-	std::shared_ptr<ModernEngine::Shader> m_RectangleShader;
+	std::shared_ptr<ModernEngine::Shader> m_FlatColorShader;
 
 	ModernEngine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
@@ -193,6 +202,8 @@ private:
 
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 180.0f;
+
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.0f };
 };
 
 class Sandbox : public ModernEngine::Application

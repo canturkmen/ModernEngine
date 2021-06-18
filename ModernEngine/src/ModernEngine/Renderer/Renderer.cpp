@@ -1,5 +1,6 @@
 #include "mnpch.h"
 #include "Renderer.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace ModernEngine {
 
@@ -13,8 +14,8 @@ namespace ModernEngine {
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->UploadShaderMat4("u_ViewProjectionMatrix", s_SceneData->ViewProjectionMatrix);
-		shader->UploadShaderMat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadShaderMat4("u_ViewProjectionMatrix", s_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadShaderMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
