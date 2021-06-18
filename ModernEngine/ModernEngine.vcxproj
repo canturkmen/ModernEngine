@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Core\DeltaTime.h" />
     <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h" />

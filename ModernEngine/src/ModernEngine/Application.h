@@ -4,11 +4,12 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Core/DeltaTime.h"
 #include "ImGui/ImGuiLayer.h"
 
 namespace ModernEngine {
 
-	class MN_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -28,8 +29,8 @@ namespace ModernEngine {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool OnCloseWindow(WindowCloseEvent& e);
-
 		LayerStack m_LayerStack;
+		float m_LastFrameTime = 0.0f;
 
 	private:
 		static Application* s_AppInstance;

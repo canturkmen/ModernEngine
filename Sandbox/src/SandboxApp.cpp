@@ -125,12 +125,30 @@ public:
 		m_RectangleShader.reset(new ModernEngine::Shader(rectangleVertexSrc, rectangleFragmentSrc));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(ModernEngine::DeltaTime dt) override
 	{
+		if (ModernEngine::Input::IsKeyPressed(MN_KEY_W))
+			m_CameraPosition.y += m_CameraMovingSpeed * dt;
+		else if (ModernEngine::Input::IsKeyPressed(MN_KEY_S))
+			m_CameraPosition.y -= m_CameraMovingSpeed * dt;
+
+		if (ModernEngine::Input::IsKeyPressed(MN_KEY_D))
+			m_CameraPosition.x += m_CameraMovingSpeed * dt;
+		else if (ModernEngine::Input::IsKeyPressed(MN_KEY_A))
+			m_CameraPosition.x -= m_CameraMovingSpeed * dt;
+
+		if (ModernEngine::Input::IsKeyPressed(MN_KEY_LEFT))
+			m_CameraRotation += m_CameraRotationSpeed * dt;
+		if (ModernEngine::Input::IsKeyPressed(MN_KEY_RIGHT))
+			m_CameraRotation -= m_CameraRotationSpeed * dt;
+
 		ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ModernEngine::RenderCommand::Clear();
 
 		ModernEngine::Renderer::BeginScene(m_Camera);
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
 		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_RectangleShader);
 		ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
@@ -146,6 +164,11 @@ private:
 	std::shared_ptr<ModernEngine::Shader> m_RectangleShader;
 
 	ModernEngine::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+	float m_CameraMovingSpeed = 5.0f;
+
+	float m_CameraRotation = 0.0f;
+	float m_CameraRotationSpeed = 180.0f;
 };
 
 class Sandbox : public ModernEngine::Application

@@ -1,6 +1,7 @@
 #include "mnpch.h"
 #include "Application.h"
 #include "Log.h"
+#include <GLFW/glfw3.h>
 
 namespace ModernEngine {
 
@@ -46,8 +47,12 @@ namespace ModernEngine {
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			DeltaTime deltatime = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(deltatime);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

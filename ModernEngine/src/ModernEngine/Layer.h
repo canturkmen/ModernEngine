@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Events/Event.h"
+#include "Core/DeltaTime.h"
 
 namespace ModernEngine {
 
@@ -13,7 +14,7 @@ namespace ModernEngine {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(DeltaTime dt) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}
 
