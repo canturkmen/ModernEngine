@@ -168,7 +168,8 @@ public:
 
 		m_TextureShader.reset(ModernEngine::Shader::Create(TextureShaderVertexShader, TextureShaderFragmentShader));
 
-		m_Texture2D.reset(ModernEngine::Texture2D::Create("assets/textures/TextureSample.jpg"));
+		m_Texture.reset(ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png"));
+		m_NetflixLogoTexture.reset(ModernEngine::Texture2D::Create("assets/textures/NetflixLogo.png"));
 
 		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->UploadShaderInt("u_Texture", 0);
@@ -216,8 +217,11 @@ public:
 			}
 		}
 
-		m_Texture2D->Bind(0);
+		m_Texture->Bind();
 		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		m_NetflixLogoTexture->Bind();
+		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_TextureShader, glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.5f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		// ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
 
@@ -238,7 +242,7 @@ private:
 	ModernEngine::Ref<ModernEngine::VertexArray> m_RectangleVertexArray;
 	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader, m_TextureShader;
 
-	ModernEngine::Ref<ModernEngine::Texture2D> m_Texture2D;
+	ModernEngine::Ref<ModernEngine::Texture2D> m_Texture, m_NetflixLogoTexture;
 
 	ModernEngine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };

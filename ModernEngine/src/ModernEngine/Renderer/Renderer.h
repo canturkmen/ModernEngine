@@ -10,6 +10,8 @@ namespace ModernEngine {
 	class Renderer
 	{
 	public:
+
+		static void Init();
 		static void BeginScene(const OrthographicCamera& camera);
 		static void Submit(const Ref<VertexArray>& vertexArray, const Ref<Shader>& shader, const glm::mat4& transform = glm::mat4(1.0f));
 		static void EndScene();
