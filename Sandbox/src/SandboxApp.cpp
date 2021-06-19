@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 class ExampleLayer : public ModernEngine::Layer
 {
 public:
@@ -20,7 +19,7 @@ public:
 
 		m_VertexArray.reset(ModernEngine::VertexArray::Create());
 
-		std::shared_ptr<ModernEngine::VertexBuffer> m_VertexBuffer;
+		ModernEngine::Ref<ModernEngine::VertexBuffer> m_VertexBuffer;
 		m_VertexBuffer.reset((ModernEngine::VertexBuffer::Create(vertices, sizeof(vertices))));
 
 		ModernEngine::BufferLayout layout =
@@ -33,7 +32,7 @@ public:
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<ModernEngine::IndexBuffer> m_IndexBuffer;
+		ModernEngine::Ref<ModernEngine::IndexBuffer> m_IndexBuffer;
 		m_IndexBuffer.reset(ModernEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
@@ -83,7 +82,7 @@ public:
 
 		m_RectangleVertexArray.reset(ModernEngine::VertexArray::Create());
 
-		std::shared_ptr<ModernEngine::VertexBuffer> m_RectangleVertexBuffer;
+		ModernEngine::Ref<ModernEngine::VertexBuffer> m_RectangleVertexBuffer;
 		m_RectangleVertexBuffer.reset(ModernEngine::VertexBuffer::Create(rectangeVertices, sizeof(rectangeVertices)));
 
 		ModernEngine::BufferLayout rectangleLayout =
@@ -95,7 +94,7 @@ public:
 		m_RectangleVertexArray->AddVertexBuffer(m_RectangleVertexBuffer);
 
 		uint32_t rectangleIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<ModernEngine::IndexBuffer> m_RectangeIndexBuffer;
+		ModernEngine::Ref<ModernEngine::IndexBuffer> m_RectangeIndexBuffer;
 		m_RectangeIndexBuffer.reset(ModernEngine::IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
 		m_RectangleVertexArray->SetIndexBuffer(m_RectangeIndexBuffer);
 
@@ -188,13 +187,12 @@ public:
 		ImGui::End();
 	}
 
-
 private:
-	std::shared_ptr<ModernEngine::VertexArray> m_VertexArray;
-	std::shared_ptr<ModernEngine::Shader> m_Shader;
+	ModernEngine::Ref<ModernEngine::VertexArray> m_VertexArray;
+	ModernEngine::Ref<ModernEngine::Shader> m_Shader;
 
-	std::shared_ptr<ModernEngine::VertexArray> m_RectangleVertexArray; 
-	std::shared_ptr<ModernEngine::Shader> m_FlatColorShader;
+	ModernEngine::Ref<ModernEngine::VertexArray> m_RectangleVertexArray;
+	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader;
 
 	ModernEngine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };

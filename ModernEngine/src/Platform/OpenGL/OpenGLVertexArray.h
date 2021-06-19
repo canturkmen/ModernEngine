@@ -13,15 +13,15 @@ namespace ModernEngine {
 		virtual void Bind() const override;
 		virtual void UnBind() const override; 
 
-		inline virtual const std::vector<std::shared_ptr<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
-		inline virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBufer; }
+		inline virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
+		inline virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBufer; }
 
-		virtual void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexbuffer) override;
-		virtual void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexbuffer) override;
+		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexbuffer) override;
+		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexbuffer) override;
 
 	private:
-		std::vector<std::shared_ptr<VertexBuffer>> m_VertexBuffers;
-		std::shared_ptr<IndexBuffer> m_IndexBufer;
+		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
+		Ref<IndexBuffer> m_IndexBufer;
 		uint32_t m_RendererID;
 	};
 

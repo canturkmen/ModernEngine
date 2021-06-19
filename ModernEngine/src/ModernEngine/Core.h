@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef MN_PLATFORM_WINDOWS
 #if MN_DYNAMIC_LINK
 	#ifdef MN_BUILD_DLL
@@ -29,3 +31,13 @@
 #define BIT(x) (1 << x)
 
 #define MN_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace ModernEngine {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}
