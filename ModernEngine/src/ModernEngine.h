@@ -17,3 +17,4 @@
 #include "ModernEngine/Renderer/Buffer.h"
 #include "ModernEngine/Renderer/VertexArray.h"
 #include "ModernEngine/Renderer/OrthographicCamera.h"
+#include "ModernEngine/Renderer/Texture.h"

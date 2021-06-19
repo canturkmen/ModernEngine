@@ -73,14 +73,14 @@ public:
 
 		m_Shader.reset(ModernEngine::Shader::Create(vertexSrc, fragmentSrc));
 
-		float rectangeVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
-		};
-
 		m_RectangleVertexArray.reset(ModernEngine::VertexArray::Create());
+
+		float rectangeVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
+		};
 
 		ModernEngine::Ref<ModernEngine::VertexBuffer> m_RectangleVertexBuffer;
 		m_RectangleVertexBuffer.reset(ModernEngine::VertexBuffer::Create(rectangeVertices, sizeof(rectangeVertices)));
@@ -88,6 +88,7 @@ public:
 		ModernEngine::BufferLayout rectangleLayout =
 		{
 			{ModernEngine::ShaderDataType::Float3, "a_Position"},
+			{ModernEngine::ShaderDataType::Float2, "a_Textcoord"}
 		};
 
 		m_RectangleVertexBuffer->SetBufferLayout(rectangleLayout);
@@ -131,6 +132,46 @@ public:
 			)";
 
 		m_FlatColorShader.reset(ModernEngine::Shader::Create(flatColorVertexShader, flatColorFragmentShader));
+
+		std::string TextureShaderVertexShader = R"(
+				#version 330 core
+			
+				layout(location = 0) in vec3 a_Position;	
+				layout(location = 1) in vec2 a_TexCoord;
+		
+				out vec2 v_TexCoord;
+
+				uniform mat4 u_ViewProjectionMatrix;
+				uniform mat4 u_Transform;
+
+				void main()
+				{
+					v_TexCoord = a_TexCoord;
+					gl_Position = u_ViewProjectionMatrix * u_Transform * vec4(a_Position, 1.0);
+				}
+			)";
+
+		std::string TextureShaderFragmentShader = R"(
+				#version 330 core
+
+				layout(location = 0) out vec4 color;
+
+				in vec2 v_TexCoord;
+
+				uniform sampler2D u_Texture;
+
+				void main()
+				{
+					color = texture(u_Texture, v_TexCoord);
+				}
+			)";
+
+		m_TextureShader.reset(ModernEngine::Shader::Create(TextureShaderVertexShader, TextureShaderFragmentShader));
+
+		m_Texture2D.reset(ModernEngine::Texture2D::Create("assets/textures/TextureSample.jpg"));
+
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->UploadShaderInt("u_Texture", 0);
 	}
 
 	void OnUpdate(ModernEngine::DeltaTime dt) override
@@ -175,6 +216,9 @@ public:
 			}
 		}
 
+		m_Texture2D->Bind(0);
+		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
 		// ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
 
 		ModernEngine::Renderer::EndScene();
@@ -192,7 +236,9 @@ private:
 	ModernEngine::Ref<ModernEngine::Shader> m_Shader;
 
 	ModernEngine::Ref<ModernEngine::VertexArray> m_RectangleVertexArray;
-	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader;
+	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader, m_TextureShader;
+
+	ModernEngine::Ref<ModernEngine::Texture2D> m_Texture2D;
 
 	ModernEngine::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
