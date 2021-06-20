@@ -166,7 +166,7 @@ public:
 				}
 			)";
 
-		m_TextureShader.reset(ModernEngine::Shader::Create(TextureShaderVertexShader, TextureShaderFragmentShader));
+		m_TextureShader.reset(ModernEngine::Shader::Create("assets/shaders/Texture.glsl"));
 
 		m_Texture.reset(ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png"));
 		m_NetflixLogoTexture.reset(ModernEngine::Texture2D::Create("assets/textures/NetflixLogo.png"));
