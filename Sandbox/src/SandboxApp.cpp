@@ -71,7 +71,7 @@ public:
 				}
 			)";
 
-		m_Shader.reset(ModernEngine::Shader::Create(vertexSrc, fragmentSrc));
+		m_TriangleShader = ModernEngine::Shader::Create("TriangleShader", vertexSrc, fragmentSrc);
 
 		m_RectangleVertexArray.reset(ModernEngine::VertexArray::Create());
 
@@ -131,7 +131,7 @@ public:
 				}
 			)";
 
-		m_FlatColorShader.reset(ModernEngine::Shader::Create(flatColorVertexShader, flatColorFragmentShader));
+		m_FlatColorShader = ModernEngine::Shader::Create("FlatColorShader", flatColorVertexShader, flatColorFragmentShader);
 
 		std::string TextureShaderVertexShader = R"(
 				#version 330 core
@@ -166,13 +166,13 @@ public:
 				}
 			)";
 
-		m_TextureShader.reset(ModernEngine::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");	
 
 		m_Texture.reset(ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png"));
 		m_NetflixLogoTexture.reset(ModernEngine::Texture2D::Create("assets/textures/NetflixLogo.png"));
 
-		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_TextureShader)->UploadShaderInt("u_Texture", 0);
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(textureShader)->UploadShaderInt("u_Texture", 0);
 	}
 
 	void OnUpdate(ModernEngine::DeltaTime dt) override
@@ -217,13 +217,15 @@ public:
 			}
 		}
 
+		auto textureUpdateShader = m_ShaderLibrary.Get("Texture");
+
 		m_Texture->Bind();
-		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_TextureShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_NetflixLogoTexture->Bind();
-		ModernEngine::Renderer::Submit(m_RectangleVertexArray, m_TextureShader, glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.5f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.5f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
-		// ModernEngine::Renderer::Submit(m_VertexArray, m_Shader);
+		ModernEngine::Renderer::Submit(m_VertexArray, m_TriangleShader, glm::translate(glm::mat4(1.0f), glm::vec3(1.2f, 1.2f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)));
 
 		ModernEngine::Renderer::EndScene();
 	}
@@ -237,10 +239,9 @@ public:
 
 private:
 	ModernEngine::Ref<ModernEngine::VertexArray> m_VertexArray;
-	ModernEngine::Ref<ModernEngine::Shader> m_Shader;
-
 	ModernEngine::Ref<ModernEngine::VertexArray> m_RectangleVertexArray;
-	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader, m_TextureShader;
+	ModernEngine::Ref<ModernEngine::Shader> m_TriangleShader, m_FlatColorShader;
+	ModernEngine::ShaderLibrary m_ShaderLibrary;
 
 	ModernEngine::Ref<ModernEngine::Texture2D> m_Texture, m_NetflixLogoTexture;
 
