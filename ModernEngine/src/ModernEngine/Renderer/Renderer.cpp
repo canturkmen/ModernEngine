@@ -6,6 +6,11 @@ namespace ModernEngine {
 
 	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		RenderCommand::OnWindowResize(width, height);
+	}
+
 	void Renderer::Init()
 	{
 		RenderCommand::Init();

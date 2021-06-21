@@ -11,7 +11,7 @@ namespace ModernEngine {
 	class OrthographicCameraController
 	{
 	public:
-		OrthographicCameraController(float aspectratio, bool enablerotation);
+		OrthographicCameraController(float aspectratio, bool enablerotation = false);
 		
 		void OnEvent(Event& e);
 		void OnUpdate(DeltaTime dt);
@@ -19,11 +19,12 @@ namespace ModernEngine {
 		OrthographicCamera& GetCamera() { return m_OrthographicCamera; }
 		const OrthographicCamera& GetCamera() const { return m_OrthographicCamera; }
 
+		float GetZoomLevel() const { return m_ZoomLevel; }
+		void SetZoomLevel(float level) { m_ZoomLevel = level; }
 
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
-
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;

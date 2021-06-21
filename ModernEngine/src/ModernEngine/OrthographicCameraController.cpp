@@ -54,7 +54,7 @@ namespace ModernEngine {
 
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)
 	{
-		m_AspectRatio = e.GetWidth() / e.GetHeight();
+		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_OrthographicCamera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
 	}

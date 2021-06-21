@@ -9,7 +9,7 @@ class ExampleLayer : public ModernEngine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f, true)
+		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f)
 	{
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
