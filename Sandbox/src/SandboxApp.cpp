@@ -9,7 +9,7 @@ class ExampleLayer : public ModernEngine::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example Layer"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f, true)
 	{
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -175,30 +175,14 @@ public:
 		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(textureShader)->UploadShaderInt("u_Texture", 0);
 	}
 
-	void OnUpdate(ModernEngine::DeltaTime dt) override
+	virtual void OnUpdate(ModernEngine::DeltaTime dt) override
 	{
-		if (ModernEngine::Input::IsKeyPressed(MN_KEY_W))
-			m_CameraPosition.y += m_CameraMovingSpeed * dt;
-		else if (ModernEngine::Input::IsKeyPressed(MN_KEY_S))
-			m_CameraPosition.y -= m_CameraMovingSpeed * dt;
-
-		if (ModernEngine::Input::IsKeyPressed(MN_KEY_D))
-			m_CameraPosition.x += m_CameraMovingSpeed * dt;
-		else if (ModernEngine::Input::IsKeyPressed(MN_KEY_A))
-			m_CameraPosition.x -= m_CameraMovingSpeed * dt;
-
-		if (ModernEngine::Input::IsKeyPressed(MN_KEY_LEFT))
-			m_CameraRotation += m_CameraRotationSpeed * dt;
-		if (ModernEngine::Input::IsKeyPressed(MN_KEY_RIGHT))
-			m_CameraRotation -= m_CameraRotationSpeed * dt;
+		m_CameraController.OnUpdate(dt);
 
 		ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		ModernEngine::RenderCommand::Clear();
 
-		ModernEngine::Renderer::BeginScene(m_Camera);
-
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		ModernEngine::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		glm::vec4 redColor({ 0.8, 0.3, 0.2, 1.0 });
@@ -230,6 +214,11 @@ public:
 		ModernEngine::Renderer::EndScene();
 	}
 
+	virtual void OnEvent(ModernEngine::Event& e) override
+	{
+		m_CameraController.OnEvent(e);
+	}
+
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Settings");
@@ -245,12 +234,7 @@ private:
 
 	ModernEngine::Ref<ModernEngine::Texture2D> m_Texture, m_NetflixLogoTexture;
 
-	ModernEngine::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-	float m_CameraMovingSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 180.0f;
+	ModernEngine::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.0f };
 };

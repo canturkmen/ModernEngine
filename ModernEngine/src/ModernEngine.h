@@ -10,6 +10,7 @@
 #include "ModernEngine/Input.h"
 #include "ModernEngine/KeyCodes.h"
 #include "ModernEngine/MouseButtonCodes.h"
+#include "ModernEngine/OrthographicCameraController.h"
 
 //Renderer files
 #include "ModernEngine/Renderer/Renderer.h"
