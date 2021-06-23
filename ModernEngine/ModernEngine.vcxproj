@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Core.h" />
@@ -456,6 +457,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />

@@ -16,32 +16,7 @@ Sanbdox2D::Sanbdox2D()
 
 void Sanbdox2D::OnAttach()
 {
-	m_SquareVA.reset(ModernEngine::VertexArray::Create());
 
-	float SquareVertices[5 * 4] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		-0.5f,  0.5f, 0.0f
-	};
-
-	ModernEngine::Ref<ModernEngine::VertexBuffer> SquareVertexBuffer;
-	SquareVertexBuffer.reset(ModernEngine::VertexBuffer::Create(SquareVertices, sizeof(SquareVertices)));
-
-	ModernEngine::BufferLayout SquareLayout =
-	{
-		{ModernEngine::ShaderDataType::Float3, "a_Position"},
-	};
-
-	SquareVertexBuffer->SetBufferLayout(SquareLayout);
-	m_SquareVA->AddVertexBuffer(SquareVertexBuffer);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	ModernEngine::Ref<ModernEngine::IndexBuffer> SquareIB;
-	SquareIB.reset(ModernEngine::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-	m_SquareVA->SetIndexBuffer(SquareIB);
-
-	m_FlatColorShader = ModernEngine::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 void Sanbdox2D::OnDetach()
@@ -56,14 +31,11 @@ void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 	ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	ModernEngine::RenderCommand::Clear();
 
-	ModernEngine::Renderer::BeginScene(m_CameraController.GetCamera());
+	ModernEngine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_FlatColorShader)->Bind();
-	std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(m_FlatColorShader)->UploadShaderFloat4("u_Color", m_SquareColor);
-
-	ModernEngine::Renderer::Submit(m_SquareVA, m_FlatColorShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	ModernEngine::Renderer::EndScene();
+	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, }, { 0.2f, 0.3, 0.5f, 1.0f });
+	
+	ModernEngine::Renderer2D::EndScene();
 }
 
 void Sanbdox2D::OnEvent(ModernEngine::Event& e)

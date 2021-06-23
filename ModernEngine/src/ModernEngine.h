@@ -12,6 +12,7 @@
 
 //Renderer files
 #include "ModernEngine/Renderer/Renderer.h"
+#include "ModernEngine/Renderer/Renderer2D.h"
 #include "ModernEngine/Renderer/Shader.h"
 #include "ModernEngine/Renderer/Buffer.h"
 #include "ModernEngine/Renderer/VertexArray.h"
