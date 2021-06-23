@@ -5,7 +5,7 @@
 namespace ModernEngine {
 
 	// This is an interface for the sub input classes such as Windows input, Linux input and MAC input
-	class MN_API Input
+	class Input
 	{
 	public:
 		static bool IsKeyPressed(int key) { return s_InputInstance->IsKeyPressedImpl(key); }

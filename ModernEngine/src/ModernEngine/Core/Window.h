@@ -19,7 +19,7 @@ namespace ModernEngine {
 
 
 	// This class is an interface for the sub window classes such as WindowsWindow, LinuxWindow and MacWindow
-	class MN_API Window
+	class Window
 	{
 	public:
 		using EventCallbackFunc = std::function<void(Event&)>;

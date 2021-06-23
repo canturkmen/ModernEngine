@@ -6,7 +6,7 @@
 
 namespace ModernEngine {
 
-	class MN_API Log
+	class Log
 	{
 	public:
 		static void Init();

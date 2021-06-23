@@ -4,7 +4,7 @@
 
 namespace ModernEngine {
 
-	class MN_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float posX, float posY)
@@ -27,7 +27,7 @@ namespace ModernEngine {
 		float m_MousePosX, m_MousePosY;
 	};
 
-	class MN_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xoffset, float yoffset)
@@ -50,7 +50,7 @@ namespace ModernEngine {
 		float m_XOffset, m_YOffset;
 	};
 
-	class MN_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
@@ -64,7 +64,7 @@ namespace ModernEngine {
 		int m_Button;
 	};
 
-	class MN_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -81,7 +81,7 @@ namespace ModernEngine {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class MN_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

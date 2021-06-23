@@ -3,7 +3,6 @@
 // Main application files
 #include "ModernEngine/Core/Application.h"
 #include "ModernEngine/Core/Log.h"
-#include "ModernEngine/Core/EntryPoint.h"
 #include "ModernEngine/Core/DeltaTime.h"
 
 //Input polling files

@@ -24,7 +24,7 @@ namespace ModernEngine {
 	};
 
 	// Event class is an interface class for the sub event classes such as mouse events, keyboard events and application events.
-	class MN_API Event
+	class Event
 	{
 	public:
 		bool m_Handled = false;
@@ -36,7 +36,7 @@ namespace ModernEngine {
 		inline bool IsInCategory(const EventCategory& category) { return GetCategoryFlags() & category; }
 	};
 
-	#define EVENT_CLASS_TYPE(type)	static EventType GetStaticType() { return EventType::##type; }\
+	#define EVENT_CLASS_TYPE(type)	static EventType GetStaticType() { return EventType::type; }\
 									virtual EventType GetEventType() const override { return GetStaticType(); }\
 									virtual const char* GetName() const override { return #type; }
 

@@ -4,7 +4,7 @@
 
 namespace ModernEngine {
 
-	class MN_API WindowResizeEvent : public Event
+	class WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(int windowwidth, int windowheight)
@@ -27,7 +27,7 @@ namespace ModernEngine {
 		int m_WindowWidth, m_WindowHeight;
 	};
 
-	class MN_API WindowCloseEvent : public Event
+	class WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() {}
@@ -36,7 +36,7 @@ namespace ModernEngine {
 		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryApplication)
 	};
 
-	class MN_API AppTickEvent : public Event
+	class AppTickEvent : public Event
 	{
 	public:
 		AppTickEvent() {}
@@ -45,7 +45,7 @@ namespace ModernEngine {
 		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryApplication)
 	};
 
-	class MN_API AppUpdateEvent : public Event
+	class AppUpdateEvent : public Event
 	{
 	public:
 		AppUpdateEvent() {}
@@ -54,7 +54,7 @@ namespace ModernEngine {
 		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryApplication)
 	};
 
-	class MN_API AppRenderEvent : public Event
+	class AppRenderEvent : public Event
 	{
 	public:
 		AppRenderEvent() {}

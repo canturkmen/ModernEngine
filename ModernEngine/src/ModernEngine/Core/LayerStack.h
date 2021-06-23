@@ -6,7 +6,7 @@
 
 namespace ModernEngine {
 
-	class MN_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();
