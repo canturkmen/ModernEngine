@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ModernEngine/Core.h"
+#include "ModernEngine/Core/Core.h"
 
 namespace ModernEngine {
 

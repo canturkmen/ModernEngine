@@ -1,7 +1,7 @@
 #include "mnpch.h"
 #include "Application.h"
 #include "Log.h"
-#include "Renderer/Renderer.h"
+#include "ModernEngine/Renderer/Renderer.h"
 #include <GLFW/glfw3.h>
 
 namespace ModernEngine {

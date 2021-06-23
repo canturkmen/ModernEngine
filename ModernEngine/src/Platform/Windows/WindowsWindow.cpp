@@ -134,7 +134,7 @@ namespace ModernEngine {
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent e(xPosition, yPosition);
+			MouseMovedEvent e(xPosition, yPosition);
 			data.EventCallback(e);
 		});
 	}

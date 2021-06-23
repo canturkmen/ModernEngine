@@ -2,10 +2,10 @@
 
 #include "Core.h"
 #include "Window.h"
-#include "Events/ApplicationEvent.h"
+#include "ModernEngine/Events/ApplicationEvent.h"
 #include "LayerStack.h"
-#include "Core/DeltaTime.h"
-#include "ImGui/ImGuiLayer.h"
+#include "DeltaTime.h"
+#include "ModernEngine/ImGui/ImGuiLayer.h"
 
 namespace ModernEngine {
 
@@ -28,7 +28,7 @@ namespace ModernEngine {
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
-		bool m_Minimized;
+		bool m_Minimized = false;
 		bool OnCloseWindow(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		LayerStack m_LayerStack;

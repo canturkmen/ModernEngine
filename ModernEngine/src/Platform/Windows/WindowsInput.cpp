@@ -1,6 +1,6 @@
 #include "mnpch.h"
 #include "WindowsInput.h"
-#include "ModernEngine/Application.h"
+#include "ModernEngine/Core/Application.h"
 #include "GLFW/glfw3.h"
 
 namespace ModernEngine {

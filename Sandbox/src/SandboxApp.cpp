@@ -207,16 +207,11 @@ public:
 		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_NetflixLogoTexture->Bind();
-		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, -0.5f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		ModernEngine::Renderer::Submit(m_VertexArray, m_TriangleShader, glm::translate(glm::mat4(1.0f), glm::vec3(1.2f, 1.2f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)));
 
 		ModernEngine::Renderer::EndScene();
-	}
-
-	virtual void OnEvent(ModernEngine::Event& e) override
-	{
-		m_CameraController.OnEvent(e);
 	}
 
 	virtual void OnImGuiRender() override
@@ -224,6 +219,11 @@ public:
 		ImGui::Begin("Settings");
 		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
 		ImGui::End();
+	}
+
+	virtual void OnEvent(ModernEngine::Event& e) override
+	{
+		m_CameraController.OnEvent(e);
 	}
 
 private:

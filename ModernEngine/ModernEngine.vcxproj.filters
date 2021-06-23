@@ -57,17 +57,38 @@
     <ClInclude Include="src\ModernEngine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Application.h">
-      <Filter>src\ModernEngine</Filter>
+    <ClInclude Include="src\ModernEngine\Core\Application.h">
+      <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Core.h">
-      <Filter>src\ModernEngine</Filter>
+    <ClInclude Include="src\ModernEngine\Core\Core.h">
+      <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Core\DeltaTime.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\EntryPoint.h">
-      <Filter>src\ModernEngine</Filter>
+    <ClInclude Include="src\ModernEngine\Core\EntryPoint.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\Input.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\KeyCodes.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\Layer.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\LayerStack.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\Log.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\MouseButtonCodes.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\Window.h">
+      <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h">
       <Filter>src\ModernEngine\Events</Filter>
@@ -84,24 +105,6 @@
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h">
       <Filter>src\ModernEngine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Input.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\KeyCodes.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Layer.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\LayerStack.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Log.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\MouseButtonCodes.h">
-      <Filter>src\ModernEngine</Filter>
-    </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
@@ -109,6 +112,9 @@
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCameraController.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h">
@@ -128,9 +134,6 @@
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h">
       <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Window.h">
-      <Filter>src\ModernEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -990,11 +993,19 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ModernEngine\Application.cpp">
-      <Filter>src\ModernEngine</Filter>
+    <ClCompile Include="src\ModernEngine\Core\Application.cpp">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Core\Layer.cpp">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Core\Log.cpp">
+      <Filter>src\ModernEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiBuild.cpp">
       <Filter>src\ModernEngine\ImGui</Filter>
@@ -1002,19 +1013,13 @@
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp">
       <Filter>src\ModernEngine\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Layer.cpp">
-      <Filter>src\ModernEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\LayerStack.cpp">
-      <Filter>src\ModernEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Log.cpp">
-      <Filter>src\ModernEngine</Filter>
-    </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCameraController.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp">
@@ -1065,6 +1070,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

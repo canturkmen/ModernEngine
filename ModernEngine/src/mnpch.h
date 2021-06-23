@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "ModernEngine/Log.h"
+#include "ModernEngine/Core/Log.h"
 
 #ifdef MN_PLATFORM_WINDOWS
 	#include <Windows.h>

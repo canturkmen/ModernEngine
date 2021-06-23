@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core.h"
-#include "Events/Event.h"
-#include "Core/DeltaTime.h"
+#include "ModernEngine/Events/Event.h"
+#include "DeltaTime.h"
 
 namespace ModernEngine {
 
