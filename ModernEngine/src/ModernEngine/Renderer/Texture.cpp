@@ -6,7 +6,7 @@
 
 namespace ModernEngine {
 	
-	Texture2D* Texture2D::Create(const std::string& filepath)
+	Ref<Texture2D> Texture2D::Create(const std::string& filepath)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -17,7 +17,7 @@ namespace ModernEngine {
 			
 			case RendererAPI::API::OpenGL:
 			{
-				return new OpenGLTexture2D(filepath);
+				return std::make_shared<OpenGLTexture2D>(filepath);
 			}
 		}
 	}

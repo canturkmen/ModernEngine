@@ -179,6 +179,11 @@ namespace ModernEngine {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadShaderInt(name, value);
+	}
+
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
 		UploadShaderFloat3(name, value);

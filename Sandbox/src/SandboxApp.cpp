@@ -172,8 +172,7 @@ public:
 
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");	
 
-		m_Texture.reset(ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png"));
-		m_NetflixLogoTexture.reset(ModernEngine::Texture2D::Create("assets/textures/NetflixLogo.png"));
+		m_Texture = ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png");
 
 		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<ModernEngine::OpenGLShader>(textureShader)->UploadShaderInt("u_Texture", 0);
@@ -208,9 +207,6 @@ public:
 		auto textureUpdateShader = m_ShaderLibrary.Get("Texture");
 
 		m_Texture->Bind();
-		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-		m_NetflixLogoTexture->Bind();
 		ModernEngine::Renderer::Submit(m_RectangleVertexArray, textureUpdateShader, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		ModernEngine::Renderer::Submit(m_VertexArray, m_TriangleShader, glm::translate(glm::mat4(1.0f), glm::vec3(1.2f, 1.2f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)));

@@ -16,7 +16,7 @@ Sanbdox2D::Sanbdox2D()
 
 void Sanbdox2D::OnAttach()
 {
-
+	m_Checkerboard = ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sanbdox2D::OnDetach()
@@ -33,8 +33,10 @@ void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 
 	ModernEngine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, }, m_SquareColor);
-	ModernEngine::Renderer2D::DrawQuad({ 1.0f, 1.5f, 0.0f }, { 2.0f, 2.0f, }, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f}, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 2.0f, -1.0f, 0.0f }, { 0.5f, 1.0f}, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f}, m_Checkerboard);
+
 	ModernEngine::Renderer2D::EndScene();
 }
 

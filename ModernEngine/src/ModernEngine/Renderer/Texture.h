@@ -19,8 +19,7 @@ namespace ModernEngine {
 	class Texture2D : public Texture
 	{
 	public:
-		static Texture2D* Create(const std::string& filepath);
-
+		static Ref<Texture2D> Create(const std::string& filepath);
 	};
 }
 

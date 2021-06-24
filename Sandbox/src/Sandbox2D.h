@@ -16,8 +16,7 @@ public:
 	virtual void OnImGuiRender() override;
 
 private:
-	ModernEngine::Ref<ModernEngine::VertexArray> m_SquareVA; 
-	ModernEngine::Ref<ModernEngine::Shader> m_FlatColorShader;
 	ModernEngine::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.0f };
+	ModernEngine::Ref<ModernEngine::Texture2D> m_Checkerboard;
 };
