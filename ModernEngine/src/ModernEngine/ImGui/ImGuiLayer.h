@@ -18,7 +18,6 @@ namespace ModernEngine {
 		virtual void OnDetach() override;
 
 		void Begin();
-		virtual void OnImGuiRender() override;
 		void End();
 
 	private:
