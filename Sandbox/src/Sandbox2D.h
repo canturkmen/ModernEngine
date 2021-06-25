@@ -19,12 +19,4 @@ private:
 	ModernEngine::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.0f };
 	ModernEngine::Ref<ModernEngine::Texture2D> m_Checkerboard;
-
-	struct ProfileResult
-	{
-		const char* Name;
-		float Time;
-	};
-
-	std::vector<ProfileResult> m_ProfileResults;
 };

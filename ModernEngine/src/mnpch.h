@@ -14,6 +14,7 @@
 #include <unordered_set>
 
 #include "ModernEngine/Core/Log.h"
+#include "ModernEngine/Debug/Instrumentor.h"
 
 #ifdef MN_PLATFORM_WINDOWS
 	#include <Windows.h>

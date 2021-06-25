@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
