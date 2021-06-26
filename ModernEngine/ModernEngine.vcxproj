@@ -141,8 +141,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h" />
-    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Core.h" />
@@ -155,6 +153,7 @@
     <ClInclude Include="src\ModernEngine\Core\Log.h" />
     <ClInclude Include="src\ModernEngine\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\ModernEngine\Core\Window.h" />
+    <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h" />
     <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h" />
     <ClInclude Include="src\ModernEngine\Events\Event.h" />
     <ClInclude Include="src\ModernEngine\Events\KeyEvent.h" />
@@ -166,6 +165,7 @@
     <ClInclude Include="src\ModernEngine\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Renderer.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Shader.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Texture.h" />
@@ -458,7 +458,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
@@ -470,6 +469,7 @@
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Texture.cpp" />

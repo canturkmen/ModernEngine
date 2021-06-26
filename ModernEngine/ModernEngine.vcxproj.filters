@@ -10,6 +10,9 @@
     <Filter Include="src\ModernEngine\Core">
       <UniqueIdentifier>{8F4B3142-FBB7-EC3C-C4AB-849A30D70EA5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ModernEngine\Debug">
+      <UniqueIdentifier>{8D186788-7912-90DA-627F-26EB4E18F646}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\ModernEngine\Events">
       <UniqueIdentifier>{DB7CD498-47B4-1C30-50BE-8053BC744329}</UniqueIdentifier>
     </Filter>
@@ -90,6 +93,9 @@
     <ClInclude Include="src\ModernEngine\Core\Window.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h">
+      <Filter>src\ModernEngine\Debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h">
       <Filter>src\ModernEngine\Events</Filter>
     </ClInclude>
@@ -121,6 +127,9 @@
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\Renderer.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h">
@@ -993,8 +1002,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1028,6 +1035,9 @@
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\Renderer.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp">
@@ -1072,6 +1082,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

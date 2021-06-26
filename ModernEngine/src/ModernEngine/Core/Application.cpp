@@ -12,6 +12,8 @@ namespace ModernEngine {
 
 	Application::Application()
 	{
+		MN_PROFILE_FUNCTION();
+
 		s_AppInstance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -49,6 +51,8 @@ namespace ModernEngine {
 
 	void Application::Run()
 	{
+		MN_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();

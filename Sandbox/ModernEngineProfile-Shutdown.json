@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":1,"name":"__cdecl ModernEngine::OpenGLTexture2D::~OpenGLTexture2D(void)","ph":"X","pid":0,"tid":1493763413,"ts":1518447749},{"cat":"function","dur":3114,"name":"void __cdecl ModernEngine::ImGuiLayer::OnDetach(void)","ph":"X","pid":0,"tid":1493763413,"ts":1518447818}]}

@@ -28,27 +28,16 @@ void Sanbdox2D::OnDetach()
 
 void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 {
-	MN_PROFILE_FUNCTION();
+	m_CameraController.OnUpdate(dt);
 
-	{
-		MN_PROFILE_SCOPE("CameraController");
-		m_CameraController.OnUpdate(dt);
-	}
+	ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	ModernEngine::RenderCommand::Clear();
+	ModernEngine::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	{
-		MN_PROFILE_SCOPE("RenderingStartup");
-		ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-		ModernEngine::RenderCommand::Clear();
-		ModernEngine::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	}
-
-	{
-		MN_PROFILE_SCOPE("Rendering");
-		ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_SquareColor);
-		ModernEngine::Renderer2D::DrawQuad({ 2.0f, -1.0f, 0.0f }, { 0.5f, 1.0f }, m_SquareColor);
-		ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_Checkerboard);
-		ModernEngine::Renderer2D::EndScene();
-	}
+	ModernEngine::Renderer2D::DrawRotateQuad({ 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, -45, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 2.0f, -1.0f, 0.0f }, { 0.5f, 1.0f }, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_Checkerboard, 10.0f, { 1.0f, 0.5f, 0.6f, 1.0f });
+	ModernEngine::Renderer2D::EndScene();
 }
 
 void Sanbdox2D::OnEvent(ModernEngine::Event& e)
