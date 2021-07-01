@@ -22,6 +22,7 @@ namespace ModernEngine {
 	private:
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBufer;
+		uint32_t m_VertexBufferIndex = 0;
 		uint32_t m_RendererID;
 	};
 

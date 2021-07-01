@@ -24,6 +24,5 @@ namespace ModernEngine {
 		static void DrawRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 		static void DrawRotateQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor = 1.0f, const glm::vec4& color = glm::vec4(1.0f));
 	};
-
 }
 
