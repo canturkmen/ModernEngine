@@ -21,10 +21,10 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		m_VertexArray.reset(ModernEngine::VertexArray::Create());
+		m_VertexArray = ModernEngine::VertexArray::Create();
 
 		ModernEngine::Ref<ModernEngine::VertexBuffer> m_VertexBuffer;
-		m_VertexBuffer.reset((ModernEngine::VertexBuffer::Create(vertices, sizeof(vertices))));
+		m_VertexBuffer = ModernEngine::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		ModernEngine::BufferLayout layout =
 		{
@@ -37,7 +37,7 @@ public:
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		ModernEngine::Ref<ModernEngine::IndexBuffer> m_IndexBuffer;
-		m_IndexBuffer.reset(ModernEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_IndexBuffer = ModernEngine::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		std::string vertexSrc = R"(
@@ -77,7 +77,7 @@ public:
 
 		m_TriangleShader = ModernEngine::Shader::Create("TriangleShader", vertexSrc, fragmentSrc);
 
-		m_RectangleVertexArray.reset(ModernEngine::VertexArray::Create());
+		m_RectangleVertexArray = ModernEngine::VertexArray::Create();
 
 		float rectangeVertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -87,7 +87,7 @@ public:
 		};
 
 		ModernEngine::Ref<ModernEngine::VertexBuffer> m_RectangleVertexBuffer;
-		m_RectangleVertexBuffer.reset(ModernEngine::VertexBuffer::Create(rectangeVertices, sizeof(rectangeVertices)));
+		m_RectangleVertexBuffer = ModernEngine::VertexBuffer::Create(rectangeVertices, sizeof(rectangeVertices));
 
 		ModernEngine::BufferLayout rectangleLayout =
 		{
@@ -100,7 +100,7 @@ public:
 
 		uint32_t rectangleIndices[6] = { 0, 1, 2, 2, 3, 0 };
 		ModernEngine::Ref<ModernEngine::IndexBuffer> m_RectangeIndexBuffer;
-		m_RectangeIndexBuffer.reset(ModernEngine::IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
+		m_RectangeIndexBuffer = ModernEngine::IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t));
 		m_RectangleVertexArray->SetIndexBuffer(m_RectangeIndexBuffer);
 
 		std::string flatColorVertexShader = R"(

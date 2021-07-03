@@ -18,7 +18,7 @@ namespace ModernEngine {
 		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexbuffer) = 0;
 		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexbuffer) = 0;
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }
 
