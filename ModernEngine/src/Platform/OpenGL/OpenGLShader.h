@@ -20,12 +20,14 @@ namespace ModernEngine {
 		virtual void UnBind() const override;
 
 		virtual void SetInt(const std::string& name, int value);
+		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
 		virtual void SetFloat(const std::string& name, float value) override;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value);
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value);
 		virtual void SetMat4(const std::string& name, const glm::mat4& value);
 
 		void UploadShaderInt(const std::string& name, int value);
+		void UploadShaderIntArray(const std::string& name, int* values, uint32_t count);
 		void UploadShaderFloat(const std::string& name, float value);
 		void UploadShaderFloat2(const std::string& name, const glm::vec2& value);
 		void UploadShaderFloat3(const std::string& name, const glm::vec3& value);

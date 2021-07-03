@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":1,"name":"__cdecl ModernEngine::OpenGLTexture2D::~OpenGLTexture2D(void)","ph":"X","pid":0,"tid":2334592127,"ts":-1472432874},{"cat":"function","dur":3611,"name":"void __cdecl ModernEngine::ImGuiLayer::OnDetach(void)","ph":"X","pid":0,"tid":2334592127,"ts":-1472432808}]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":3063,"name":"void __cdecl ModernEngine::ImGuiLayer::OnDetach(void)","ph":"X","pid":0,"tid":2476898351,"ts":115678192}]}
