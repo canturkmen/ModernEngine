@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{"cat":"function","dur":3063,"name":"void __cdecl ModernEngine::ImGuiLayer::OnDetach(void)","ph":"X","pid":0,"tid":2476898351,"ts":115678192}]}
+{"otherData": {},"traceEvents":[{"cat":"function","dur":3033,"name":"void __cdecl ModernEngine::ImGuiLayer::OnDetach(void)","ph":"X","pid":0,"tid":2459354909,"ts":1113458298}]}

@@ -33,11 +33,15 @@ void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 	ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	ModernEngine::RenderCommand::Clear();
 
+	static float Rotation = 0.0f;
+	Rotation += dt * 50;
+
 	ModernEngine::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, m_SquareColor);
-	ModernEngine::Renderer2D::DrawQuad({ 2.0f, -1.0f}, { 0.5f, 0.5f }, m_SquareColor);
-	ModernEngine::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, m_Checkerboard, 10.0f);
-	ModernEngine::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 5.0f, 5.0f }, m_Checkerboard);
+	ModernEngine::Renderer2D::DrawQuad({ -1.0f, 1.0f }, { 1.0f, 1.0f }, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 1.5f, -1.5f}, { 1.0f, 1.0f }, m_SquareColor);
+	ModernEngine::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_Checkerboard, 10.0f);
+	ModernEngine::Renderer2D::DrawRotateQuad({ 2.0f, 2.0f}, { 1.5f, 1.5f }, 45, m_Checkerboard, 10.0f);
+	ModernEngine::Renderer2D::DrawRotateQuad({ -2.0f, -2.0f}, { 1.5f, 1.5f }, Rotation, m_Checkerboard, 10.0f);
 	ModernEngine::Renderer2D::EndScene();
 }
 
