@@ -49,6 +49,11 @@ namespace ModernEngine {
 		}
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::Run()
 	{
 		MN_PROFILE_FUNCTION();

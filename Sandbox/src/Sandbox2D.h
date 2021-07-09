@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ModernEngine.h"
+#include "ParticleSystem.h"
 
 class Sanbdox2D : public ModernEngine::Layer
 {
@@ -18,5 +19,9 @@ public:
 private:
 	ModernEngine::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.0f };
+
 	ModernEngine::Ref<ModernEngine::Texture2D> m_Checkerboard;
+
+	ParticleSystem m_ParticleSystem;
+	ParticleProps m_ParticleProps;
 };

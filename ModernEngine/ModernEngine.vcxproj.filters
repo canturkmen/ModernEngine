@@ -111,39 +111,6 @@
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h">
       <Filter>src\ModernEngine\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCameraController.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Renderer.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Shader.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\Texture.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -1002,6 +969,40 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\OrthographicCameraController.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\RenderCommand.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Shader.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\SubTexture2D.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Texture.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1021,36 +1022,6 @@
     </ClCompile>
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp">
       <Filter>src\ModernEngine\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCameraController.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Renderer.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\Texture.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\VertexArray.cpp">
-      <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1081,6 +1052,37 @@
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\OrthographicCameraController.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\SubTexture2D.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\Texture.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\VertexArray.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

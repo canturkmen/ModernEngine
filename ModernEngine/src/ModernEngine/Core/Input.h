@@ -10,10 +10,10 @@ namespace ModernEngine {
 	public:
 		static bool IsKeyPressed(int key) { return s_InputInstance->IsKeyPressedImpl(key); }
 		static bool IsMouseButtonPressed(int button) { return s_InputInstance->IsMouseButtonPressedImpl(button); }
-		std::pair<float, float> GetMousePosition() { return s_InputInstance->GetMousePositionImpl(); }
-		float GetMouseXPosition() { return s_InputInstance->GetMouseXPositionImpl(); }
-		float GetMouseYPosition() { return s_InputInstance->GetMouseYPositionImpl(); }
-
+		static std::pair<float, float> GetMousePosition() { return s_InputInstance->GetMousePositionImpl(); }
+		static float GetMouseXPosition() { return s_InputInstance->GetMouseXPositionImpl(); }
+		static float GetMouseYPosition() { return s_InputInstance->GetMouseYPositionImpl(); }
+		
 	protected:
 		virtual bool IsKeyPressedImpl(int key) = 0;
 		virtual bool IsMouseButtonPressedImpl(int button) = 0;
