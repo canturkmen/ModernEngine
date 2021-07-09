@@ -17,6 +17,11 @@ void Sanbdox2D::OnAttach()
 {
 	m_Checkerboard = ModernEngine::Texture2D::Create("assets/textures/Checkerboard.png");
 
+	ModernEngine::FrameBufferSpecification fbSpec;
+	fbSpec.height = 720.0f;
+	fbSpec.width = 1280.0f;
+	m_FrameBuffer = ModernEngine::FrameBuffer::Create(fbSpec);
+
 	m_ParticleProps.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_ParticleProps.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
 	m_ParticleProps.SizeBegin = 0.5f;
@@ -40,6 +45,7 @@ void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 	m_CameraController.OnUpdate(dt);
 
 	ModernEngine::Renderer2D::ResetStats();
+	m_FrameBuffer->Bind();
 	ModernEngine::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 	ModernEngine::RenderCommand::Clear();
 
@@ -64,7 +70,7 @@ void Sanbdox2D::OnUpdate(ModernEngine::DeltaTime dt)
 	}
 
 	ModernEngine::Renderer2D::EndScene();
-
+	m_FrameBuffer->Unbind();
 
 #if 0
 	if (ModernEngine::Input::IsMouseButtonPressed(MN_MOUSE_BUTTON_LEFT))
@@ -168,7 +174,7 @@ void Sanbdox2D::OnImGuiRender()
 	ImGui::Text("Index Count: %d", ModernEngine::Renderer2D::GetStats().GetTotalIndexCount());
 
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-	ImGui::Image((void*)m_Checkerboard->GetRendererID(), ImVec2(256.0f, 256.0f));
+	ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2(1280.0f, 720.0f));
 	ImGui::End();
 
 	ImGui::End();

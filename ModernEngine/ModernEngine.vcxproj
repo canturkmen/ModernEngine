@@ -141,6 +141,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Core.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="src\ModernEngine\Renderer\Renderer2D.h" />
     <ClInclude Include="src\ModernEngine\Renderer\RendererAPI.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Shader.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Texture.h" />
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -179,7 +182,6 @@
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\mnpch.h" />
-    <ClInclude Include="src\ModernEngine\Renderer\SubTexture2D.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -459,6 +461,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
@@ -473,6 +477,7 @@
     <ClCompile Include="src\ModernEngine\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Shader.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Texture.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
@@ -486,7 +491,6 @@
     <ClCompile Include="src\mnpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
