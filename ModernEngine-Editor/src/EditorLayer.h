@@ -23,6 +23,8 @@ namespace ModernEngine {
 
 		Ref<Texture2D> m_Checkerboard;
 		Ref<FrameBuffer> m_FrameBuffer;
+
+		glm::vec2 m_ViewportSize = { 0, 0 };
 	};
 
 }

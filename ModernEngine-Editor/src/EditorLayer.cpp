@@ -57,7 +57,7 @@ namespace ModernEngine {
 			for (float x = -5.0f; x < 5.0f; x += 0.5f)
 			{
 				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.3f, (y + 5.0f) / 10.0f, 0.7f };
-				Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.5f }, color);
+				Renderer2D::DrawQuad({ x, y }, { 0.5f, 0.5f }, color);
 			}
 		}
 
@@ -145,9 +145,20 @@ namespace ModernEngine {
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
 		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
 
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ 1280.0f, 720.0f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+		ImGui::Begin("Viewport");
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
+		{
+			m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			m_ViewportSize = { viewportSize.x, viewportSize.y };
+			m_CameraController.OnResize(viewportSize.x, viewportSize.y);
+		}
+		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 	}

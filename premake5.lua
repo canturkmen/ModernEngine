@@ -1,6 +1,6 @@
 workspace "ModernEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "ModernEngine-Editor"
 	configurations {"Debug", "Release", "Dist"}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"

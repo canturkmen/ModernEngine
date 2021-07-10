@@ -47,6 +47,13 @@ namespace ModernEngine {
 		dispatcher.Dispatch<WindowResizeEvent>(MN_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		m_AspectRatio = width / height;
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		m_Camera.SetProjectionMatrix(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+	}
+
 	void OrthographicCameraController::RecalculateProjectionMatrix()
 	{
 		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
@@ -67,8 +74,8 @@ namespace ModernEngine {
 	{
 		MN_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		RecalculateProjectionMatrix();
+		OnResize(e.GetWidth(), e.GetHeight());
+		
 		return false;
 	}
 }
