@@ -12,7 +12,7 @@ namespace ModernEngine {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Modern Engine App");
 		virtual ~Application() = default;
 	
 		void Run(); 

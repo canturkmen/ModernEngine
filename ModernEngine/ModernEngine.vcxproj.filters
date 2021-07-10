@@ -114,6 +114,9 @@
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
@@ -151,6 +154,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
@@ -1005,8 +1011,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1028,6 +1032,9 @@
       <Filter>src\ModernEngine\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp">
@@ -1066,6 +1073,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1090,7 +1100,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

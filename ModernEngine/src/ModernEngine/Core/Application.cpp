@@ -10,13 +10,15 @@ namespace ModernEngine {
 
 	Application* Application::s_AppInstance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		MN_PROFILE_FUNCTION();
 
 		s_AppInstance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		WindowProps props;
+		props.Title = name;
+		m_Window = std::unique_ptr<Window>(Window::Create(props));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();

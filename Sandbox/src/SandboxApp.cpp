@@ -244,7 +244,6 @@ class Sandbox : public ModernEngine::Application
 public:
 	Sandbox()
 	{
-		//PushLayer(new ExampleLayer());
 		PushLayer(new Sanbdox2D());
 	}
 

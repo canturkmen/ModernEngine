@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "ModernEngine\vendo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModernEngine", "ModernEngine\ModernEngine.vcxproj", "{60620D60-4CC5-9C04-F54A-D5BAE18C6887}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModernEngine-Editor", "ModernEngine-Editor\ModernEngine-Editor.vcxproj", "{14BAD82B-801B-B639-0989-FCEB75E9ECF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -50,6 +52,12 @@ Global
 		{60620D60-4CC5-9C04-F54A-D5BAE18C6887}.Dist|x64.Build.0 = Dist|x64
 		{60620D60-4CC5-9C04-F54A-D5BAE18C6887}.Release|x64.ActiveCfg = Release|x64
 		{60620D60-4CC5-9C04-F54A-D5BAE18C6887}.Release|x64.Build.0 = Release|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Debug|x64.ActiveCfg = Debug|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Debug|x64.Build.0 = Debug|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Dist|x64.ActiveCfg = Dist|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Dist|x64.Build.0 = Dist|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Release|x64.ActiveCfg = Release|x64
+		{14BAD82B-801B-B639-0989-FCEB75E9ECF8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
