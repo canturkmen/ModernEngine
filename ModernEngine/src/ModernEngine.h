@@ -5,12 +5,12 @@
 #include "ModernEngine/Core/Log.h"
 #include "ModernEngine/Core/DeltaTime.h"
 
-//Input polling files
+// Input polling files
 #include "ModernEngine/Core/Input.h"
 #include "ModernEngine/Core/KeyCodes.h"
 #include "ModernEngine/Core/MouseButtonCodes.h"
 
-//Renderer files
+// Renderer files
 #include "ModernEngine/Renderer/Renderer.h"
 #include "ModernEngine/Renderer/Renderer2D.h"
 #include "ModernEngine/Renderer/Shader.h"
