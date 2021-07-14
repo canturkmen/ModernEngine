@@ -16,11 +16,15 @@ namespace ModernEngine {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
+		virtual void OnEvent(Event& e) override;
 
 		void Begin();
 		void End();
 
+		void BlockEvent(bool eventblocked) { m_EventBlocked = eventblocked; }
+
 	private:
+		bool m_EventBlocked = true;
 		float m_Time = 0.0f;
 	};
 }

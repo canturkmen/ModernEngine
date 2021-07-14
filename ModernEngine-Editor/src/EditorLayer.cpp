@@ -34,7 +34,8 @@ namespace ModernEngine {
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
-		m_CameraController.OnUpdate(dt);
+		if(m_ViewportFocused)
+			m_CameraController.OnUpdate(dt);
 
 		Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
@@ -149,6 +150,11 @@ namespace ModernEngine {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->BlockEvent(!m_ViewportHovered || !m_ViewportFocused);
+
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
 		{

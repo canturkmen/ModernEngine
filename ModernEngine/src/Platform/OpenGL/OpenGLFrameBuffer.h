@@ -18,6 +18,7 @@ namespace ModernEngine {
 
 		virtual const FrameBufferSpecification& GetSpefications() const override { return m_Specification; }
 		virtual uint32_t GetColorAttachmentRendererID() const override { return m_ColorAttachment; }
+
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_ColorAttachment = 0, m_DepthAttachment = 0;

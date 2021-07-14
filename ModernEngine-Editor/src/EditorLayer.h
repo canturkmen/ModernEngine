@@ -25,6 +25,7 @@ namespace ModernEngine {
 		Ref<FrameBuffer> m_FrameBuffer;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
 	};
 
 }

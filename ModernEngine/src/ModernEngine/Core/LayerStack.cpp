@@ -30,7 +30,6 @@ namespace ModernEngine {
 		overlay->OnAttach();
 	}
 
-
 	void LayerStack::PopLayer(Layer* layer)
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsert, layer);

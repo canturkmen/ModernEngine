@@ -1,27 +1,25 @@
 #include "mnpch.h"
-#include "WindowsInput.h"
+#include "ModernEngine/Core/Input.h"
 #include "ModernEngine/Core/Application.h"
 #include "GLFW/glfw3.h"
 
 namespace ModernEngine {
 
-	Input* Input::s_InputInstance = new WindowsInput; 
-
-	bool WindowsInput::IsKeyPressedImpl(int key)
+	bool Input::IsKeyPressed(int key)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, key);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xPos, yPos;
@@ -29,16 +27,15 @@ namespace ModernEngine {
 		return { (float)xPos, (float)yPos };
 	}
 
-	float WindowsInput::GetMouseXPositionImpl()
+	float Input::GetMouseXPosition()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return x;
 	}
 
-	float WindowsInput::GetMouseYPositionImpl()
+	float Input::GetMouseYPosition()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto [x, y] = GetMousePosition();
 		return y;
 	}
-
 }
