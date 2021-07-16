@@ -11,6 +11,8 @@ IncludeDir["Glad"] = "ModernEngine/vendor/GLAD/include"
 IncludeDir["ImGui"] = "ModernEngine/vendor/imgui"
 IncludeDir["glm"] = "ModernEngine/vendor/glm"
 IncludeDir["stb_image"] = "ModernEngine/vendor/stb_image"
+IncludeDir["entt"] = "ModernEngine/vendor/entt/include"
+
 
 group "Dependencies"
 
@@ -34,7 +36,7 @@ project "ModernEngine"
 
 	defines {"_CRT_SECURE_NO_WARNINGS"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}"}
 
 	links { "GLFW", "opengl32.lib", "Glad", "ImGui"}
 
@@ -82,7 +84,8 @@ project "ModernEngine-Editor"
 		"ModernEngine/vendor/spdlog/include",
 		"ModernEngine/src",
 		"ModernEngine/vendor",
-		"%{IncludeDir.glm}" 
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}" 
 	}
 
 	links
@@ -134,7 +137,8 @@ project "Sandbox"
 		"ModernEngine/vendor/spdlog/include",
 		"ModernEngine/src",
 		"ModernEngine/vendor",
-		"%{IncludeDir.glm}" 
+		"%{IncludeDir.glm}", 
+		"%{IncludeDir.entt}"
 	}
 
 	links

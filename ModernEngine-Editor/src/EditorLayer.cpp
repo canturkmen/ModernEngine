@@ -24,7 +24,13 @@ namespace ModernEngine {
 		fbSpec.width = 1280.0f;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_CameraController.SetZoomLevel(5.0f);
+		m_ActiveScene = std::make_shared<Scene>();
+		auto square = m_ActiveScene->CreateEntity();
+
+		m_ActiveScene->Registery().emplace<TransformComponent>(square); 
+		m_ActiveScene->Registery().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+
+		m_Entity = square;
 	}
 
 	void EditorLayer::OnDetach()
@@ -42,25 +48,9 @@ namespace ModernEngine {
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 
-		static float Rotation = 0.0f;
-		Rotation += dt * 50;
-
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Renderer2D::DrawQuad({ -1.0f, 1.0f }, { 1.0f, 1.0f }, m_SquareColor);
-		Renderer2D::DrawQuad({ 1.5f, -1.5f }, { 1.0f, 1.0f }, m_SquareColor);
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_Checkerboard, 10.0f);
-		Renderer2D::DrawRotateQuad({ -2.0f, -2.0f }, { 1.5f, 1.5f }, Rotation, m_Checkerboard, 10.0f);
+		m_ActiveScene->OnUpdate(dt);
 		Renderer2D::EndScene();
-
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-		for (float y = -5.0f; y < 5.0f; y += 0.5f)
-		{
-			for (float x = -5.0f; x < 5.0f; x += 0.5f)
-			{
-				glm::vec4 color = { (x + 5.0f) / 10.0f, 0.3f, (y + 5.0f) / 10.0f, 0.7f };
-				Renderer2D::DrawQuad({ x, y }, { 0.5f, 0.5f }, color);
-			}
-		}
 
 		Renderer2D::EndScene();
 		m_FrameBuffer->Unbind();
@@ -144,7 +134,10 @@ namespace ModernEngine {
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetStats().DrawCalls);
 		ImGui::Text("Quad Count: %d", Renderer2D::GetStats().QuadCount);
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
-		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
+		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());     
+
+		auto& color = m_ActiveScene->Registery().get<SpriteRendererComponent>(m_Entity).Color;
+		ImGui::ColorEdit4("Color: ", glm::value_ptr(color));
 
 		ImGui::End();
 

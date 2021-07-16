@@ -164,17 +164,53 @@ namespace ModernEngine {
 	{
 		MN_PROFILE_FUNCTION();
 
-		constexpr size_t QuadVertexCount = 4;
-		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+		
+		DrawQuad(transform, color);
+	}
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
-			FlushAndReset();
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, TilingFactor, color);
+	}
 
-		const float textureIndex = 0.0f; // White Texture
-		const float tilingFactor = 1.0f;
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	{
+		MN_PROFILE_FUNCTION();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		DrawQuad(transform, texture, TilingFactor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subtexture, float TilingFactor /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, size, subtexture, TilingFactor, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subtexture, float TilingFactor /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
+	{
+		MN_PROFILE_FUNCTION();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		DrawQuad(transform, subtexture, TilingFactor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		MN_PROFILE_FUNCTION();
+
+		constexpr size_t QuadVertexCount = 4;
+		constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
+		const float textureIndex = 0.0f; // White Texture
+		const float tilingFactor = 1.0f;
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+			FlushAndReset();
 
 		for (int i = 0; i < QuadVertexCount; i++)
 		{
@@ -190,12 +226,7 @@ namespace ModernEngine {
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, TilingFactor, color);
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& color /*= glm::vec4(1.0f)*/)
 	{
 		MN_PROFILE_FUNCTION();
 
@@ -223,16 +254,13 @@ namespace ModernEngine {
 			s_Data.TextureSlotIndex++;
 		}
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
 		for (int i = 0; i < QuadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.VertexPositions[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -240,12 +268,7 @@ namespace ModernEngine {
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subtexture, float TilingFactor /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, subtexture, TilingFactor, color);
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subtexture, float TilingFactor /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subtexture, float tilingFactor, const glm::vec4& color /*= glm::vec4(1.0f)*/)
 	{
 		constexpr size_t QuadVertexCount = 4;
 		const glm::vec2* textureCoords = subtexture->GetTexCoords();
@@ -272,16 +295,13 @@ namespace ModernEngine {
 			s_Data.TextureSlotIndex++;
 		}
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
 		for (int i = 0; i < QuadVertexCount; i++)
 		{
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.VertexPositions[i];
 			s_Data.QuadVertexBufferPtr->Color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 			s_Data.QuadVertexBufferPtr++;
 		}
 

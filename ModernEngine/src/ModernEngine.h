@@ -4,6 +4,8 @@
 #include "ModernEngine/Core/Application.h"
 #include "ModernEngine/Core/Log.h"
 #include "ModernEngine/Core/DeltaTime.h"
+#include "ModernEngine/Scene/Scene.h"
+#include "ModernEngine/Scene/Components.h"
 
 // Input polling files
 #include "ModernEngine/Core/Input.h"

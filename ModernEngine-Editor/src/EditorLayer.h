@@ -18,11 +18,15 @@ namespace ModernEngine {
 		virtual void OnImGuiRender() override;
 
 	private:
+		Ref<Scene> m_ActiveScene;
+
 		OrthographicCameraController m_CameraController;
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.0f };
 
 		Ref<Texture2D> m_Checkerboard;
 		Ref<FrameBuffer> m_FrameBuffer;
+
+		entt::entity m_Entity;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
