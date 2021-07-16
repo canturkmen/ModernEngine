@@ -1100,5 +1100,9 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
+    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\ModernEngine\Scene\Entity.h" />
   </ItemGroup>
 </Project>

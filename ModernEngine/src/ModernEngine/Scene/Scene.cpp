@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Components.h"
 #include "ModernEngine/Renderer/Renderer2D.h"
+#include "Entity.h"
 #include <glm/glm.hpp>
 
 namespace ModernEngine {
@@ -50,9 +51,14 @@ namespace ModernEngine {
 		
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_Registery.create();
+		Entity entity = { m_Registery.create(), this }; 
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "Entity" : name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(DeltaTime dt)

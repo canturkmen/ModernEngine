@@ -25,10 +25,8 @@ namespace ModernEngine {
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = std::make_shared<Scene>();
-		auto square = m_ActiveScene->CreateEntity();
-
-		m_ActiveScene->Registery().emplace<TransformComponent>(square); 
-		m_ActiveScene->Registery().emplace<SpriteRendererComponent>(square, glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		Entity square = m_ActiveScene->CreateEntity("Square Entity");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 
 		m_Entity = square;
 	}
@@ -134,9 +132,12 @@ namespace ModernEngine {
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetStats().DrawCalls);
 		ImGui::Text("Quad Count: %d", Renderer2D::GetStats().QuadCount);
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
-		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());     
+		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());    
 
-		auto& color = m_ActiveScene->Registery().get<SpriteRendererComponent>(m_Entity).Color;
+		auto& tag = m_Entity.GetComponent<TagComponent>().Tag;
+		ImGui::Text("Tag: %s", tag.c_str());
+
+		auto& color = m_Entity.GetComponent<SpriteRendererComponent>().Color;
 		ImGui::ColorEdit4("Color: ", glm::value_ptr(color));
 
 		ImGui::End();

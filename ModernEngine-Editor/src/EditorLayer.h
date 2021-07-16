@@ -26,7 +26,7 @@ namespace ModernEngine {
 		Ref<Texture2D> m_Checkerboard;
 		Ref<FrameBuffer> m_FrameBuffer;
 
-		entt::entity m_Entity;
+		Entity m_Entity;
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;

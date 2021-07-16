@@ -462,6 +462,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
@@ -505,6 +506,9 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\ModernEngine\Scene\Entity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
