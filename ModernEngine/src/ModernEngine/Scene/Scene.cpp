@@ -63,11 +63,33 @@ namespace ModernEngine {
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{
-		auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		Camera* mainCamera = nullptr;
+		glm::mat4* cameraTransform = nullptr;
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawQuad(transform, sprite.Color);
+			auto cameraGroup = m_Registery.view<TransformComponent, CameraComponent>();
+			for (auto entity : cameraGroup)
+			{
+				auto& [transform, camera] = cameraGroup.get<TransformComponent, CameraComponent>(entity);
+
+				if (camera.Primary)
+				{
+					mainCamera = &camera.m_Camera;
+					cameraTransform = &transform.Transform;
+					break;
+				}
+			}
 		}
+
+		if (mainCamera != nullptr)
+		{
+			Renderer2D::BeginScene(mainCamera->GetProjectionMatrix(), *cameraTransform);
+			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				Renderer2D::DrawQuad(transform, sprite.Color);
+			}
+		}
+		Renderer2D::EndScene();
 	}
 }

@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
     <ClInclude Include="src\ModernEngine\Scene\Components.h" />
     <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
     <ClInclude Include="src\ModernEngine.h" />

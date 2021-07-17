@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ModernEngine/Renderer/Camera.h"
 #include <glm/glm.hpp>
 
 namespace ModernEngine {
@@ -35,5 +36,16 @@ namespace ModernEngine {
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
 		SpriteRendererComponent(const glm::vec4& color)
 			: Color(color) {}
+	};
+
+	struct CameraComponent
+	{
+		Camera m_Camera;
+		bool Primary = true;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const Camera& camera)
+			: m_Camera(camera) {}
 	};
 }

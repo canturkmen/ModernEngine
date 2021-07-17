@@ -28,6 +28,12 @@ namespace ModernEngine {
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 
+		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
+		m_Camera.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
+		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f)); 
+
 		m_Entity = square;
 	}
 
@@ -38,19 +44,14 @@ namespace ModernEngine {
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
-		if(m_ViewportFocused)
-			m_CameraController.OnUpdate(dt);
-
 		Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
+
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
 		m_ActiveScene->OnUpdate(dt);
-		Renderer2D::EndScene();
 
-		Renderer2D::EndScene();
 		m_FrameBuffer->Unbind();
 	}
 
@@ -139,6 +140,14 @@ namespace ModernEngine {
 
 		auto& color = m_Entity.GetComponent<SpriteRendererComponent>().Color;
 		ImGui::ColorEdit4("Color: ", glm::value_ptr(color));
+
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_Camera.GetComponent<TransformComponent>().Transform[3]));
+
+		if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
+		{
+			m_Camera.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+		}
 
 		ImGui::End();
 
