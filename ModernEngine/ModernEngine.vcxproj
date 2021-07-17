@@ -141,6 +141,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
     <ClInclude Include="src\ModernEngine\Scene\Components.h" />
     <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
@@ -463,6 +464,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />

@@ -16,8 +16,12 @@ namespace ModernEngine {
 		entt::registry& Registery() { return m_Registery; }
 
 		void OnUpdate(DeltaTime dt);
+		void OnViewportResize(uint32_t width, uint32_t height);
 
 	private:
+		uint32_t m_Width;
+		uint32_t m_Height;
+
 		entt::registry m_Registery;
 		friend class Entity;
 	};

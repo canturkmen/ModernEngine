@@ -1011,6 +1011,7 @@
     <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
     <ClInclude Include="src\ModernEngine\Scene\Components.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
+    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1102,6 +1103,7 @@
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
+    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ModernEngine\Scene\Entity.h" />

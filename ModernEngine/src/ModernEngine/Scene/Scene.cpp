@@ -9,6 +9,7 @@ namespace ModernEngine {
 
 	Scene::Scene()
 	{
+
 #if 0
 		struct MeshComponent 
 		{
@@ -91,5 +92,21 @@ namespace ModernEngine {
 			}
 		}
 		Renderer2D::EndScene();
+	}
+
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_Width = width;
+		m_Height = height;
+
+		auto view = m_Registery.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& cameraComponent = view.get<CameraComponent>(entity);
+			if (!cameraComponent.FixedAspectRatio)
+			{
+				cameraComponent.m_Camera.SetViewportSize(width, height);
+			}
+		}
 	}
 }

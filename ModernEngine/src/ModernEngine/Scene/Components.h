@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ModernEngine/Renderer/Camera.h"
+#include "ModernEngine/Scene/SceneCamera.h"
 #include <glm/glm.hpp>
 
 namespace ModernEngine {
@@ -40,12 +40,11 @@ namespace ModernEngine {
 
 	struct CameraComponent
 	{
-		Camera m_Camera;
+		SceneCamera m_Camera;
 		bool Primary = true;
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const Camera& camera)
-			: m_Camera(camera) {}
 	};
 }

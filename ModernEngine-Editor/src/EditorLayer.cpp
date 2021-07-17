@@ -29,10 +29,10 @@ namespace ModernEngine {
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 
 		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
-		m_Camera.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_Camera.AddComponent<CameraComponent>();
 
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
-		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f)); 
+		m_SecondCamera.AddComponent<CameraComponent>(); 
 
 		m_Entity = square;
 	}
@@ -57,7 +57,7 @@ namespace ModernEngine {
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		m_CameraController.OnEvent(e);
+
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -149,6 +149,14 @@ namespace ModernEngine {
 			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
 		}
 
+		{
+			auto& camera = m_SecondCamera.GetComponent<CameraComponent>().m_Camera;
+			float orthoSize = camera.GetOrthographicCameraSize();
+			if (ImGui::DragFloat("Second Camera Orthographic Size", &orthoSize))
+				camera.SetOrthographicCameraSize(orthoSize);
+		}
+
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -164,6 +172,7 @@ namespace ModernEngine {
 			m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 			m_ViewportSize = { viewportSize.x, viewportSize.y };
 			m_CameraController.OnResize(viewportSize.x, viewportSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
