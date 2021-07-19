@@ -64,6 +64,22 @@ namespace ModernEngine {
 
 	void Scene::OnUpdate(DeltaTime dt)
 	{
+		// Update Scripts
+		{
+			m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
+				{
+					if (nsc.Instance == nullptr)
+					{
+						nsc.InstantiateFunction();
+						nsc.Instance->m_Entity = Entity{ entity, this };
+						nsc.OnCreateFunction(nsc.Instance);
+					}
+
+					nsc.OnUpdateFunction(nsc.Instance, dt);
+				});
+		}
+
+		// 2D render
 		Camera* mainCamera = nullptr;
 		glm::mat4* cameraTransform = nullptr;
 		{

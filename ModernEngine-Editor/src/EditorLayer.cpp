@@ -27,14 +27,45 @@ namespace ModernEngine {
 		m_ActiveScene = std::make_shared<Scene>();
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
+		m_Entity = square;
 
 		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
 		m_Camera.AddComponent<CameraComponent>();
 
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
-		m_SecondCamera.AddComponent<CameraComponent>(); 
+		m_SecondCamera.AddComponent<CameraComponent>();
+		m_SecondCamera.GetComponent<CameraComponent>().Primary = false;
 
-		m_Entity = square;
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			void OnCreate()
+			{
+				
+			}
+
+			void OnDestroy()
+			{
+
+			}
+
+			void OnUpdate(DeltaTime dt)
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				float Speed = 5.0f;
+
+				if (Input::IsKeyPressed(MN_KEY_A))
+					transform[3][0] -= Speed * dt;
+				if (Input::IsKeyPressed(MN_KEY_D))
+					transform[3][0] += Speed * dt;
+				if (Input::IsKeyPressed(MN_KEY_W))
+					transform[3][1] += Speed * dt;
+				if (Input::IsKeyPressed(MN_KEY_S))
+					transform[3][1] -= Speed * dt;
+			}
+		};
+
+		m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()

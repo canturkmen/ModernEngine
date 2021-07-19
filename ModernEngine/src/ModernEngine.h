@@ -7,6 +7,7 @@
 #include "ModernEngine/Scene/Scene.h"
 #include "ModernEngine/Scene/Components.h"
 #include "ModernEngine/Scene/Entity.h"
+#include "ModernEngine/Scene/ScriptableEntity.h"
 
 // Input polling files
 #include "ModernEngine/Core/Input.h"

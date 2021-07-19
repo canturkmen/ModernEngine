@@ -32,5 +32,4 @@ namespace ModernEngine {
 
 		m_ProjectionMatrix = glm::ortho(Left, Right, Bottom, Up, m_OrthographicNear, m_OrthographicFar);
 	}
-
 }

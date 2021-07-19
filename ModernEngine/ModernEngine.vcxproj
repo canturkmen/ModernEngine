@@ -176,6 +176,7 @@
     <ClInclude Include="src\ModernEngine\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Texture.h" />
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h" />
+    <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
