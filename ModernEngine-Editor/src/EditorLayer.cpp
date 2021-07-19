@@ -41,10 +41,11 @@ namespace ModernEngine {
 		public:
 			void OnCreate()
 			{
-				
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				transform[3][0] = rand() % 10 - 5.0f;
 			}
 
-			void OnDestroy()
+		   void OnDestroy()
 			{
 
 			}
@@ -66,6 +67,7 @@ namespace ModernEngine {
 		};
 
 		m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()

@@ -10,41 +10,6 @@ namespace ModernEngine {
 	Scene::Scene()
 	{
 
-#if 0
-		struct MeshComponent 
-		{
-			float value;
-			MeshComponent() = default;
-		};
-
-		struct TransformComponent
-		{
-			glm::mat4 Transform;
-
-			TransformComponent() = default;
-			TransformComponent(const TransformComponent&) = default;
-			TransformComponent(const glm::mat4& transform)
-				:Transform(transform) {}
-
-			operator glm::mat4() { return Transform; }
-			operator const glm::mat4& () const { return Transform; }
-		};
-
-		entt::entity entity = m_Registery.create();
-		m_Registery.emplace<TransformComponent>(entity, glm::mat4(1.0f));
-
-		auto view = m_Registery.view<TransformComponent>();
-		for (auto entity : view)
-		{
-			TransformComponent& transform = m_Registery.get<TransformComponent>(entity);
-		}
-
-		auto group = m_Registery.group<TransformComponent>(entt::get<MeshComponent>);
-		for (auto entity : group)
-		{
-			auto& [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
-		}
-#endif
 	}
 
 	Scene::~Scene()
@@ -70,12 +35,12 @@ namespace ModernEngine {
 				{
 					if (nsc.Instance == nullptr)
 					{
-						nsc.InstantiateFunction();
+						nsc.Instance = nsc.InstantiateScript();
 						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.OnCreateFunction(nsc.Instance);
+						nsc.Instance->OnCreate();
 					}
 
-					nsc.OnUpdateFunction(nsc.Instance, dt);
+					nsc.Instance->OnUpdate(dt);
 				});
 		}
 
@@ -86,7 +51,7 @@ namespace ModernEngine {
 			auto cameraGroup = m_Registery.view<TransformComponent, CameraComponent>();
 			for (auto entity : cameraGroup)
 			{
-				auto& [transform, camera] = cameraGroup.get<TransformComponent, CameraComponent>(entity);
+				auto [transform, camera] = cameraGroup.get<TransformComponent, CameraComponent>(entity);
 
 				if (camera.Primary)
 				{
@@ -120,9 +85,8 @@ namespace ModernEngine {
 		{
 			auto& cameraComponent = view.get<CameraComponent>(entity);
 			if (!cameraComponent.FixedAspectRatio)
-			{
 				cameraComponent.m_Camera.SetViewportSize(width, height);
-			}
+			
 		}
 	}
 }
