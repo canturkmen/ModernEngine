@@ -2,6 +2,7 @@
 
 #include "ModernEngine/Scene/Scene.h"
 #include "ModernEngine/Scene/Entity.h"
+#include "ModernEngine/Scene/Components.h"
 #include "ModernEngine/Core/Core.h"
 
 namespace ModernEngine {

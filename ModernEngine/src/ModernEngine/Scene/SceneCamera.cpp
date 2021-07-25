@@ -11,9 +11,23 @@ namespace ModernEngine {
 
 	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
 	{
+		m_ProjectionType = ProjectionType::Orthographic;
+
 		m_OrthographicSize = size;
 		m_OrthographicNear = nearClip;
 		m_OrthographicFar = farClip;
+
+		RecalculateProjectionMatrix();
+	}
+
+	void SceneCamera::SetPerspective(float perspectiveFOV, float nearClip, float farClip)
+	{
+		m_ProjectionType = ProjectionType::Perspective;
+
+		m_PerspectiveFOV = perspectiveFOV;
+		m_PerspectiveNear = nearClip;
+		m_PerspectiveFar = farClip;
+
 		RecalculateProjectionMatrix();
 	}
 
@@ -25,11 +39,18 @@ namespace ModernEngine {
 
 	void SceneCamera::RecalculateProjectionMatrix()
 	{
-		float Left = -m_OrthographicSize * m_AspectRatio * 0.5f;
-		float Right = m_OrthographicSize * m_AspectRatio * 0.5f;
-		float Bottom = -m_OrthographicSize * 0.5f;
-		float Up = m_OrthographicSize * 0.5f;
+		if (m_ProjectionType == ProjectionType::Perspective)
+		{
+			m_ProjectionMatrix = glm::perspective(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
+		}
+		else
+		{
+			float Left = -m_OrthographicSize * m_AspectRatio * 0.5f;
+			float Right = m_OrthographicSize * m_AspectRatio * 0.5f;
+			float Bottom = -m_OrthographicSize * 0.5f;
+			float Up = m_OrthographicSize * 0.5f;
 
-		m_ProjectionMatrix = glm::ortho(Left, Right, Bottom, Up, m_OrthographicNear, m_OrthographicFar);
+			m_ProjectionMatrix = glm::ortho(Left, Right, Bottom, Up, m_OrthographicNear, m_OrthographicFar);
+		}
 	}
 }

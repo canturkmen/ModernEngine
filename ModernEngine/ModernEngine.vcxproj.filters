@@ -22,6 +22,9 @@
     <Filter Include="src\ModernEngine\Renderer">
       <UniqueIdentifier>{5D2EE216-C9F0-15A1-12A1-A42D7EA2EE7E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ModernEngine\Scene">
+      <UniqueIdentifier>{347B7589-2075-9EDB-09E2-34ECF57A0448}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -114,6 +117,9 @@
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Renderer\Camera.h">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClInclude>
@@ -149,6 +155,21 @@
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h">
       <Filter>src\ModernEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scene\Components.h">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scene\Entity.h">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scene\Scene.h">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h">
+      <Filter>src\ModernEngine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1008,11 +1029,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
-    <ClInclude Include="src\ModernEngine\Scene\Components.h" />
-    <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
-    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
-    <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1069,6 +1085,15 @@
     <ClCompile Include="src\ModernEngine\Renderer\VertexArray.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Scene\Scene.cpp">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp">
+      <Filter>src\ModernEngine\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1102,11 +1127,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
-    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
-    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\ModernEngine\Scene\Entity.h" />
   </ItemGroup>
 </Project>

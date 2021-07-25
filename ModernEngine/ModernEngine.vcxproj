@@ -141,10 +141,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
-    <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
-    <ClInclude Include="src\ModernEngine\Scene\Components.h" />
-    <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Core.h" />
@@ -164,6 +160,7 @@
     <ClInclude Include="src\ModernEngine\Events\MouseEvent.h" />
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
     <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h" />
@@ -176,6 +173,10 @@
     <ClInclude Include="src\ModernEngine\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Texture.h" />
     <ClInclude Include="src\ModernEngine\Renderer\VertexArray.h" />
+    <ClInclude Include="src\ModernEngine\Scene\Components.h" />
+    <ClInclude Include="src\ModernEngine\Scene\Entity.h" />
+    <ClInclude Include="src\ModernEngine\Scene\Scene.h" />
+    <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -465,9 +466,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
-    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
-    <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
@@ -486,6 +484,9 @@
     <ClCompile Include="src\ModernEngine\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Texture.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\ModernEngine\Scene\Entity.cpp" />
+    <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
+    <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
@@ -510,9 +511,6 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\ModernEngine\Scene\Entity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

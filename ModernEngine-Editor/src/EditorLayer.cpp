@@ -29,6 +29,10 @@ namespace ModernEngine {
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 		m_Entity = square;
 
+		Entity second_square = m_ActiveScene->CreateEntity("Second Square Entity");
+		second_square.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
+		second_square.AddComponent<TransformComponent>()
+
 		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
 		m_Camera.AddComponent<CameraComponent>();
 
@@ -184,13 +188,6 @@ namespace ModernEngine {
 		{
 			m_Camera.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
 			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-		}
-
-		{
-			auto& camera = m_Camera.GetComponent<CameraComponent>().m_Camera;
-			float orthoSize = camera.GetOrthographicCameraSize();
-			if (ImGui::DragFloat("Second Camera Orthographic Size", &orthoSize))
-				camera.SetOrthographicCameraSize(orthoSize);
 		}
 
 		ImGui::End();
