@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ModernEngine.h"
+#include "Panels/SceneHierarchyPanel.h"
 
 namespace ModernEngine {
 
@@ -34,6 +35,8 @@ namespace ModernEngine {
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+
+		SceneHierarchyPanel m_SceneHieararchyPanel;
 	};
 
 }

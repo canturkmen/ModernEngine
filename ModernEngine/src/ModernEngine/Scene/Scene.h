@@ -24,6 +24,7 @@ namespace ModernEngine {
 
 		entt::registry m_Registery;
 		friend class Entity;
+		friend class SceneHierarchyPanel;
 	};
 }
 

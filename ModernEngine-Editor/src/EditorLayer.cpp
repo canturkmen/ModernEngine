@@ -32,7 +32,7 @@ namespace ModernEngine {
 		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
 		m_Camera.AddComponent<CameraComponent>();
 
-		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera");
+		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera Entity");
 		m_SecondCamera.AddComponent<CameraComponent>();
 		m_SecondCamera.GetComponent<CameraComponent>().Primary = false;
 
@@ -68,6 +68,8 @@ namespace ModernEngine {
 
 		m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_SceneHieararchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -161,6 +163,8 @@ namespace ModernEngine {
 			ImGui::EndMenuBar();
 		}
 
+		m_SceneHieararchyPanel.OnImGuiRender();
+
 		ImGui::Begin("Settings");
 
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetStats().DrawCalls);
@@ -183,12 +187,11 @@ namespace ModernEngine {
 		}
 
 		{
-			auto& camera = m_SecondCamera.GetComponent<CameraComponent>().m_Camera;
+			auto& camera = m_Camera.GetComponent<CameraComponent>().m_Camera;
 			float orthoSize = camera.GetOrthographicCameraSize();
 			if (ImGui::DragFloat("Second Camera Orthographic Size", &orthoSize))
 				camera.SetOrthographicCameraSize(orthoSize);
 		}
-
 
 		ImGui::End();
 
