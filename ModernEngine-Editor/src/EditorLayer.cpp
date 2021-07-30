@@ -31,7 +31,6 @@ namespace ModernEngine {
 
 		Entity second_square = m_ActiveScene->CreateEntity("Second Square Entity");
 		second_square.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
-		second_square.AddComponent<TransformComponent>()
 
 		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
 		m_Camera.AddComponent<CameraComponent>();
@@ -45,8 +44,8 @@ namespace ModernEngine {
 		public:
 			virtual void OnCreate() override
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
-				transform[3][0] = rand() % 10 - 5.0f;
+				auto& transform = GetComponent<TransformComponent>();
+				transform.Translation.x = rand() % 10 - 5.0f; 
 			}
 
 		   virtual void OnDestroy() override
@@ -56,17 +55,17 @@ namespace ModernEngine {
 
 			virtual void OnUpdate(DeltaTime dt) override
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& transform = GetComponent<TransformComponent>();
 				float Speed = 5.0f;
 
 				if (Input::IsKeyPressed(MN_KEY_A))
-					transform[3][0] -= Speed * dt;
+					transform.Translation.x -= Speed * dt;
 				if (Input::IsKeyPressed(MN_KEY_D))
-					transform[3][0] += Speed * dt;
+					transform.Translation.x += Speed * dt;
 				if (Input::IsKeyPressed(MN_KEY_W))
-					transform[3][1] += Speed * dt;
+					transform.Translation.y += Speed * dt;
 				if (Input::IsKeyPressed(MN_KEY_S))
-					transform[3][1] -= Speed * dt;
+					transform.Translation.y -= Speed * dt;
 			}
 		};
 
@@ -169,26 +168,12 @@ namespace ModernEngine {
 
 		m_SceneHieararchyPanel.OnImGuiRender();
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Stats");
 
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetStats().DrawCalls);
 		ImGui::Text("Quad Count: %d", Renderer2D::GetStats().QuadCount);
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
-		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());    
-
-		auto& tag = m_Entity.GetComponent<TagComponent>().Tag;
-		ImGui::Text("Tag: %s", tag.c_str());
-
-		auto& color = m_Entity.GetComponent<SpriteRendererComponent>().Color;
-		ImGui::ColorEdit4("Color: ", glm::value_ptr(color));
-
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_Camera.GetComponent<TransformComponent>().Transform[3]));
-
-		if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
-		{
-			m_Camera.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-			m_SecondCamera.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-		}
+		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
 
 		ImGui::End();
 

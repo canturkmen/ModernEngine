@@ -1,6 +1,7 @@
 #include "SceneHierarchyPanel.h"
-#include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 namespace ModernEngine {
 
@@ -19,7 +20,7 @@ namespace ModernEngine {
 		ImGui::Begin("Scene Hierarchy");
 
 		m_Context->m_Registery.each([&](auto entityID)
-			{
+			{ 
 				Entity entity = { entityID, m_Context.get() };
 				DrawEntityNode(entity);
 			});
@@ -34,6 +35,65 @@ namespace ModernEngine {
 			DrawComponents(m_SelectionContext);
 		
 		ImGui::End();
+	}
+
+	static void DrawVec3Component(const std::string& name, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	{
+		ImGui::PushID(name.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(name.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 0.0f });
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 ButtonSize = { lineHeight + 3.0f, lineHeight };
+
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.3f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.4f, 0.5f, 0.5f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.8f, 0.3f, 1.0f });
+
+		if (ImGui::Button("X", ButtonSize))
+			values.x = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.7f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.4f, 0.5f, 0.3f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f, 0.3f, 0.3f, 1.0f });
+
+		if (ImGui::Button("Y", ButtonSize))
+			values.y = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+		
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.2f, 0.3f, 0.8f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f, 0.4f, 0.6f, 1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.2f, 0.5f, 0.3f, 1.0f });
+
+		if (ImGui::Button("Z", ButtonSize))
+			values.x = resetValue;
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
 	}
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
@@ -71,11 +131,17 @@ namespace ModernEngine {
 		{
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				auto& transform = entity.GetComponent<TransformComponent>().Transform;
-				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+				auto& transform = entity.GetComponent<TransformComponent>();
+
+				DrawVec3Component("Position", transform.Translation);
+				glm::vec3 rotation = glm::degrees(transform.Rotation);
+				DrawVec3Component("Rotation", rotation);
+				transform.Rotation = glm::radians(rotation);
+				DrawVec3Component("Scale", transform.Scale);
+
 				ImGui::TreePop();
 			}
-		}
+		} 
 
 		if (entity.HasComponent<CameraComponent>())
 		{
@@ -128,13 +194,23 @@ namespace ModernEngine {
 
 					float OrthoNear = camera.GetOrthographicCameraNear();
 					if (ImGui::DragFloat("Near Clip", &OrthoNear))
-						camera.SetOrthographicCameraNear(OrthoNear); 
+						camera.SetOrthographicCameraNear(OrthoNear);
 
 					float OrthoFar = camera.GetOrthographicCameraNear();
 					if (ImGui::DragFloat("Far Clip", &OrthoFar))
 						camera.SetOrthographicCameraFar(OrthoFar);
 				}
 
+				ImGui::TreePop();
+			}
+		}
+
+		if(entity.HasComponent<SpriteRendererComponent>())
+		{
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+			{
+				auto& color = entity.GetComponent<SpriteRendererComponent>().Color;
+				ImGui::ColorEdit4("Color", glm::value_ptr(color));
 				ImGui::TreePop();
 			}
 		}

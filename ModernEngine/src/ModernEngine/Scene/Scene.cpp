@@ -46,7 +46,7 @@ namespace ModernEngine {
 
 		// 2D render
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform = nullptr;
+		glm::mat4 cameraTransform;
 		{
 			auto cameraGroup = m_Registery.view<TransformComponent, CameraComponent>();
 			for (auto entity : cameraGroup)
@@ -56,7 +56,7 @@ namespace ModernEngine {
 				if (camera.Primary)
 				{
 					mainCamera = &camera.m_Camera;
-					cameraTransform = &transform.Transform;
+					cameraTransform = transform.GetTransform();
 					break;
 				}
 			}
@@ -64,12 +64,12 @@ namespace ModernEngine {
 
 		if (mainCamera != nullptr)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjectionMatrix(), *cameraTransform);
+			Renderer2D::BeginScene(mainCamera->GetProjectionMatrix(), cameraTransform);
 			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
 				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform, sprite.Color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 			}
 		}
 		Renderer2D::EndScene();
