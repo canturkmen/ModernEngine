@@ -24,6 +24,9 @@ namespace ModernEngine {
 		void BlockEvent(bool eventblocked) { m_EventBlocked = eventblocked; }
 
 	private:
+		void SetTheme();
+
+	private:
 		bool m_EventBlocked = true;
 		float m_Time = 0.0f;
 	};

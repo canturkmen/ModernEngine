@@ -13,7 +13,7 @@ namespace ModernEngine {
 		uint32_t Width;
 		std::string Title;
 
-		WindowProps(uint32_t height = 720, uint32_t width = 1280, const std::string& title = "Modern Engine")
+		WindowProps(uint32_t height = 900, uint32_t width = 1600, const std::string& title = "Modern Engine")
 			: Height(height), Width(width), Title(title) {}
 	};
 
