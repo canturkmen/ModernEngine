@@ -15,14 +15,19 @@ namespace ModernEngine {
 		Entity CreateEntity(const std::string& name);
 		entt::registry& Registery() { return m_Registery; }
 
+		void DestroyEntity(Entity entity);
+
 		void OnUpdate(DeltaTime dt);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
-	private:
-		uint32_t m_Width;
-		uint32_t m_Height;
+	private: 
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 
+	private:
 		entt::registry m_Registery;
+		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 	};

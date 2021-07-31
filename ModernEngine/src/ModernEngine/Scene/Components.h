@@ -57,7 +57,7 @@ namespace ModernEngine {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 	};
-
+	
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* Instance = nullptr;
