@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "ModernEngine/Scene/SceneSerializer.h"
 
 namespace ModernEngine {
 
@@ -25,6 +26,7 @@ namespace ModernEngine {
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = std::make_shared<Scene>();
+
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 		m_Entity = square;
@@ -155,10 +157,23 @@ namespace ModernEngine {
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("Options"))
+			if (ImGui::BeginMenu("File"))
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
+
+				if (ImGui::MenuItem("Serialize"))
+				{
+					SceneSerializer Serializer(m_ActiveScene);
+					Serializer.Serialize("assets/scenes/Example.ModernEngine");
+				}
+
+				if (ImGui::MenuItem("Deserialize"))
+				{
+					SceneSerializer Serializer(m_ActiveScene);
+					Serializer.Deserialize("assets/scenes/Example.ModernEngine");
+				}
+
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
 			}

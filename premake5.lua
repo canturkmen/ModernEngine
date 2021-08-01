@@ -12,6 +12,7 @@ IncludeDir["ImGui"] = "ModernEngine/vendor/imgui"
 IncludeDir["glm"] = "ModernEngine/vendor/glm"
 IncludeDir["stb_image"] = "ModernEngine/vendor/stb_image"
 IncludeDir["entt"] = "ModernEngine/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "ModernEngine/vendor/yaml-cpp/include"
 
 
 group "Dependencies"
@@ -19,6 +20,7 @@ group "Dependencies"
 include "ModernEngine/vendor/GLFW"
 include "ModernEngine/vendor/Glad"
 include "ModernEngine/vendor/imgui"
+include "ModernEngine/vendor/yaml-cpp"
 
 group ""
 
@@ -36,9 +38,9 @@ project "ModernEngine"
 
 	defines {"_CRT_SECURE_NO_WARNINGS"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}", "%{IncludeDir.yaml_cpp}"}
 
-	links { "GLFW", "opengl32.lib", "Glad", "ImGui"}
+	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp"}
 
 	pchheader "mnpch.h"
 	pchsource "ModernEngine/src/mnpch.cpp"
