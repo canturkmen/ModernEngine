@@ -8,6 +8,8 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "ModernEngine/Scene/SceneSerializer.h"
 
+#include "ModernEngine/Utils/PlatformUtils.h"
+
 namespace ModernEngine {
 
 	EditorLayer::EditorLayer()
@@ -84,6 +86,14 @@ namespace ModernEngine {
 
 	void EditorLayer::OnUpdate(DeltaTime dt)
 	{
+		if (ModernEngine::FrameBufferSpecification spec = m_FrameBuffer->GetSpefications();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
+		{
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+
 		Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
 
@@ -162,16 +172,35 @@ namespace ModernEngine {
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
 				// which we can't undo at the moment without finer window depth/z control.
 
-				if (ImGui::MenuItem("Serialize"))
+				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
-					SceneSerializer Serializer(m_ActiveScene);
-					Serializer.Serialize("assets/scenes/Example.ModernEngine");
+					m_ActiveScene = std::make_shared<Scene>();
+					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+					m_SceneHieararchyPanel.SetContext(m_ActiveScene);
 				}
 
-				if (ImGui::MenuItem("Deserialize"))
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
-					SceneSerializer Serializer(m_ActiveScene);
-					Serializer.Deserialize("assets/scenes/Example.ModernEngine");
+					std::string filepath = FileDialogs::OpenFile("Modern Engine (*.modernengine)\0*.modernengine\0");
+					if (!filepath.empty())
+					{
+						m_ActiveScene = std::make_shared<Scene>();
+						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+						m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+
+						SceneSerializer Serializer(m_ActiveScene);
+						Serializer.Deserialize(filepath);
+					}
+				}
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				{
+					std::string filepath = FileDialogs::SaveFile("Modern Engine (*.modernengine)\0*.modernengine\0");
+					if (!filepath.empty())
+					{
+						SceneSerializer Serializer(m_ActiveScene);
+						Serializer.Serialize(filepath);
+					}
 				}
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
@@ -200,13 +229,9 @@ namespace ModernEngine {
 		Application::Get().GetImGuiLayer()->BlockEvent(!m_ViewportHovered || !m_ViewportFocused);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *(glm::vec2*)&viewportSize && viewportSize.x > 0 && viewportSize.y > 0)
-		{
-			m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-			m_ViewportSize = { viewportSize.x, viewportSize.y };
-			m_CameraController.OnResize(viewportSize.x, viewportSize.y);
-			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-		}
+		
+		m_ViewportSize = { viewportSize.x, viewportSize.y };
+
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 		ImGui::PopStyleVar();
