@@ -13,6 +13,7 @@ IncludeDir["glm"] = "ModernEngine/vendor/glm"
 IncludeDir["stb_image"] = "ModernEngine/vendor/stb_image"
 IncludeDir["entt"] = "ModernEngine/vendor/entt/include"
 IncludeDir["yaml_cpp"] = "ModernEngine/vendor/yaml-cpp/include"
+IncludeDir["ImGuizmo"] = "ModernEngine/vendor/ImGuizmo"
 
 
 group "Dependencies"
@@ -34,13 +35,17 @@ project "ModernEngine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("intermediate/" .. outputdir .. "/%{prj.name}")
 
-	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp", "%{prj.name}/vendor/glm/glm/**.hpp", "%{prj.name}/vendor/glm/glm/**.ini", "%{prj.name}/vendor/stb_image/**.h", "%{prj.name}/vendor/stb_image/**.cpp"}
+	files {"%{prj.name}/src/**.h", "%{prj.name}/src/**.cpp", "%{prj.name}/vendor/glm/glm/**.hpp", "%{prj.name}/vendor/glm/glm/**.ini", "%{prj.name}/vendor/stb_image/**.h", "%{prj.name}/vendor/stb_image/**.cpp", "%{prj.name}/vendor/ImGuizmo/ImGuizmo.h", "%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"}
 
 	defines {"_CRT_SECURE_NO_WARNINGS"}
 
-	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}", "%{IncludeDir.yaml_cpp}"}
+	includedirs {"%{prj.name}/src", "%{prj.name}/vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}", "%{IncludeDir.yaml_cpp}", "%{IncludeDir.ImGuizmo}"}
 
 	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp"}
+
+	filter "files:vendor/ImGuizmo/**.cpp"
+	flags{"NoPCH"}
+		
 
 	pchheader "mnpch.h"
 	pchsource "ModernEngine/src/mnpch.cpp"
@@ -87,7 +92,8 @@ project "ModernEngine-Editor"
 		"ModernEngine/src",
 		"ModernEngine/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}" 
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links

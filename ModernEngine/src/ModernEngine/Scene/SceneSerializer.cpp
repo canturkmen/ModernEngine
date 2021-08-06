@@ -217,18 +217,17 @@ namespace ModernEngine {
 				if (cameraComponent)
 				{
 					auto& cp = deserializedEntity.AddComponent<CameraComponent>();
-					auto& camera = cp.m_Camera;
 					auto& cameraProps = cameraComponent["Camera"];
 
-					camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
+					cp.m_Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
-					camera.SetPerspectiveCameraFOV(cameraProps["PerspectiveFOV"].as<float>());
-					camera.SetPerspectiveCameraNear(cameraProps["PerspectiveNear"].as<float>());
-					camera.SetPerspectiveCameraFar(cameraProps["PerspectiveFar"].as<float>());
+					cp.m_Camera.SetPerspectiveCameraFOV(cameraProps["PerspectiveFOV"].as<float>());
+					cp.m_Camera.SetPerspectiveCameraNear(cameraProps["PerspectiveNear"].as<float>());
+					cp.m_Camera.SetPerspectiveCameraFar(cameraProps["PerspectiveFar"].as<float>());
 
-					camera.SetOrthographicCameraSize(cameraProps["OrthographicSize"].as<float>());
-					camera.SetOrthographicCameraNear(cameraProps["OrthographicNear"].as<float>());
-					camera.SetOrthographicCameraFar(cameraProps["OrthographicFar"].as<float>());
+					cp.m_Camera.SetOrthographicCameraSize(cameraProps["OrthographicSize"].as<float>());
+					cp.m_Camera.SetOrthographicCameraNear(cameraProps["OrthographicNear"].as<float>());
+					cp.m_Camera.SetOrthographicCameraFar(cameraProps["OrthographicFar"].as<float>());
 
 					cp.Primary = cameraComponent["Primary"].as<bool>();
 					cp.FixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();

@@ -9,6 +9,9 @@
 #include "ModernEngine/Scene/SceneSerializer.h"
 
 #include "ModernEngine/Utils/PlatformUtils.h"
+#include "ImGuizmo.h"
+
+#include "ModernEngine/Math/Math.h"
 
 namespace ModernEngine {
 
@@ -28,7 +31,7 @@ namespace ModernEngine {
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = std::make_shared<Scene>();
-
+#if 0
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
 		m_Entity = square;
@@ -75,6 +78,7 @@ namespace ModernEngine {
 
 		m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 
 		m_SceneHieararchyPanel.SetContext(m_ActiveScene);
 	}
@@ -103,11 +107,6 @@ namespace ModernEngine {
 		m_ActiveScene->OnUpdate(dt);
 
 		m_FrameBuffer->Unbind();
-	}
-
-	void EditorLayer::OnEvent(Event& e)
-	{
-
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -181,13 +180,13 @@ namespace ModernEngine {
 
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
 				{
-					std::string filepath = FileDialogs::OpenFile("Modern Engine (*.modernengine)\0*.modernengine\0");
+					std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
 					if (!filepath.empty())
 					{
 						m_ActiveScene = std::make_shared<Scene>();
 						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 						m_SceneHieararchyPanel.SetContext(m_ActiveScene);
-
+					
 						SceneSerializer Serializer(m_ActiveScene);
 						Serializer.Deserialize(filepath);
 					}
@@ -195,7 +194,7 @@ namespace ModernEngine {
 
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 				{
-					std::string filepath = FileDialogs::SaveFile("Modern Engine (*.modernengine)\0*.modernengine\0");
+					std::string filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
 					if (!filepath.empty())
 					{
 						SceneSerializer Serializer(m_ActiveScene);
@@ -226,17 +225,97 @@ namespace ModernEngine {
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvent(!m_ViewportHovered || !m_ViewportFocused);
+		Application::Get().GetImGuiLayer()->BlockEvent(!m_ViewportHovered && !m_ViewportFocused);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		
 		m_ViewportSize = { viewportSize.x, viewportSize.y };
 
+		// Rendering
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+
+		// Gizmos
+		Entity selectedEntity = m_SceneHieararchyPanel.GetSelectedEntity();
+		if (selectedEntity && m_GizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			// Camera - View and Projection 
+			auto PrimaryCamera = m_ActiveScene->GetPrimaryCamera();
+			if (PrimaryCamera)
+			{
+				const auto& cameraCopmonent = PrimaryCamera.GetComponent<CameraComponent>().m_Camera;
+				const glm::mat4& CameraProjection = cameraCopmonent.GetProjectionMatrix();
+				glm::mat4 CameraView = glm::inverse(PrimaryCamera.GetComponent<TransformComponent>().GetTransform());
+
+				// Entity transform 
+				auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+				glm::mat4 Transform = transformComponent.GetTransform();
+
+				bool snap = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL);
+				float snapValue = 0.5f;
+				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+					snapValue = 45.0f;
+
+				float snapValues[3] = { snapValue, snapValue, snapValue };
+
+				ImGuizmo::Manipulate(glm::value_ptr(CameraView), glm::value_ptr(CameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(Transform), nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing())
+				{
+					glm::vec3 translation, rotation, scale;
+					Math::DecomposeTransform(Transform, rotation, translation, scale);
+
+					glm::vec3 deltaRotation = rotation - transformComponent.Rotation; // To avoid the gimbal lock.
+					transformComponent.Translation = translation;
+					transformComponent.Rotation += deltaRotation;
+					transformComponent.Scale = scale;
+				}
+			}
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
 		ImGui::End();
 	}
-}
 
+	void EditorLayer::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
+	}
+
+	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent e)
+	{
+		// Gizmos Shortcut
+		switch (e.GetKeyCode())
+		{
+			case MN_KEY_Q:
+				m_GizmoType = -1;
+				break;
+
+			case MN_KEY_W:
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+
+			case MN_KEY_E:
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+
+			case MN_KEY_R:
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
+		}
+
+		return true;
+	}
+
+}

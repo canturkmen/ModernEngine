@@ -14,3 +14,6 @@
 [submodule "ModernEngine/vendor/yaml-cpp"]
 	path = ModernEngine/vendor/yaml-cpp
 	url = https://github.com/canturkmen/yaml-cpp
+[submodule "ModernEngine/vendor/ImGuizmo"]
+	path = ModernEngine/vendor/ImGuizmo
+	url = https://github.com/canturkmen/ImGuizmo

@@ -19,6 +19,9 @@ namespace ModernEngine {
 		virtual void OnImGuiRender() override;
 
 	private:
+		bool OnKeyPressedEvent(KeyPressedEvent e);
+
+	private:
 		Ref<Scene> m_ActiveScene;
 
 		OrthographicCameraController m_CameraController;
@@ -35,6 +38,8 @@ namespace ModernEngine {
 
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+
+		int m_GizmoType = -1;
 
 		SceneHierarchyPanel m_SceneHieararchyPanel;
 	};

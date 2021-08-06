@@ -94,6 +94,19 @@ namespace ModernEngine {
 		}
 	}
 
+	Entity Scene::GetPrimaryCamera()
+	{
+		auto view = m_Registery.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& cameraComponent = view.get<CameraComponent>(entity);
+			if (cameraComponent.Primary)
+				return Entity{ entity, this };
+		}
+
+		return {};
+	}
+
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
