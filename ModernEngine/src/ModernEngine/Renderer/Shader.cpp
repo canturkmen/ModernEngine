@@ -16,7 +16,7 @@ namespace ModernEngine {
 		}
 		case RendererAPI::API::OpenGL:
 		{
-			return std::make_shared<OpenGLShader>(filepath);
+			return CreateRef<OpenGLShader>(filepath);
 		}
 		}
 
@@ -34,7 +34,7 @@ namespace ModernEngine {
 			}
 			case RendererAPI::API::OpenGL:
 			{
-				return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+				return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 			}
 		}
 

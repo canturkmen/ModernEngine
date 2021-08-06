@@ -17,7 +17,7 @@ namespace ModernEngine {
 
 			case RendererAPI::API::OpenGL:
 			{
-				return std::make_shared<OpenGLVertexArray>();
+				return CreateRef<OpenGLVertexArray>();
 			}
 		}
 

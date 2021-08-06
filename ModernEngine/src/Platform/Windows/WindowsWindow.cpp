@@ -5,15 +5,15 @@
 #include "ModernEngine/Events/KeyEvent.h"
 #include "ModernEngine/Events/ApplicationEvent.h"
 
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "ModernEngine/Renderer/GraphicsContext.h"
 
 namespace ModernEngine {
 
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWindowCount = 0;
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -32,16 +32,15 @@ namespace ModernEngine {
 		m_Data.Width = props.Width;
 		m_Data.Title = props.Title;
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWindowCount == 0)
 		{
 			int success = glfwInit();
 			MN_CORE_ASSERT(success, "GLFW could not be initialized ! ");
-
-			s_GLFWInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
-		m_Context = new OpenGLContext(m_Window);
+		++s_GLFWindowCount;
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -142,6 +141,13 @@ namespace ModernEngine {
 	void WindowsWindow::ShutDown()
 	{
 		glfwDestroyWindow(m_Window);
+		--s_GLFWindowCount;
+
+		if (s_GLFWindowCount == 0)
+		{
+			MN_CORE_INFO("Terminating GLFW");
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::OnUpdate()

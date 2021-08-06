@@ -19,6 +19,9 @@
     <Filter Include="src\ModernEngine\ImGui">
       <UniqueIdentifier>{4183C588-2D7D-EEDA-16EA-84EB02835447}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ModernEngine\Math">
+      <UniqueIdentifier>{108C3642-7CF8-F13C-45EC-899AB11714A5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\ModernEngine\Renderer">
       <UniqueIdentifier>{5D2EE216-C9F0-15A1-12A1-A42D7EA2EE7E}</UniqueIdentifier>
     </Filter>
@@ -119,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="src\ModernEngine\ImGui\ImGuiLayer.h">
       <Filter>src\ModernEngine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Math\Math.h">
+      <Filter>src\ModernEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h">
       <Filter>src\ModernEngine\Renderer</Filter>
@@ -1044,7 +1050,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Math\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1064,6 +1069,9 @@
     </ClCompile>
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp">
       <Filter>src\ModernEngine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Math\Math.cpp">
+      <Filter>src\ModernEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
@@ -1152,6 +1160,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Math\Math.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\GraphicsContext.cpp" />
   </ItemGroup>
 </Project>

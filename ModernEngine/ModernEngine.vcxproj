@@ -79,7 +79,9 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\GLAD\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -102,6 +104,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -125,6 +128,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>Release %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -476,6 +480,7 @@
     <ClCompile Include="src\ModernEngine\Math\Math.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\RenderCommand.cpp" />

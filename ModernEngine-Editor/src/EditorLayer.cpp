@@ -1,7 +1,7 @@
 #include "mnpch.h"
 #include "EditorLayer.h"
 
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -30,7 +30,7 @@ namespace ModernEngine {
 		fbSpec.width = 1280.0f;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_ActiveScene = std::make_shared<Scene>();
+		m_ActiveScene = CreateRef<Scene>();
 #if 0
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
@@ -173,7 +173,7 @@ namespace ModernEngine {
 
 				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
-					m_ActiveScene = std::make_shared<Scene>();
+					m_ActiveScene = CreateRef<Scene>();
 					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 					m_SceneHieararchyPanel.SetContext(m_ActiveScene);
 				}
@@ -183,7 +183,7 @@ namespace ModernEngine {
 					std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
 					if (!filepath.empty())
 					{
-						m_ActiveScene = std::make_shared<Scene>();
+						m_ActiveScene = CreateRef<Scene>();
 						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 						m_SceneHieararchyPanel.SetContext(m_ActiveScene);
 					
