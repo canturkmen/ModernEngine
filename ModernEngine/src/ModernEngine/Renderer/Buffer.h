@@ -40,7 +40,7 @@ namespace ModernEngine {
 		BufferElement(ShaderDataType type,const std::string& name, bool normalized = false)
 			: Type(type), Name(name), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
 		{
-
+			
 		}
 
 		uint32_t GetComponentCount() const
@@ -55,8 +55,8 @@ namespace ModernEngine {
 				case ShaderDataType::Float2:	return 2;
 				case ShaderDataType::Float3:	return 3;	
 				case ShaderDataType::Float4:	return 4;
-				case ShaderDataType::Mat3:		return 4 * 3;
-				case ShaderDataType::Mat4:		return 4 * 4;
+				case ShaderDataType::Mat3:		return 3;
+				case ShaderDataType::Mat4:		return 4;
 				case ShaderDataType::Bool:		return 1;
 			}
 

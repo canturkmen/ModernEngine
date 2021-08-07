@@ -16,7 +16,7 @@ namespace ModernEngine {
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
 		void OnUpdate() override;
-		void SetEventCallback(const EventCallbackFunc& CallbackFunc) override { m_Data.EventCallback = CallbackFunc; }
+		inline void SetEventCallback(const EventCallbackFunc& CallbackFunc) override { m_Data.EventCallback = CallbackFunc; }
 
 		void SetVsync(bool enabled) override;
 		bool IsVsync() const override;

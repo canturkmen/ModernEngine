@@ -1079,6 +1079,9 @@
     <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModernEngine\Renderer\GraphicsContext.cpp">
+      <Filter>src\ModernEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp">
       <Filter>src\ModernEngine\Renderer</Filter>
     </ClCompile>
@@ -1160,6 +1163,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Renderer\GraphicsContext.cpp" />
   </ItemGroup>
 </Project>

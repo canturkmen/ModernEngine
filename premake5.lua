@@ -1,5 +1,5 @@
 workspace "ModernEngine"
-	architecture "x64"
+	architecture "x86_64"
 	startproject "ModernEngine-Editor"
 	configurations {"Debug", "Release", "Dist"}
 	flags {"MultiProcessorCompile"}

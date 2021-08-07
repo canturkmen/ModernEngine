@@ -5,17 +5,17 @@
 
 namespace ModernEngine {
 
-	bool Input::IsKeyPressed(int key)
+	bool Input::IsKeyPressed(KeyCode key)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, key);
+		auto state = glfwGetKey(window, static_cast<uint32_t>(key));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool Input::IsMouseButtonPressed(int button)
+	bool Input::IsMouseButtonPressed(MouseCode button)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(window, button);
+		auto state = glfwGetMouseButton(window, static_cast<uint32_t>(button));
 		return state == GLFW_PRESS;
 	}
 

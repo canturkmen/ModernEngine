@@ -27,6 +27,8 @@ namespace ModernEngine {
 	class Event
 	{
 	public:
+		virtual ~Event() = default;
+
 		bool m_Handled = false;
 
 		virtual EventType GetEventType() const = 0;

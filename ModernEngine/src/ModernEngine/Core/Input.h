@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Core.h"
+#include "MouseButtonCodes.h"
+#include "KeyCodes.h"
 
 namespace ModernEngine {
 
@@ -8,8 +10,10 @@ namespace ModernEngine {
 	class Input
 	{
 	public:
-		static bool IsKeyPressed(int key);
-		static bool IsMouseButtonPressed(int button);
+		virtual ~Input() = default;
+
+		static bool IsKeyPressed(KeyCode key);
+		static bool IsMouseButtonPressed(MouseCode button);
 		static std::pair<float, float> GetMousePosition();
 		static float GetMouseXPosition();
 		static float GetMouseYPosition();

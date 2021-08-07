@@ -62,14 +62,49 @@ namespace ModernEngine {
 		const auto& Layout = vertexbuffer->GetBufferLayout();
 		for (const auto& element : Layout)
 		{
-			glEnableVertexAttribArray(m_VertexBufferIndex);
-			glVertexAttribPointer(m_VertexBufferIndex,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				Layout.GetStride(),
-				(const void*)element.Offset);
-			m_VertexBufferIndex++;
+			switch (element.Type)
+			{
+				case ShaderDataType::Float:
+				case ShaderDataType::Float2:
+				case ShaderDataType::Float3:
+				case ShaderDataType::Float4:
+				case ShaderDataType::Int:
+				case ShaderDataType::Int2:
+				case ShaderDataType::Int3:
+				case ShaderDataType::Int4:
+				case ShaderDataType::Bool:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						Layout.GetStride(),
+						(const void*)element.Offset);
+					m_VertexBufferIndex++;
+					break;
+				}
+				case ShaderDataType::Mat3:
+				case ShaderDataType::Mat4:
+				{
+					uint8_t count = element.GetComponentCount();
+					for (uint8_t index = 0; index < count; index++)
+					{
+						glEnableVertexAttribArray(m_VertexBufferIndex);
+						glVertexAttribPointer(m_VertexBufferIndex,
+							count,
+							ShaderDataTypeToOpenGLType(element.Type),
+							element.Normalized ? GL_TRUE : GL_FALSE,
+							Layout.GetStride(),
+							(const void*)(sizeof(float) * count * index));
+						glVertexAttribDivisor(m_VertexBufferIndex, 1);
+						m_VertexBufferIndex++;
+					}
+					break;
+				}
+				default:
+					MN_CORE_ERROR("Unknown shader data type !");
+			}
 		}
 
 		m_VertexBuffers.push_back(vertexbuffer);
