@@ -2,6 +2,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
+#include <cstring>
+
+// To avoid a compiler warning when the strncpy is used
+#ifdef _MSVC_LANG
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 namespace ModernEngine {
 
@@ -199,7 +205,7 @@ namespace ModernEngine {
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
-			strcpy_s(buffer, tag.c_str());
+			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
@@ -265,9 +271,9 @@ namespace ModernEngine {
 
 			if (camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 			{
-				float PerpsectiveFOV = glm::degrees(camera.GetPerspectiveCameraFOV());
-				if (ImGui::DragFloat("Vertical FOV", &PerpsectiveFOV))
-					camera.SetPerspectiveCameraFOV(glm::radians(PerpsectiveFOV));
+				float PerspectiveFOV = glm::degrees(camera.GetPerspectiveCameraFOV());
+				if (ImGui::DragFloat("Vertical FOV", &PerspectiveFOV))
+					camera.SetPerspectiveCameraFOV(glm::radians(PerspectiveFOV));
 
 				float PerspectiveNear = camera.GetPerspectiveCameraNear();
 				if (ImGui::DragFloat("Near Clip", &PerspectiveNear))

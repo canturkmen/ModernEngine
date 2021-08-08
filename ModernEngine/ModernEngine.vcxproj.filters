@@ -75,7 +75,7 @@
     <ClInclude Include="src\ModernEngine\Core\Application.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Core\Core.h">
+    <ClInclude Include="src\ModernEngine\Core\Base.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Core\DeltaTime.h">

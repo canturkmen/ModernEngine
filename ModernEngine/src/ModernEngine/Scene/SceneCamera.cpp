@@ -9,16 +9,6 @@ namespace ModernEngine {
 		RecalculateProjectionMatrix();
 	}
 
-	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
-	{
-		m_ProjectionType = ProjectionType::Orthographic;
-
-		m_OrthographicSize = size;
-		m_OrthographicNear = nearClip;
-		m_OrthographicFar = farClip;
-
-		RecalculateProjectionMatrix();
-	}
 
 	void SceneCamera::SetPerspective(float perspectiveFOV, float nearClip, float farClip)
 	{
@@ -27,6 +17,17 @@ namespace ModernEngine {
 		m_PerspectiveFOV = perspectiveFOV;
 		m_PerspectiveNear = nearClip;
 		m_PerspectiveFar = farClip;
+
+		RecalculateProjectionMatrix();
+	}
+
+	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
+	{
+		m_ProjectionType = ProjectionType::Orthographic;
+
+		m_OrthographicSize = size;
+		m_OrthographicNear = nearClip;
+		m_OrthographicFar = farClip;
 
 		RecalculateProjectionMatrix();
 	}

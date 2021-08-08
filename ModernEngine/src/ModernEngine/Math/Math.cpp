@@ -31,7 +31,7 @@ namespace ModernEngine::Math {
 
 		// Next take care of translation (easy).
 		outTranslation = vec3(LocalMatrix[3]);
-		LocalMatrix[3] = vec4(LocalMatrix[3].w);
+		LocalMatrix[3] = vec4(0, 0, 0,LocalMatrix[3].w);
 
 		vec3 Row[3], Pdum3;
 
@@ -73,5 +73,7 @@ namespace ModernEngine::Math {
 			outRotation.x = atan2(-Row[2][0], Row[1][1]);
 			outRotation.z = 0;
 		}
+
+		return true;
 	}
 }

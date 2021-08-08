@@ -69,7 +69,7 @@ namespace ModernEngine {
 
 		if (mainCamera != nullptr)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjectionMatrix(), cameraTransform);
+			Renderer2D::BeginScene(*mainCamera, cameraTransform);
 			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{

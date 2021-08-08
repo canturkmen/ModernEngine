@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Base.h"
 #include "MouseButtonCodes.h"
 #include "KeyCodes.h"
 

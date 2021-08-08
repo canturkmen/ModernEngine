@@ -18,6 +18,7 @@ namespace YAML {
 			node.push_back(rhs.x);
 			node.push_back(rhs.y);
 			node.push_back(rhs.z);
+			node.SetStyle(EmitterStyle::Flow);
 			return node;
 		}
 
@@ -43,6 +44,7 @@ namespace YAML {
 			node.push_back(rhs.y);
 			node.push_back(rhs.z);
 			node.push_back(rhs.w);
+			node.SetStyle(EmitterStyle::Flow);
 			return node;
 		}
 
@@ -84,7 +86,7 @@ namespace ModernEngine {
 	static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "EntityID" << YAML::Value << "12312314";
+		out << YAML::Key << "Entity" << YAML::Value << "12312314";
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -180,11 +182,8 @@ namespace ModernEngine {
 
 	bool SceneSerializer::Deserialize(const std::string& filepath)
 	{
-		std::ifstream stream(filepath);
-		std::stringstream ss;
-		ss << stream.rdbuf();
+		YAML::Node data = YAML::LoadFile(filepath);
 
-		YAML::Node data = YAML::Load(ss.str());
 		if (!data["Scene"])
 			return false;
 
@@ -195,7 +194,7 @@ namespace ModernEngine {
 		{
 			for (auto entity : entities)
 			{
-				uint64_t uuid = entity["EntityID"].as<uint64_t>();
+				uint64_t uuid = entity["Entity"].as<uint64_t>();
 				
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
@@ -207,7 +206,7 @@ namespace ModernEngine {
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)
 				{
-					auto& tc = deserializedEntity.AddComponent<TransformComponent>();
+					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
 					tc.Translation = transformComponent["Translation"].as<glm::vec3>();
 					tc.Rotation = transformComponent["Rotation"].as<glm::vec3>();
 					tc.Scale = transformComponent["Scale"].as<glm::vec3>();

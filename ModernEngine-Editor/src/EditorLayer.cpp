@@ -172,35 +172,13 @@ namespace ModernEngine {
 				// which we can't undo at the moment without finer window depth/z control.
 
 				if (ImGui::MenuItem("New", "Ctrl+N"))
-				{
-					m_ActiveScene = CreateRef<Scene>();
-					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-					m_SceneHieararchyPanel.SetContext(m_ActiveScene);
-				}
+					NewScene();
 
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
-					std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-					if (!filepath.empty())
-					{
-						m_ActiveScene = CreateRef<Scene>();
-						m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-						m_SceneHieararchyPanel.SetContext(m_ActiveScene);
-					
-						SceneSerializer Serializer(m_ActiveScene);
-						Serializer.Deserialize(filepath);
-					}
-				}
+					OpenScene();
 
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-				{
-					std::string filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-					if (!filepath.empty())
-					{
-						SceneSerializer Serializer(m_ActiveScene);
-						Serializer.Serialize(filepath);
-					}
-				}
+					SaveSceneAs();
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
@@ -233,8 +211,6 @@ namespace ModernEngine {
 
 		// Rendering
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-		m_GizmoType = ImGuizmo::OPERATION::ROTATE;
 
 		// Gizmos
 		Entity selectedEntity = m_SceneHieararchyPanel.GetSelectedEntity();
@@ -271,7 +247,7 @@ namespace ModernEngine {
 				if (ImGuizmo::IsUsing())
 				{
 					glm::vec3 translation, rotation, scale;
-					Math::DecomposeTransform(Transform, rotation, translation, scale);
+					Math::DecomposeTransform(Transform, translation, rotation, scale);
 
 					glm::vec3 deltaRotation = rotation - transformComponent.Rotation; // To avoid the gimbal lock.
 					transformComponent.Translation = translation;
@@ -293,11 +269,41 @@ namespace ModernEngine {
 		dispatcher.Dispatch<KeyPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
 	}
 
-	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent e)
+	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)
 	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool isControlPressed = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL) || Input::IsKeyPressed(MN_KEY_RIGHT_CONTROL);
+		bool isShiftPressed = Input::IsKeyPressed(MN_KEY_LEFT_SHIFT) || Input::IsKeyPressed(MN_KEY_RIGHT_SHIFT);
+
 		// Gizmos Shortcut
 		switch (e.GetKeyCode())
 		{
+			case MN_KEY_N:
+			{
+				if (isControlPressed)
+					NewScene();
+
+				break;
+			}
+
+			case MN_KEY_O:
+			{
+				if (isControlPressed)
+					OpenScene();
+				
+				break;
+			}
+
+			case MN_KEY_S:
+			{
+				if (isControlPressed && isShiftPressed)
+					SaveSceneAs();
+
+				break;
+			}
+
 			case MN_KEY_Q:
 				m_GizmoType = -1;
 				break;
@@ -318,4 +324,34 @@ namespace ModernEngine {
 		return true;
 	}
 
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::optional<std::string> filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+		if (filepath)
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+
+			SceneSerializer Serializer(m_ActiveScene);
+			Serializer.Deserialize(*filepath);
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::optional<std::string> filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+		if (filepath)
+		{
+			SceneSerializer Serializer(m_ActiveScene);
+			Serializer.Serialize(*filepath);
+		}
+	}
 }

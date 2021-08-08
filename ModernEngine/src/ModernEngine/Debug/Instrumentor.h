@@ -25,11 +25,8 @@ namespace ModernEngine {
 	class Instrumentor 
 	{
 	public:
-		Instrumentor()
-			:m_CurrentSession(nullptr)
-		{
-
-		}
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
 
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
@@ -96,6 +93,17 @@ namespace ModernEngine {
 		}
 
 	private:
+		Instrumentor()
+			:m_CurrentSession(nullptr)
+		{
+
+		}
+
+		~Instrumentor()
+		{
+			EndSession();
+		}
+
 		void WriteHeader()
 		{
 			m_OutputStream << "{\"otherData\": {},\"traceEvents\":[";
@@ -161,7 +169,33 @@ namespace ModernEngine {
 	namespace InstrumentorUtils
 	{
 		template<size_t N>
+		struct ChangeResult
+		{
+			char Data[N];
+		};
 
+		template<size_t N, size_t K>
+		constexpr auto CleanOutputString(const char(&expr)[N], const char(&remove)[K])
+		{
+			ChangeResult<N> result = {};
+			
+			size_t srcIndex = 0;
+			size_t dstIndex = 0;
+			while (srcIndex < N)
+			{
+				size_t matchIndex = 0;
+				while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[matchIndex])
+				{
+					matchIndex++;
+					if (matchIndex == K - 1)
+						srcIndex += matchIndex;
+
+					result.Data[dstIndex++] = expr[srcIndex] == '"' ? '\'' : expr[srcIndex];
+					srcIndex++;
+				}
+				return result;
+			}
+		}
 	}
 }
 
@@ -172,7 +206,7 @@ namespace ModernEngine {
 	#define MN_FUNC_SIG __PRETTY_FUNCTION__
 #elif defined(__DMC__) && (__DMC__ >= 0x810)
 	#define MN_FUNC_SIG __PRETTY_FUNCTION__
-#elif defined(__FUNCSIG__)
+#elif (defined(__FUNCSIG__) || (_MSC_VER))
 	#define MN_FUNC_SIG __FUNCSIG__
 #elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
 	#define MN_FUNC_SIG __FUNCTION__
@@ -186,9 +220,12 @@ namespace ModernEngine {
 	#define MN_FUNC_SIG "MN_FUNC_SIG unknown!"
 #endif
 	#define MN_PROFILE_BEGIN_SESSION(name, filepath)	::ModernEngine::Instrumentor::Get().BeginSession(name, filepath)
-	#define MN_PROFILE_END_SESSION()	::ModernEngine::Instrumentor::Get().EndSession()
-	#define MN_PROFILE_SCOPE(name)	::ModernEngine::InstrumentationTimer timer##__LINE__(name)
-	#define MN_PROFILE_FUNCTION()	MN_PROFILE_SCOPE(MN_FUNC_SIG)
+	#define MN_PROFILE_END_SESSION()			::ModernEngine::Instrumentor::Get().EndSession()
+	#define MN_PROFILE_SCOPE_LINE2(name, line)	constexpr auto FixedName##line = ::ModernEngine::InstrumentorUtils::CleanOutputString(name, "__cdecl ");\
+												::ModernEngine::InstrumentationTimer timer##line(FixedName##line.Data)
+	#define MN_PROFILE_SCOPE_LINE(name, line)	MN_PROFILE_SCOPE_LINE2(name, line)
+	#define MN_PROFILE_SCOPE(name)				MN_PROFILE_SCOPE_LINE(name, __LINE__)
+	#define MN_PROFILE_FUNCTION()				MN_PROFILE_SCOPE(MN_FUNC_SIG)
 #else
 	#define MN_PROFILE_BEGIN_SESSION(name)
 	#define MN_PROFILE_END_SESSION()

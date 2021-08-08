@@ -19,7 +19,11 @@ namespace ModernEngine {
 		virtual void OnImGuiRender() override;
 
 	private:
-		bool OnKeyPressedEvent(KeyPressedEvent e);
+		bool OnKeyPressedEvent(KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
 
 	private:
 		Ref<Scene> m_ActiveScene;

@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
-    <ClInclude Include="src\ModernEngine\Core\Core.h" />
+    <ClInclude Include="src\ModernEngine\Core\Base.h" />
     <ClInclude Include="src\ModernEngine\Core\DeltaTime.h" />
     <ClInclude Include="src\ModernEngine\Core\EntryPoint.h" />
     <ClInclude Include="src\ModernEngine\Core\Input.h" />

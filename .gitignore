@@ -1,9 +1,12 @@
 # Directories 
-.vs/
-/bin/
+**/bin/
+!vendor/premake/bin/
 intermediate/
 
-# Files
+# ModernEngine files
+*.log
+
+# VS Files
 .vs/
 **.sln
 **.vcxproj

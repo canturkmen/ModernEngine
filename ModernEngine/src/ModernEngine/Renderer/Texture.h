@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "ModernEngine/Core/Core.h"
+#include "ModernEngine/Core/Base.h"
 
 namespace ModernEngine {
 
