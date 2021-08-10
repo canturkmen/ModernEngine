@@ -26,6 +26,7 @@ namespace ModernEngine {
 		m_Checkerboard = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FrameBufferSpecification fbSpec;
+		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::Depth };
 		fbSpec.height = 720.0f;
 		fbSpec.width = 1280.0f;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
