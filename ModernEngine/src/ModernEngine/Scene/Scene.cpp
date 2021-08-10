@@ -32,7 +32,19 @@ namespace ModernEngine {
 		m_Registery.destroy(entity);
 	}
 
-	void Scene::OnUpdate(DeltaTime dt)
+	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
 		// Update Scripts
 		{

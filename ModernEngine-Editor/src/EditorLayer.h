@@ -2,6 +2,7 @@
 
 #include "ModernEngine.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "ModernEngine/Renderer/EditorCamera.h"
 
 namespace ModernEngine {
 
@@ -33,6 +34,7 @@ namespace ModernEngine {
 		Ref<Texture2D> m_Checkerboard;
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		EditorCamera m_EditorCamera;
 		Entity m_Entity;
 		Entity m_Camera;
 		Entity m_SecondCamera;

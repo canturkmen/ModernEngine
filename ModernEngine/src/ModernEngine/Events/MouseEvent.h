@@ -2,6 +2,7 @@
 
 #include "Event.h"
 #include "ModernEngine/Core/MouseButtonCodes.h"
+#include <sstream>
 
 namespace ModernEngine {
 
@@ -78,7 +79,6 @@ namespace ModernEngine {
 			ss << "MouseButtonPressed:  " << m_Button;
 			return ss.str();
 		}
-
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 

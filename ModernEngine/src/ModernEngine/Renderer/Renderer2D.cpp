@@ -137,6 +137,18 @@ namespace ModernEngine {
 		StartBatch();
 	}
 
+	void Renderer2D::BeginScene(EditorCamera& camera)
+	{
+		MN_PROFILE_FUNCTION();
+
+		glm::mat4 viewProjectionMatrix = camera.GetViewProjectionMatrix();
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+
+		StartBatch();
+	}
+
 	void Renderer2D::StartBatch()
 	{
 		s_Data.QuadIndexCount = 0;

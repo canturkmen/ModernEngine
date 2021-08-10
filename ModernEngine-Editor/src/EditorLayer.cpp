@@ -31,6 +31,7 @@ namespace ModernEngine {
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
+		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.01f, 1000.0f);
 #if 0
 		Entity square = m_ActiveScene->CreateEntity("Square Entity");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
@@ -95,16 +96,19 @@ namespace ModernEngine {
 			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
 		{
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_EditorCamera.SetViewport(m_ViewportSize.x, m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
 
+		m_EditorCamera.OnUpdate(dt);
+
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 
-		m_ActiveScene->OnUpdate(dt);
+		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 
 		m_FrameBuffer->Unbind();
 	}
@@ -267,6 +271,7 @@ namespace ModernEngine {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
+		m_EditorCamera.OnEvent(e);
 	}
 
 	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)

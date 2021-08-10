@@ -1,6 +1,7 @@
 #pragma once
 #include "entt.hpp"
 #include "ModernEngine/Core/DeltaTime.h"
+#include "ModernEngine/Renderer/EditorCamera.h"
 
 namespace ModernEngine {
 
@@ -17,7 +18,9 @@ namespace ModernEngine {
 
 		void DestroyEntity(Entity entity);
 
-		void OnUpdate(DeltaTime dt);
+		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
+		void OnUpdateRuntime(DeltaTime dt);
+
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCamera();
