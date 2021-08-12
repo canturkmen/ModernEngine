@@ -13,6 +13,19 @@ namespace ModernEngine {
 		{
 			return multiSampled ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 		}
+		
+		static GLenum ModernEngineFBTextureFormatToGL(FrameBufferTextureFormat format)
+		{
+			switch (format)
+			{
+				case ModernEngine::FrameBufferTextureFormat::RGBA8:
+					return GL_RGBA8;
+					break;
+				case ModernEngine::FrameBufferTextureFormat::RED_INTEGER:
+					return GL_RED_INTEGER;
+					break;
+			}
+		}
 
 		static void CreateTexture(bool multiSampled, uint32_t* outID, uint32_t count)
 		{
@@ -194,4 +207,11 @@ namespace ModernEngine {
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixedData);
 		return pixedData;
 	}
+
+	void OpenGLFrameBuffer::ClearAttachments(uint32_t attachmentIndex, int data)
+	{
+		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::ModernEngineFBTextureFormatToGL(spec.TextureFormat), GL_INT, &data);
+	}
+
 }

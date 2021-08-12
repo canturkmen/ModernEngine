@@ -13,6 +13,7 @@ namespace ModernEngine {
 		void Invalidate();
 		virtual void Resize(uint32_t width, uint32_t height) override;
 		virtual int ReadPixels(uint32_t attachmentIndex, int x, int y) override;
+		virtual void ClearAttachments(uint32_t attachmentIndex, int data) override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;

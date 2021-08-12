@@ -109,6 +109,8 @@ namespace ModernEngine {
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 
+		m_FrameBuffer->ClearAttachments(1, -1);
+
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
