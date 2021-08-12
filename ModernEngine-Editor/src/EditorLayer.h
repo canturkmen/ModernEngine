@@ -40,8 +40,10 @@ namespace ModernEngine {
 		Entity m_SecondCamera;
 		bool m_PrimaryCamera = true;
 
+		glm::vec2 m_ViewportBounds[2];
 		glm::vec2 m_ViewportSize = { 0, 0 };
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+
 
 		int m_GizmoType = -1;
 		SceneHierarchyPanel m_SceneHieararchyPanel;

@@ -26,7 +26,7 @@ namespace ModernEngine {
 		m_Checkerboard = Texture2D::Create("assets/textures/Checkerboard.png");
 
 		FrameBufferSpecification fbSpec;
-		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::Depth };
+		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
 		fbSpec.height = 720.0f;
 		fbSpec.width = 1280.0f;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
@@ -110,6 +110,19 @@ namespace ModernEngine {
 		RenderCommand::Clear();
 
 		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		auto viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = m_ViewportSize.y - my;
+		int mouseX = int(mx);
+		int mouseY = int(my);
+
+		if (mouseX > 0 && mouseY > 0 && mouseX < (int)m_ViewportSize.x && mouseY < (int)m_ViewportSize.y)
+		{
+			int pixelData = m_FrameBuffer->ReadPixels(1, mouseX, mouseY);
+			MN_INFO("Pixel : {0}", pixelData);
+		}
 
 		m_FrameBuffer->Unbind();
 	}
@@ -205,7 +218,8 @@ namespace ModernEngine {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
-
+		auto viewportOffset = ImGui::GetCursorPos();
+		
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		Application::Get().GetImGuiLayer()->BlockEvent(!m_ViewportHovered && !m_ViewportFocused);
@@ -216,6 +230,15 @@ namespace ModernEngine {
 
 		// Rendering
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 windowMinBound = ImGui::GetWindowPos();
+		windowMinBound.x += viewportOffset.x;
+		windowMinBound.y += viewportOffset.y;
+
+		ImVec2 windowMaxBound = {windowMinBound.x + windowSize.x, windowMinBound.y + windowSize.y };
+		m_ViewportBounds[0] = { windowMinBound.x, windowMinBound.y };
+		m_ViewportBounds[1] = { windowMaxBound.x, windowMaxBound.y };
 
 		// Gizmos
 		Entity selectedEntity = m_SceneHieararchyPanel.GetSelectedEntity();
@@ -228,37 +251,32 @@ namespace ModernEngine {
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 			// Camera - View and Projection 
-			auto PrimaryCamera = m_ActiveScene->GetPrimaryCamera();
-			if (PrimaryCamera)
+			const glm::mat4& CameraProjection = m_EditorCamera.GetProjectionMatrix();
+			glm::mat4 CameraView = m_EditorCamera.GetViewMatrix();
+
+			// Entity transform 
+			auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 Transform = transformComponent.GetTransform();
+
+			bool snap = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL);
+			float snapValue = 0.5f;
+			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(CameraView), glm::value_ptr(CameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(Transform), nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
 			{
-				const auto& cameraCopmonent = PrimaryCamera.GetComponent<CameraComponent>().m_Camera;
-				const glm::mat4& CameraProjection = cameraCopmonent.GetProjectionMatrix();
-				glm::mat4 CameraView = glm::inverse(PrimaryCamera.GetComponent<TransformComponent>().GetTransform());
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(Transform, translation, rotation, scale);
 
-				// Entity transform 
-				auto& transformComponent = selectedEntity.GetComponent<TransformComponent>();
-				glm::mat4 Transform = transformComponent.GetTransform();
-
-				bool snap = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL);
-				float snapValue = 0.5f;
-				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
-					snapValue = 45.0f;
-
-				float snapValues[3] = { snapValue, snapValue, snapValue };
-
-				ImGuizmo::Manipulate(glm::value_ptr(CameraView), glm::value_ptr(CameraProjection),
-					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(Transform), nullptr, snap ? snapValues : nullptr);
-
-				if (ImGuizmo::IsUsing())
-				{
-					glm::vec3 translation, rotation, scale;
-					Math::DecomposeTransform(Transform, translation, rotation, scale);
-
-					glm::vec3 deltaRotation = rotation - transformComponent.Rotation; // To avoid the gimbal lock.
-					transformComponent.Translation = translation;
-					transformComponent.Rotation += deltaRotation;
-					transformComponent.Scale = scale;
-				}
+				glm::vec3 deltaRotation = rotation - transformComponent.Rotation; // To avoid the gimbal lock.
+				transformComponent.Translation = translation;
+				transformComponent.Rotation += deltaRotation;
+				transformComponent.Scale = scale;
 			}
 		}
 

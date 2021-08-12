@@ -24,14 +24,14 @@ namespace ModernEngine {
 			glBindTexture(TextureTarget(multiSampled), id);
 		}
 
-		static void AttachColorTexture(uint32_t id, int samples, GLenum format, float width, float height, int index)
+		static void AttachColorTexture(uint32_t id, int samples, GLenum internalformat, GLenum format, float width, float height, int index)
 		{
 			bool multiSampled = samples > 1;
 			if (multiSampled)
-				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, format, width, height, GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, internalformat, width, height, GL_FALSE);
 			else
 			{
-				glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -68,7 +68,6 @@ namespace ModernEngine {
 			}
 			return false;
 		}
-
 	}
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
@@ -131,8 +130,14 @@ namespace ModernEngine {
 				switch (m_ColorAttachmentSpecifications[i].TextureFormat)
 				{
 					case FrameBufferTextureFormat::RGBA8: 
+					{ 
+						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.width, m_Specification.height, i);
+						break;
+					}
+
+					case FrameBufferTextureFormat::RED_INTEGER:
 					{
-						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, m_Specification.width, m_Specification.height, i);
+						Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.width, m_Specification.height, i);
 						break;
 					}
 				}
@@ -180,5 +185,13 @@ namespace ModernEngine {
 		m_Specification.height = height;
 
 		Invalidate();
+	}
+
+	int OpenGLFrameBuffer::ReadPixels(uint32_t attachmentIndex, int x, int y)
+	{
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		int pixedData;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixedData);
+		return pixedData;
 	}
 }

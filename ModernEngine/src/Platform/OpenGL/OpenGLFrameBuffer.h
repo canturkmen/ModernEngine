@@ -12,12 +12,14 @@ namespace ModernEngine {
 
 		void Invalidate();
 		virtual void Resize(uint32_t width, uint32_t height) override;
+		virtual int ReadPixels(uint32_t attachmentIndex, int x, int y) override;
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
 		virtual const FrameBufferSpecification& GetSpefications() const override { return m_Specification; }
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { return m_ColorAttachments[index];}
+
 
 	private:
 		uint32_t m_RendererID;
