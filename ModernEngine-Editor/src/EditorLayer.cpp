@@ -120,10 +120,10 @@ namespace ModernEngine {
 		int mouseX = int(mx);
 		int mouseY = int(my);
 
-		if (mouseX > 0 && mouseY > 0 && mouseX < (int)m_ViewportSize.x && mouseY < (int)m_ViewportSize.y)
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)m_ViewportSize.x && mouseY < (int)m_ViewportSize.y)
 		{
 			int pixelData = m_FrameBuffer->ReadPixels(1, mouseX, mouseY);
-			MN_INFO("Pixel : {0}", pixelData);
+			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
 
 		m_FrameBuffer->Unbind();
@@ -211,6 +211,11 @@ namespace ModernEngine {
 
 		ImGui::Begin("Stats");
 
+		std::string entityName = "None";
+		if (m_HoveredEntity)
+			entityName = m_HoveredEntity.GetComponent<TagComponent>().Tag;
+		
+		ImGui::Text("Entity Name: %s", entityName.c_str());
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetStats().DrawCalls);
 		ImGui::Text("Quad Count: %d", Renderer2D::GetStats().QuadCount);
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());

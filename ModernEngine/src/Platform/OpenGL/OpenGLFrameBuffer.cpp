@@ -203,9 +203,9 @@ namespace ModernEngine {
 	int OpenGLFrameBuffer::ReadPixels(uint32_t attachmentIndex, int x, int y)
 	{
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
-		int pixedData;
-		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixedData);
-		return pixedData;
+		int pixelData;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+		return pixelData;
 	}
 
 	void OpenGLFrameBuffer::ClearAttachments(uint32_t attachmentIndex, int data)
@@ -213,5 +213,4 @@ namespace ModernEngine {
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
 		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::ModernEngineFBTextureFormatToGL(spec.TextureFormat), GL_INT, &data);
 	}
-
 }

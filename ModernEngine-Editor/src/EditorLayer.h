@@ -38,6 +38,7 @@ namespace ModernEngine {
 		Entity m_Entity;
 		Entity m_Camera;
 		Entity m_SecondCamera;
+		Entity m_HoveredEntity;
 		bool m_PrimaryCamera = true;
 
 		glm::vec2 m_ViewportBounds[2];
