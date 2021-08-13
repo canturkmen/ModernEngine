@@ -17,3 +17,5 @@
 [submodule "ModernEngine/vendor/ImGuizmo"]
 	path = ModernEngine/vendor/ImGuizmo
 	url = https://github.com/canturkmen/ImGuizmo
+[submodule "ModernEngine/vendor"]
+	url = https://github.com/canturkmen/ImGuizmo
