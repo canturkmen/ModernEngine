@@ -297,6 +297,7 @@ namespace ModernEngine {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 		m_EditorCamera.OnEvent(e);
 	}
 
@@ -353,6 +354,14 @@ namespace ModernEngine {
 		}
 
 		return true;
+	}
+
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
+			m_SceneHieararchyPanel.SetSelectedEntity(m_HoveredEntity);
+
+		return false;
 	}
 
 	void EditorLayer::NewScene()
