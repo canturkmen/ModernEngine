@@ -142,7 +142,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\ModernEngine\Renderer\EditorCamera.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Base.h" />
@@ -164,6 +163,7 @@
     <ClInclude Include="src\ModernEngine\Math\Math.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Buffer.h" />
     <ClInclude Include="src\ModernEngine\Renderer\Camera.h" />
+    <ClInclude Include="src\ModernEngine\Renderer\EditorCamera.h" />
     <ClInclude Include="src\ModernEngine\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\ModernEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\ModernEngine\Renderer\OrthographicCamera.h" />
@@ -472,7 +472,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ModernEngine\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
@@ -481,6 +480,7 @@
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\ModernEngine\Math\Math.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\ModernEngine\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\ModernEngine\Renderer\OrthographicCamera.cpp" />

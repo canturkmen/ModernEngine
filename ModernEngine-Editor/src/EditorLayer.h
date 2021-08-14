@@ -2,6 +2,7 @@
 
 #include "ModernEngine.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 #include "ModernEngine/Renderer/EditorCamera.h"
 
 namespace ModernEngine {
@@ -48,7 +49,8 @@ namespace ModernEngine {
 
 
 		int m_GizmoType = -1;
-		SceneHierarchyPanel m_SceneHieararchyPanel;
+		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 
 }

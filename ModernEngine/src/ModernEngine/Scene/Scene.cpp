@@ -9,7 +9,7 @@ namespace ModernEngine {
 
 	Scene::Scene()
 	{
-
+	
 	}
 
 	Scene::~Scene()

@@ -17,7 +17,7 @@ namespace ModernEngine {
 			
 			case RendererAPI::API::OpenGL:
 			{
-				return std::make_shared<OpenGLTexture2D>(filepath);
+				return CreateRef<OpenGLTexture2D>(filepath);
 			}
 		}
 	}
@@ -33,7 +33,7 @@ namespace ModernEngine {
 
 			case RendererAPI::API::OpenGL:
 			{
-				return std::make_shared<OpenGLTexture2D>(width, height);
+				return CreateRef<OpenGLTexture2D>(width, height);
 			}
 		}
 	}

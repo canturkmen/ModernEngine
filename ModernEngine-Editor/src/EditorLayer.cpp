@@ -82,7 +82,7 @@ namespace ModernEngine {
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
 
-		m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -207,9 +207,10 @@ namespace ModernEngine {
 			ImGui::EndMenuBar();
 		}
 
-		m_SceneHieararchyPanel.OnImGuiRender();
+		m_SceneHierarchyPanel.OnImGuiRender();
+		m_ContentBrowserPanel.OnImGuiRender();
 
-		ImGui::Begin("Stats");
+		/*ImGui::Begin("Stats");
 
 		std::string entityName = "None";
 		if (m_HoveredEntity)
@@ -221,7 +222,7 @@ namespace ModernEngine {
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
 		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
 
-		ImGui::End();
+		ImGui::End();*/
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -248,7 +249,7 @@ namespace ModernEngine {
 		m_ViewportBounds[1] = { windowMaxBound.x, windowMaxBound.y };
 
 		// Gizmos
-		Entity selectedEntity = m_SceneHieararchyPanel.GetSelectedEntity();
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity && m_GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
@@ -359,7 +360,7 @@ namespace ModernEngine {
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
 	{
 		if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
-			m_SceneHieararchyPanel.SetSelectedEntity(m_HoveredEntity);
+			m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 
 		return false;
 	}
@@ -368,7 +369,7 @@ namespace ModernEngine {
 	{
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OpenScene()
@@ -378,7 +379,7 @@ namespace ModernEngine {
 		{
 			m_ActiveScene = CreateRef<Scene>();
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHieararchyPanel.SetContext(m_ActiveScene);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 			SceneSerializer Serializer(m_ActiveScene);
 			Serializer.Deserialize(*filepath);
