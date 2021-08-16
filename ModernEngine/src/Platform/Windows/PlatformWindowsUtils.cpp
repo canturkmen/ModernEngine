@@ -11,7 +11,7 @@
 
 namespace ModernEngine {
 
-	std::optional<std::string> FileDialogs::OpenFile(const char* filter)
+	std::string FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR sizeFile[260] = { 0 };
@@ -25,7 +25,7 @@ namespace ModernEngine {
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetOpenFileNameA(&ofn) == TRUE)
 			return ofn.lpstrFile;
-		return std::nullopt;
+		return std::string();
 	}
 
 	std::optional<std::string> FileDialogs::SaveFile(const char* filter)

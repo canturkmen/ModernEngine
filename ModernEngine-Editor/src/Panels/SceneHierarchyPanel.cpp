@@ -3,13 +3,17 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 #include <cstring>
+#include <filesystem>
+
 
 // To avoid a compiler warning when the strncpy is used
 #ifdef _MSVC_LANG
-#define _CRT_SECURE_NO_WARNINGS
+	#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 namespace ModernEngine {
+
+	extern const std::filesystem::path g_AssetsPath;
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 	{
@@ -303,6 +307,18 @@ namespace ModernEngine {
 		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+			ImGui::Button("Texture", ImVec2{ 100.0f, 0.0f });
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content Browser Item"))
+				{
+					const wchar_t* data = (const wchar_t*)payload->Data;
+					std::filesystem::path texturePath = std::filesystem::path(g_AssetsPath) / data;
+					component.Texture = Texture2D::Create(texturePath.string());
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
 		});
 	}
 }

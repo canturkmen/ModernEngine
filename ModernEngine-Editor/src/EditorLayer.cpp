@@ -15,6 +15,8 @@
 
 namespace ModernEngine {
 
+	extern const std::filesystem::path g_AssetsPath;
+
 	EditorLayer::EditorLayer()
 		: Layer("Editor Layer"), m_CameraController(1280.0f / 720.0f)
 	{
@@ -239,6 +241,16 @@ namespace ModernEngine {
 		// Rendering
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentRendererID(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content Browser Item"))
+			{
+				const wchar_t* data = (const wchar_t*)payload->Data;
+				OpenScene(std::filesystem::path(g_AssetsPath /data));
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		auto windowSize = ImGui::GetWindowSize();
 		ImVec2 windowMinBound = ImGui::GetWindowPos();
 		windowMinBound.x += viewportOffset.x;
@@ -374,16 +386,19 @@ namespace ModernEngine {
 
 	void EditorLayer::OpenScene()
 	{
-		std::optional<std::string> filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-		if (filepath)
-		{
-			m_ActiveScene = CreateRef<Scene>();
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+		if (!filepath.empty())
+			OpenScene(filepath);
+	}
 
-			SceneSerializer Serializer(m_ActiveScene);
-			Serializer.Deserialize(*filepath);
-		}
+	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		SceneSerializer Serializer(m_ActiveScene);
+		Serializer.Deserialize(filepath.string());
 	}
 
 	void EditorLayer::SaveSceneAs()

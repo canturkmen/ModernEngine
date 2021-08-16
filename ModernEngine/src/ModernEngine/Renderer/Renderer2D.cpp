@@ -399,7 +399,10 @@ namespace ModernEngine {
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRendererComponent& comp, int entityID)
 	{
-		DrawQuad(transform, comp.Color, entityID);
+		if (comp.Texture)
+			DrawQuad(transform, comp.Texture, comp.TilingFactor, comp.Color, entityID);
+		else
+			DrawQuad(transform, comp.Color, entityID);
 	}
 
 	void Renderer2D::ResetStats()
