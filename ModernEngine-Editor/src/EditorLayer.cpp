@@ -26,6 +26,8 @@ namespace ModernEngine {
 	void EditorLayer::OnAttach()
 	{
 		m_Checkerboard = Texture2D::Create("assets/textures/Checkerboard.png");
+		m_StartButton = Texture2D::Create("Resources/Icons/Play_Button.png");
+		m_StopButton = Texture2D::Create("Resources/Icons/Stop_Button.png");
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
@@ -113,7 +115,20 @@ namespace ModernEngine {
 
 		m_FrameBuffer->ClearAttachments(1, -1);
 
-		m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+		switch (m_SceneState)
+		{
+			case SceneState::Edit: 
+			{
+				m_ActiveScene->OnUpdateEditor(dt, m_EditorCamera);
+				break;
+			}
+			case SceneState::Play:
+			{
+				m_ActiveScene->OnUpdateRuntime(dt);
+				break;
+			}
+		}
+
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_ViewportBounds[0].x;
 		my -= m_ViewportBounds[0].y;
@@ -255,7 +270,7 @@ namespace ModernEngine {
 		ImVec2 windowMinBound = ImGui::GetWindowPos();
 		windowMinBound.x += viewportOffset.x;
 		windowMinBound.y += viewportOffset.y;
-
+		
 		ImVec2 windowMaxBound = {windowMinBound.x + windowSize.x, windowMinBound.y + windowSize.y };
 		m_ViewportBounds[0] = { windowMinBound.x, windowMinBound.y };
 		m_ViewportBounds[1] = { windowMaxBound.x, windowMaxBound.y };
@@ -299,9 +314,11 @@ namespace ModernEngine {
 				transformComponent.Scale = scale;
 			}
 		}
-
+		
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		UI_Toolbar();
 
 		ImGui::End();
 	}
@@ -329,7 +346,7 @@ namespace ModernEngine {
 			{
 				if (isControlPressed)
 					NewScene();
-
+				
 				break;
 			}
 
@@ -409,5 +426,48 @@ namespace ModernEngine {
 			SceneSerializer Serializer(m_ActiveScene);
 			Serializer.Serialize(*filepath);
 		}
+	}
+
+	void EditorLayer::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0 ,2});
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0 , 0 });
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0, 0, 0, 0});
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& hoveredButton = colors[ImGuiCol_ButtonHovered];
+		const auto& activeButton = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f});
+
+		ImGui::Begin("##type");
+
+		// Get the icon and center it in the available content
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_StartButton : m_StopButton;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2{ size, size }, ImVec2{ 0, 0 }, ImVec2{ 1, 1 }, 0))
+		{
+			if (m_SceneState == SceneState::Edit)
+				ScenePlay();
+			else if (m_SceneState == SceneState::Play)
+				SceneStop();
+		}
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
+	}
+		
+	void EditorLayer::ScenePlay()
+	{
+		m_SceneState = SceneState::Play;
+		m_ActiveScene->OnStartRuntime();
+	}
+
+	void EditorLayer::SceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+		m_ActiveScene->OnStopRuntime();
 	}
 }

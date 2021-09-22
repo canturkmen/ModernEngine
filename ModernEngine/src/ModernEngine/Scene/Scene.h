@@ -4,6 +4,8 @@
 #include "ModernEngine/Renderer/EditorCamera.h"
 #include "ModernEngine/Renderer/Texture.h"
 
+class b2World;
+
 namespace ModernEngine {
 
 	class Entity;
@@ -19,6 +21,9 @@ namespace ModernEngine {
 
 		void DestroyEntity(Entity entity);
 
+		void OnStartRuntime();
+		void OnStopRuntime();
+
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
 		void OnUpdateRuntime(DeltaTime dt);
 
@@ -33,6 +38,8 @@ namespace ModernEngine {
 	private:
 		entt::registry m_Registery;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+		b2World* m_ActivePhysicsWorld = nullptr;
 		
 		friend class Entity;
 		friend class SceneSerializer;

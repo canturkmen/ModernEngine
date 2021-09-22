@@ -19,3 +19,6 @@
 	url = https://github.com/canturkmen/ImGuizmo
 [submodule "ModernEngine/vendor"]
 	url = https://github.com/canturkmen/ImGuizmo
+[submodule "ModernEngine/vendor/Box2D"]
+	path = ModernEngine/vendor/Box2D
+	url = https://github.com/canturkmen/box2d

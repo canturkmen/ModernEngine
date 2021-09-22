@@ -10,6 +10,7 @@ namespace ModernEngine {
 	public:
 		ContentBrowserPanel();
 		void OnImGuiRender();
+
 	private:
 		Ref<Texture2D> m_FolderIcon;
 		Ref<Texture2D> m_FileIcon;

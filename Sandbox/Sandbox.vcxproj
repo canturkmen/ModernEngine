@@ -135,13 +135,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Sandbox2D.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Sandbox2D.cpp" />
-    <ClCompile Include="src\SandboxApp.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ModernEngine\ModernEngine.vcxproj">
       <Project>{60620D60-4CC5-9C04-F54A-D5BAE18C6887}</Project>
     </ProjectReference>
