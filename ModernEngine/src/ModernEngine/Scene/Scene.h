@@ -1,6 +1,7 @@
 #pragma once
 #include "entt.hpp"
 #include "ModernEngine/Core/DeltaTime.h"
+#include "ModernEngine/Core/UUID.h"
 #include "ModernEngine/Renderer/EditorCamera.h"
 #include "ModernEngine/Renderer/Texture.h"
 
@@ -17,6 +18,7 @@ namespace ModernEngine {
 		~Scene();
 
 		Entity CreateEntity(const std::string& name);
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name);
 		entt::registry& Registery() { return m_Registery; }
 
 		void DestroyEntity(Entity entity);

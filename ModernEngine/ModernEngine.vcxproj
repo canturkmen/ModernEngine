@@ -156,6 +156,7 @@
     <ClInclude Include="src\ModernEngine\Core\LayerStack.h" />
     <ClInclude Include="src\ModernEngine\Core\Log.h" />
     <ClInclude Include="src\ModernEngine\Core\MouseButtonCodes.h" />
+    <ClInclude Include="src\ModernEngine\Core\UUID.h" />
     <ClInclude Include="src\ModernEngine\Core\Window.h" />
     <ClInclude Include="src\ModernEngine\Debug\Instrumentor.h" />
     <ClInclude Include="src\ModernEngine\Events\ApplicationEvent.h" />
@@ -479,6 +480,7 @@
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Log.cpp" />
+    <ClCompile Include="src\ModernEngine\Core\UUID.cpp" />
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\ModernEngine\Math\Math.cpp" />

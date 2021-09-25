@@ -1,17 +1,24 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-
+#include "ModernEngine/Scene/SceneCamera.h"
+#include "ModernEngine/Core/UUID.h"
 #include "ModernEngine/Renderer/Texture.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include "ModernEngine/Scene/SceneCamera.h"
-#include "ModernEngine/Scene/ScriptableEntity.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace ModernEngine {
+
+	struct IDComponent
+	{
+		UUID uuid;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent& other) = default;
+	};
 
 	struct TagComponent
 	{
@@ -63,6 +70,8 @@ namespace ModernEngine {
 		CameraComponent(const CameraComponent&) = default;
 	};
 	
+	class ScriptableEntity;
+
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* Instance = nullptr;

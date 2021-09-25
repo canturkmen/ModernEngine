@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "ModernEngine/Scene/Components.h"
 
 namespace ModernEngine {
 
@@ -35,6 +36,8 @@ namespace ModernEngine {
 		{
 			return m_Scene->m_Registery.all_of<T>(m_EntityHandle);
 		}
+
+		UUID GetUUID() { return GetComponent<IDComponent>().uuid;}
 
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }

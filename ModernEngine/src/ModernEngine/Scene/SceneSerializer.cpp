@@ -137,7 +137,7 @@ namespace ModernEngine {
 	static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value << "12312314";
+		out << YAML::Key << "Entity" << YAML::Value <<  entity.GetUUID();
 
 		if (entity.HasComponent<TagComponent>())
 		{
@@ -280,7 +280,7 @@ namespace ModernEngine {
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				Entity deserializedEntity = m_Scene->CreateEntity(name);
+				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 
 				auto transformComponent = entity["TransformComponent"];
 				if (transformComponent)
