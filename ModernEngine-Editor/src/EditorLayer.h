@@ -35,6 +35,7 @@ namespace ModernEngine {
 
 	private:
 		Ref<Scene> m_ActiveScene;
+		Ref<Scene> m_EditorScene;
 
 		OrthographicCameraController m_CameraController;
 		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.0f };
@@ -42,9 +43,6 @@ namespace ModernEngine {
 		Ref<FrameBuffer> m_FrameBuffer;
 
 		EditorCamera m_EditorCamera;
-		Entity m_Entity;
-		Entity m_Camera;
-		Entity m_SecondCamera;
 		Entity m_HoveredEntity;
 		bool m_PrimaryCamera = true;
 

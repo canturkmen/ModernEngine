@@ -35,23 +35,10 @@ namespace ModernEngine {
 		fbSpec.width = 1280.0f;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_ActiveScene = CreateRef<Scene>();
+		m_EditorScene = CreateRef<Scene>();
+		m_ActiveScene = m_EditorScene;
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.01f, 1000.0f);
 #if 0
-		Entity square = m_ActiveScene->CreateEntity("Square Entity");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 1.0f, 1.0f });
-		m_Entity = square;
-
-		Entity second_square = m_ActiveScene->CreateEntity("Second Square Entity");
-		second_square.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f });
-
-		m_Camera = m_ActiveScene->CreateEntity("Camera Entity");
-		m_Camera.AddComponent<CameraComponent>();
-
-		m_SecondCamera = m_ActiveScene->CreateEntity("Second Camera Entity");
-		m_SecondCamera.AddComponent<CameraComponent>();
-		m_SecondCamera.GetComponent<CameraComponent>().Primary = false;
-
 		class CameraController : public ScriptableEntity
 		{
 		public:
@@ -154,7 +141,7 @@ namespace ModernEngine {
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
+		
 		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 		// because it would be confusing to have two docking targets within each others.
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
@@ -410,7 +397,11 @@ namespace ModernEngine {
 
 	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
 	{
-		m_ActiveScene = CreateRef<Scene>();
+		if (m_SceneState != SceneState::Edit)
+			SceneStop();
+
+		m_EditorScene = CreateRef<Scene>();
+		m_ActiveScene = m_EditorScene;
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
@@ -439,21 +430,21 @@ namespace ModernEngine {
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f});
 
-		ImGui::Begin("##type");
+		ImGui::Begin("##type", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		// Get the icon and center it in the available content
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_StartButton : m_StopButton;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2{ size, size }, ImVec2{ 0, 0 }, ImVec2{ 1, 1 }, 0))
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 		{
 			if (m_SceneState == SceneState::Edit)
 				ScenePlay();
 			else if (m_SceneState == SceneState::Play)
 				SceneStop();
 		}
-
+		
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
 		ImGui::End();
@@ -462,12 +453,14 @@ namespace ModernEngine {
 	void EditorLayer::ScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnStartRuntime();
 	}
 
 	void EditorLayer::SceneStop()
 	{
 		m_SceneState = SceneState::Edit;
+		m_ActiveScene = m_EditorScene;
 		m_ActiveScene->OnStopRuntime();
 	}
 }

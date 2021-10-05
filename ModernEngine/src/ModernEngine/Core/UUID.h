@@ -9,7 +9,7 @@ namespace ModernEngine {
 	public:
 		UUID();
 		UUID(uint64_t uuid);
-		UUID(UUID& other) = default;
+		UUID(UUID& other);
 
 		operator uint64_t() const { return m_UUID; }
 

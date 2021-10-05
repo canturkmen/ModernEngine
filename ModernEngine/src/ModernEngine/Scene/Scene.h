@@ -15,7 +15,10 @@ namespace ModernEngine {
 	{
 	public:
 		Scene();
-		~Scene();
+		~Scene();	
+
+		static Ref<Scene> Copy(Ref<Scene> other);
+		void DuplicateEntity(Entity entity);
 
 		Entity CreateEntity(const std::string& name);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name);
@@ -30,6 +33,7 @@ namespace ModernEngine {
 		void OnUpdateRuntime(DeltaTime dt);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
+
 
 		Entity GetPrimaryCamera();
 

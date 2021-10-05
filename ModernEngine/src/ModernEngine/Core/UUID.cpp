@@ -17,6 +17,13 @@ namespace ModernEngine {
 	}
 
 	UUID::UUID(uint64_t uuid)
+		:m_UUID(uuid)
+	{
+
+	}
+
+	UUID::UUID(UUID& other)
+		:m_UUID(other.m_UUID)
 	{
 
 	}

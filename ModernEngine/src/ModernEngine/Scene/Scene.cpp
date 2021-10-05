@@ -38,7 +38,60 @@ namespace ModernEngine {
 	{
 		return CreateEntityWithUUID(UUID(), name);
 	}
+
+	template<typename Component>
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		auto view = src.view<Component>();
+		for (auto e : view)
+		{	
+			UUID id = src.get<IDComponent>(e).uuid;
+			MN_CORE_ASSERT(enttMap.find(id) != enttMap.end(), "Key value could not be found !")
+			entt::entity dstEnttId = enttMap.at(id);
+			
+			auto& component = src.get<Component>(e);
+			dst.emplace_or_replace<Component>(dstEnttId, component);
+		}
+	}
 	
+	Ref<Scene> Scene::Copy(Ref<Scene> other)
+	{
+		Ref<Scene> newScene = CreateRef<Scene>();
+
+		newScene->m_ViewportWidth = other->m_ViewportWidth;
+		newScene->m_ViewportHeight = other->m_ViewportHeight;
+
+		auto& srcSceneRegistery = other->m_Registery;
+		auto& dstSceneRegistery = newScene->m_Registery;
+		std::unordered_map<UUID, entt::entity> enttMap;
+
+		auto idView = srcSceneRegistery.view<IDComponent>();
+
+		// Copy the entities with their UUID.
+		for (auto e : idView)
+		{
+			UUID uuid = srcSceneRegistery.get<IDComponent>(e).uuid;
+			const auto& name = srcSceneRegistery.get<TagComponent>(e).Tag;
+			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+			enttMap[uuid] = newEntity;
+		}
+
+		// Copy the components without the IDComponent and TagComponent.
+		CopyComponent<TransformComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<SpriteRendererComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<CameraComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<NativeScriptComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<BoxCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<Rigidbody2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+
+		return newScene;
+	}
+
+	void Scene::DuplicateEntity(Entity entity)
+	{
+
+	}
+
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
 		Entity entity = { m_Registery.create(), this };
