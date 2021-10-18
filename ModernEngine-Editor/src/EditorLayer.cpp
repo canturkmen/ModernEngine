@@ -329,138 +329,179 @@ namespace ModernEngine {
 		// Gizmos Shortcut
 		switch (e.GetKeyCode())
 		{
-			case MN_KEY_N:
-			{
-				if (isControlPressed)
-					NewScene();
-				
-				break;
-			}
+		case MN_KEY_N:
+		{
+			if (isControlPressed)
+				NewScene();
 
-			case MN_KEY_O:
-			{
-				if (isControlPressed)
-					OpenScene();
-				
-				break;
-			}
-
-			case MN_KEY_S:
-			{
-				if (isControlPressed && isShiftPressed)
-					SaveSceneAs();
-
-				break;
-			}
-
-			case MN_KEY_Q:
-				m_GizmoType = -1;
-				break;
-
-			case MN_KEY_W:
-				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-				break;
-
-			case MN_KEY_E:
-				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-				break;
-
-			case MN_KEY_R:
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-				break;
+			break;
 		}
+
+		case MN_KEY_O:
+		{
+			if (isControlPressed)
+				OpenScene();
+
+			break;
+		}
+
+		case MN_KEY_S:
+		{
+			if (isControlPressed)
+			{
+				if (isShiftPressed)
+					SaveSceneAs();
+				else
+					SaveScene();
+
+				break;
+			}
+		}
+
+		case MN_KEY_Q:
+			m_GizmoType = -1;
+			break;
+
+		case MN_KEY_W:
+			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+
+		case MN_KEY_E:
+			m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+			break;
+
+		case MN_KEY_R:
+			m_GizmoType = ImGuizmo::OPERATION::SCALE;
+			break;
+		}
+
+		if (Input::IsKeyPressed(MN_KEY_D))
+			OnDuplicateSelectedEntity();
 
 		return true;
-	}
-
-	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
-	{
-		if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
-			m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
-
-		return false;
-	}
-
-	void EditorLayer::NewScene()
-	{
-		m_ActiveScene = CreateRef<Scene>();
-		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-	}
-
-	void EditorLayer::OpenScene()
-	{
-		std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-		if (!filepath.empty())
-			OpenScene(filepath);
-	}
-
-	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
-	{
-		if (m_SceneState != SceneState::Edit)
-			SceneStop();
-
-		m_EditorScene = CreateRef<Scene>();
-		m_ActiveScene = m_EditorScene;
-		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-		SceneSerializer Serializer(m_ActiveScene);
-		Serializer.Deserialize(filepath.string());
-	}
-
-	void EditorLayer::SaveSceneAs()
-	{
-		std::optional<std::string> filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-		if (filepath)
-		{
-			SceneSerializer Serializer(m_ActiveScene);
-			Serializer.Serialize(*filepath);
 		}
-	}
 
-	void EditorLayer::UI_Toolbar()
-	{
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0 ,2});
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0 , 0 });
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0, 0, 0, 0});
-		auto& colors = ImGui::GetStyle().Colors;
-		const auto& hoveredButton = colors[ImGuiCol_ButtonHovered];
-		const auto& activeButton = colors[ImGuiCol_ButtonActive];
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f});
-
-		ImGui::Begin("##type", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-
-		// Get the icon and center it in the available content
-		float size = ImGui::GetWindowHeight() - 4.0f;
-		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_StartButton : m_StopButton;
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent & e)
 		{
-			if (m_SceneState == SceneState::Edit)
-				ScenePlay();
-			else if (m_SceneState == SceneState::Play)
+			if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+
+			return false;
+		}
+
+		void EditorLayer::OnDuplicateSelectedEntity()
+		{
+			if (m_SceneState != SceneState::Edit)
+				return;
+
+			Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+			if (selectedEntity)
+				m_EditorScene->DuplicateEntity(selectedEntity);
+		}
+
+		void EditorLayer::NewScene()
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			m_EditorPath = std::filesystem::path();
+		}
+
+		void EditorLayer::OpenScene()
+		{
+			std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+			if (!filepath.empty())
+				OpenScene(filepath);
+		}
+
+		void EditorLayer::OpenScene(const std::filesystem::path & filepath)
+		{
+			if (m_SceneState != SceneState::Edit)
 				SceneStop();
-		}
-		
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor(3);
-		ImGui::End();
-	}
-		
-	void EditorLayer::ScenePlay()
-	{
-		m_SceneState = SceneState::Play;
-		m_ActiveScene = Scene::Copy(m_EditorScene);
-		m_ActiveScene->OnStartRuntime();
-	}
 
-	void EditorLayer::SceneStop()
-	{
-		m_SceneState = SceneState::Edit;
-		m_ActiveScene = m_EditorScene;
-		m_ActiveScene->OnStopRuntime();
-	}
+			m_EditorScene = CreateRef<Scene>();
+			m_ActiveScene = m_EditorScene;
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			SceneSerializer Serializer(m_ActiveScene);
+			Serializer.Deserialize(filepath.string());
+
+			m_EditorPath = filepath;
+		}
+
+		void EditorLayer::SaveScene()
+		{
+			if (!m_EditorPath.empty())
+				SerializeScene(m_ActiveScene, m_EditorPath);
+			else
+				SaveSceneAs();
+		}
+
+		void EditorLayer::SaveSceneAs()
+		{
+			std::string filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+			if (!filepath.empty())
+			{
+				SerializeScene(m_ActiveScene, filepath);
+				m_EditorPath = filepath;
+			}
+		}
+
+		void EditorLayer::SerializeScene(Ref<Scene> scene, std::filesystem::path filepath)
+		{
+			SceneSerializer Serializer(scene);
+			Serializer.Serialize(filepath.string());
+		}
+
+		void EditorLayer::UI_Toolbar()
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0 ,2 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0 , 0 });
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0, 0, 0, 0 });
+			auto& colors = ImGui::GetStyle().Colors;
+			const auto& hoveredButton = colors[ImGuiCol_ButtonHovered];
+			const auto& activeButton = colors[ImGuiCol_ButtonActive];
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f });
+
+			ImGui::Begin("##type", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+			// Get the icon and center it in the available content
+			float size = ImGui::GetWindowHeight() - 4.0f;
+			Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_StartButton : m_StopButton;
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+			{
+				if (m_SceneState == SceneState::Edit)
+					ScenePlay();
+				else if (m_SceneState == SceneState::Play)
+					SceneStop();
+			}
+
+			ImGui::PopStyleVar(2);
+			ImGui::PopStyleColor(3);
+			ImGui::End();
+		}
+
+		void EditorLayer::ScenePlay()
+		{
+			m_SceneState = SceneState::Play;
+			m_ActiveScene = Scene::Copy(m_EditorScene);
+			m_ActiveScene->OnStartRuntime();
+
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		}
+
+		void EditorLayer::SceneStop()
+		{
+			m_SceneState = SceneState::Edit;
+			m_ActiveScene = m_EditorScene;
+			m_ActiveScene->OnStopRuntime();
+
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		}
+
 }

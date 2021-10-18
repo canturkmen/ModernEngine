@@ -24,10 +24,14 @@ namespace ModernEngine {
 		bool OnKeyPressedEvent(KeyPressedEvent& e);
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+		void OnDuplicateSelectedEntity();
+
 		void NewScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& filepath);
+		void SaveScene();
 		void SaveSceneAs();
+		void SerializeScene(Ref<Scene> scene, std::filesystem::path filepath);
 
 		void UI_Toolbar();
 		void ScenePlay();
@@ -45,6 +49,7 @@ namespace ModernEngine {
 		EditorCamera m_EditorCamera;
 		Entity m_HoveredEntity;
 		bool m_PrimaryCamera = true;
+		std::filesystem::path m_EditorPath;
 
 		glm::vec2 m_ViewportBounds[2];
 		glm::vec2 m_ViewportSize = { 0, 0 };

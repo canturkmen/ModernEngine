@@ -28,7 +28,7 @@ namespace ModernEngine {
 		return std::string();
 	}
 
-	std::optional<std::string> FileDialogs::SaveFile(const char* filter)
+	std::string FileDialogs::SaveFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
 		CHAR sizeFile[260] = { 0 };
@@ -43,6 +43,6 @@ namespace ModernEngine {
 		ofn.lpstrDefExt = strchr(filter, '\0') + 1;
 		if (GetSaveFileNameA(&ofn) == TRUE)
 			return ofn.lpstrFile;
-		return std::nullopt;
+		return std::string();
 	}
 }

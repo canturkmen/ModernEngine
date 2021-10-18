@@ -105,7 +105,7 @@ namespace ModernEngine {
 		glm::vec2 size = { 0.5f, 0.5f };
 
 		float Friction = 0.5f;
-		float Density = 1.0f;
+		float Density = 1.0f; // Density affects the movement of the current object.
 		float Restitution = 0.0f; // Bouncing
 		float RestitutionThreshold = 0.5f; // Velocity at which bouncing stops
 

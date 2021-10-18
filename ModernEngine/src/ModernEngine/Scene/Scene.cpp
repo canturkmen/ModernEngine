@@ -53,6 +53,13 @@ namespace ModernEngine {
 			dst.emplace_or_replace<Component>(dstEnttId, component);
 		}
 	}
+
+	template<typename Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		if (src.HasComponent<Component>())
+			dst.AddComponentOrReplace<Component>(src.GetComponent<Component>());
+	}
 	
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
 	{
@@ -89,7 +96,15 @@ namespace ModernEngine {
 
 	void Scene::DuplicateEntity(Entity entity)
 	{
+		std::string name = entity.GetName();
+		Entity newEntity = CreateEntity(name);
 
+		CopyComponentIfExists<TransformComponent>(newEntity, entity);
+		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CameraComponent>(newEntity, entity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
 	}
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
@@ -199,7 +214,7 @@ namespace ModernEngine {
 				transform.Translation.y = position.y;
 				transform.Rotation.z = body->GetAngle();
 			}
-		}
+		} 
 
 		// 2D render
 		Camera* mainCamera = nullptr;
@@ -245,6 +260,7 @@ namespace ModernEngine {
 				cameraComponent.m_Camera.SetViewportSize(width, height);
 		}
 	}
+
 
 	Entity Scene::GetPrimaryCamera()
 	{
