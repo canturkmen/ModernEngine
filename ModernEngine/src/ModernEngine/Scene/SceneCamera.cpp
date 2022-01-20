@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace ModernEngine {
-
+		
 	SceneCamera::SceneCamera()
 	{
 		RecalculateProjectionMatrix();
@@ -41,9 +41,8 @@ namespace ModernEngine {
 	void SceneCamera::RecalculateProjectionMatrix()
 	{
 		if (m_ProjectionType == ProjectionType::Perspective)
-		{
 			m_ProjectionMatrix = glm::perspective(m_PerspectiveFOV, m_AspectRatio, m_PerspectiveNear, m_PerspectiveFar);
-		}
+		
 		else
 		{
 			float Left = -m_OrthographicSize * m_AspectRatio * 0.5f;

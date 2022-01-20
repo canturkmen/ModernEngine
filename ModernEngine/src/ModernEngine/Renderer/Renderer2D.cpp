@@ -23,6 +23,19 @@ namespace ModernEngine {
 		int EntityID;
 	};
 
+
+	struct CircleQuadVertex
+	{
+		glm::vec3 WorldPosition;
+		glm::vec3 LocalPosition;
+		glm::vec4 Color;
+		float Thickness; 
+		float Fade;
+
+		// For editor
+		int EntityID;
+	};
+
 	struct Renderer2DData
 	{
 		static const uint32_t MaxQuads = 20000;
@@ -30,13 +43,23 @@ namespace ModernEngine {
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32;
 
+
+		Ref<VertexArray> QuadVA;
+		Ref<VertexBuffer> QuadVB;
+
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
 
-		Ref<VertexArray> QuadVA;
-		Ref<VertexBuffer> QuadVB;
-		Ref<Shader> TextureShader;
+		Ref<VertexArray> CircleQuadVA;
+		Ref<VertexBuffer> CircleQuadVB;
+
+		uint32_t CircleQuadIndexCount = 0;
+		CircleQuadVertex* CircleQuadVertexBufferBase = nullptr;
+		CircleQuadVertex* CircleQuadVertexBufferPtr = nullptr;
+
+		Ref<Shader> QuadShader;
+		Ref<Shader> CircleShader;
 		Ref<Texture2D> WhiteTexture;
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
@@ -53,9 +76,10 @@ namespace ModernEngine {
 	{
 		MN_PROFILE_FUNCTION();
 
+		// Rendering Quads
 		s_Data.QuadVA = VertexArray::Create();
-
 		s_Data.QuadVB = VertexBuffer::Create(s_Data.MaxQuads * sizeof(QuadVertex));
+
 		BufferLayout SquareLayout =
 		{
 			{ShaderDataType::Float3, "a_Position"},
@@ -70,7 +94,6 @@ namespace ModernEngine {
 		s_Data.QuadVA->AddVertexBuffer(s_Data.QuadVB);
 
 		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
-
 		uint32_t* QuadIndices = new uint32_t[s_Data.MaxIndices];
 
 		uint32_t offset = 0;
@@ -91,18 +114,40 @@ namespace ModernEngine {
 		s_Data.QuadVA->SetIndexBuffer(QuadIB);
 		delete[] QuadIndices;
 
+		// Rendering Circles
+		s_Data.CircleQuadVA = VertexArray::Create();
+		s_Data.CircleQuadVB = VertexBuffer::Create(s_Data.MaxQuads * sizeof(CircleQuadVertex));
+
+		BufferLayout CircleLayout =
+		{
+			{ShaderDataType::Float3, "a_World_Position"},
+			{ShaderDataType::Float3, "a_LocalPosition"},
+			{ShaderDataType::Float4, "a_Color"},
+			{ShaderDataType::Float,	 "a_Thickness"},
+			{ShaderDataType::Float,	 "a_Fade"},
+			{ShaderDataType::Int,    "a_EntityID"}
+		};
+
+		s_Data.CircleQuadVB->SetBufferLayout(CircleLayout);
+		s_Data.CircleQuadVA->AddVertexBuffer(s_Data.CircleQuadVB);
+		s_Data.CircleQuadVA->SetIndexBuffer(QuadIB);
+
+		s_Data.CircleQuadVertexBufferBase = new CircleQuadVertex[s_Data.MaxVertices];
+
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t data = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&data, sizeof(uint32_t));
-
-		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data.TextureShader->Bind();
 
 		int32_t samplers[s_Data.MaxTextureSlots];
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.TextureShader->SetIntArray("u_Texture", samplers, s_Data.MaxTextureSlots);
+
+		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
+
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetIntArray("u_Texture", samplers, s_Data.MaxTextureSlots);
 
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
@@ -123,8 +168,10 @@ namespace ModernEngine {
 	{
 		MN_PROFILE_FUNCTION();
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+		s_Data.CircleShader->Bind();
+		s_Data.CircleShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
 		StartBatch();
 	}
@@ -135,8 +182,11 @@ namespace ModernEngine {
 
 		glm::mat4 viewProjectionMatrix = camera.GetProjectionMatrix() * glm::inverse(transform);
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+
+		s_Data.CircleShader->Bind();
+		s_Data.CircleShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
 
 		StartBatch();
 	}
@@ -147,8 +197,11 @@ namespace ModernEngine {
 
 		glm::mat4 viewProjectionMatrix = camera.GetViewProjectionMatrix();
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+
+		s_Data.CircleShader->Bind();
+		s_Data.CircleShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
 
 		StartBatch();
 	}
@@ -157,6 +210,9 @@ namespace ModernEngine {
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.CircleQuadIndexCount = 0;
+		s_Data.CircleQuadVertexBufferPtr = s_Data.CircleQuadVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
 	}
@@ -169,17 +225,28 @@ namespace ModernEngine {
 
 	void Renderer2D::Flush()
 	{
-		if (s_Data.QuadIndexCount == 0)
-			return;
+		if (s_Data.QuadIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
+			s_Data.QuadVB->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
-		s_Data.QuadVB->SetData(s_Data.QuadVertexBufferBase, dataSize);
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+				s_Data.TextureSlots[i]->Bind(i);
 
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
-			s_Data.TextureSlots[i]->Bind(i);
+			s_Data.QuadShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.QuadVA, s_Data.QuadIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
+		
+		if (s_Data.CircleQuadIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleQuadVertexBufferPtr - (uint8_t*)s_Data.CircleQuadVertexBufferBase);
+			s_Data.CircleQuadVB->SetData(s_Data.CircleQuadVertexBufferBase, dataSize);
 
-		RenderCommand::DrawIndexed(s_Data.QuadVA, s_Data.QuadIndexCount);
-		s_Data.Stats.DrawCalls++;
+			s_Data.CircleShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.CircleQuadVA, s_Data.CircleQuadIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
 	}
 
 	void Renderer2D::EndScene()
@@ -403,6 +470,26 @@ namespace ModernEngine {
 			DrawQuad(transform, comp.Texture, comp.TilingFactor, comp.Color, entityID);
 		else
 			DrawQuad(transform, comp.Color, entityID);
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
+	{
+		MN_PROFILE_FUNCTION();
+		constexpr size_t CircleQuadVertexCount = 4;
+
+		for (int i = 0; i < CircleQuadVertexCount; i++)
+		{
+			s_Data.CircleQuadVertexBufferPtr->WorldPosition = transform * s_Data.VertexPositions[i];
+			s_Data.CircleQuadVertexBufferPtr->LocalPosition = s_Data.VertexPositions[i] * 2.0f;
+			s_Data.CircleQuadVertexBufferPtr->Color = color;
+			s_Data.CircleQuadVertexBufferPtr->Thickness = thickness;
+			s_Data.CircleQuadVertexBufferPtr->Fade = fade;
+			s_Data.CircleQuadVertexBufferPtr->EntityID = entityID;
+			s_Data.CircleQuadVertexBufferPtr++;
+		}
+
+		s_Data.CircleQuadIndexCount += 6;
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::ResetStats()

@@ -102,6 +102,9 @@
     <ClInclude Include="src\ModernEngine\Core\MouseButtonCodes.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Core\UUID.h">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\ModernEngine\Core\Window.h">
       <Filter>src\ModernEngine\Core</Filter>
     </ClInclude>
@@ -1053,7 +1056,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1066,6 +1068,9 @@
       <Filter>src\ModernEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Core\Log.cpp">
+      <Filter>src\ModernEngine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Core\UUID.cpp">
       <Filter>src\ModernEngine\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\ModernEngine\ImGui\ImGuiBuild.cpp">
@@ -1170,6 +1175,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Core\UUID.cpp" />
   </ItemGroup>
 </Project>
