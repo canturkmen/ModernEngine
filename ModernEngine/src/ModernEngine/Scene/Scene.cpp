@@ -189,6 +189,8 @@ namespace ModernEngine {
 			}
 		}
 
+		Renderer2D::DrawLine(glm::vec3(2.0f), glm::vec3(5.0f), glm::vec4(1, 1, 1, 1));
+
 		Renderer2D::EndScene();
 	}
 
@@ -251,22 +253,22 @@ namespace ModernEngine {
 		if (mainCamera != nullptr)
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
-			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
 			{
-				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				}
 			}
-		}
-
-		if (mainCamera != nullptr)
-		{
-			Renderer2D::BeginScene(*mainCamera, cameraTransform);
-			auto view = m_Registery.view<TransformComponent, CircleRendererComponent>();
-			for (auto entity : view)
+			
 			{
-				auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				auto view = m_Registery.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				}
 			}
 		}
 

@@ -5,7 +5,7 @@
 namespace ModernEngine {
 
 	RendererAPI::API RendererAPI::s_API = API::OpenGL;
-
+	
 	Scope<RendererAPI> RendererAPI::Create()
 	{
 		switch (s_API)
