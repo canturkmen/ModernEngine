@@ -171,7 +171,7 @@ namespace ModernEngine {
 
 				b2CircleShape CircleShape;
 				CircleShape.m_p.Set(cc2d.offset.x, cc2d.offset.y);
-				CircleShape.m_radius = cc2d.Radius;
+				CircleShape.m_radius = transform.Scale.x * cc2d.Radius;
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &CircleShape;

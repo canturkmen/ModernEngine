@@ -37,6 +37,12 @@ namespace ModernEngine {
 
 		Entity GetPrimaryCamera();
 
+		template<typename... Components>
+		auto GetAllEntitiesWith()
+		{
+			return m_Registery.view<Components...>();
+		}
+	
 	private: 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

@@ -277,7 +277,7 @@ namespace ModernEngine {
 			{
 				if (ImGui::MenuItem("Circle Collider 2D Component"))
 				{
-					m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+					m_SelectionContext.AddComponent<CircleCollider2DComponent>();
 					ImGui::CloseCurrentPopup();
 				}
 			}

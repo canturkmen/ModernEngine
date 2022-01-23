@@ -37,6 +37,8 @@ namespace ModernEngine {
 		void ScenePlay();
 		void SceneStop();
 
+		void OnOverlayRender();
+
 	private:
 		Ref<Scene> m_ActiveScene;
 		Ref<Scene> m_EditorScene;
@@ -56,6 +58,8 @@ namespace ModernEngine {
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 
 		int m_GizmoType = -1;
+		bool m_ShowPhysicsColliders = false;
+
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
 

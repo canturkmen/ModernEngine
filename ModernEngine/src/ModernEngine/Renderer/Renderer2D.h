@@ -45,7 +45,7 @@ namespace ModernEngine {
 		static void DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID = -1);
 		static void DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
 
-		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thicknes, float fade, int entityID);
+		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thicknes = 1.0f, float fade = 0.005f, int entityID = -1);
 
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& comp, int entityID);
 	
