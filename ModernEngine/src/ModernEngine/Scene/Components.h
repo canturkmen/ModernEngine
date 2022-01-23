@@ -124,4 +124,20 @@ namespace ModernEngine {
 		BoxCollider2DComponent() = default;
 		BoxCollider2DComponent(const BoxCollider2DComponent&) = default;
 	};
+
+	struct CircleCollider2DComponent
+	{
+		glm::vec2 offset = { 0.0f, 0.0f };
+		float Radius = 0.5f;
+
+		float Friction = 0.5f;
+		float Density = 1.0f; // Density affects the movement of the current object.
+		float Restitution = 0.0f; // Bouncing
+		float RestitutionThreshold = 0.5f; // Velocity at which bouncing stops
+
+		void* RuntimeFixture = nullptr;
+
+		CircleCollider2DComponent() = default;
+		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
+	};
 }

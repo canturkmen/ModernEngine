@@ -1,13 +1,16 @@
 #include "mnpch.h"
 #include "Scene.h"
 #include "Components.h"
+
 #include "ModernEngine/Renderer/Renderer2D.h"
 #include "ModernEngine/Scene/ScriptableEntity.h"
 #include "Entity.h"
 #include <glm/glm.hpp>
+
 #include "box2d/b2_world.h"
 #include "box2d/b2_body.h"
 #include "box2d/b2_polygon_shape.h"
+#include "box2d/b2_circle_shape.h"
 #include "box2d/b2_fixture.h"
 
 namespace ModernEngine {
@@ -89,8 +92,9 @@ namespace ModernEngine {
 		CopyComponent<CircleRendererComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
 		CopyComponent<CameraComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
 		CopyComponent<NativeScriptComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<BoxCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<BoxCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		CopyComponent<CircleCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
 
 		return newScene;
 	}
@@ -105,8 +109,9 @@ namespace ModernEngine {
 		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 	}
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
@@ -159,6 +164,23 @@ namespace ModernEngine {
 				fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
 				body->CreateFixture(&fixtureDef);
 			}
+
+			if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				auto& cc2d = entity.GetComponent<CircleCollider2DComponent>();
+
+				b2CircleShape CircleShape;
+				CircleShape.m_p.Set(cc2d.offset.x, cc2d.offset.y);
+				CircleShape.m_radius = cc2d.Radius;
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &CircleShape;
+				fixtureDef.density = cc2d.Density;
+				fixtureDef.friction = cc2d.Friction;
+				fixtureDef.restitution = cc2d.Restitution;
+				fixtureDef.restitutionThreshold = cc2d.RestitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
 		}
 	}
 
@@ -188,8 +210,6 @@ namespace ModernEngine {
 				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 			}
 		}
-
-		Renderer2D::DrawLine(glm::vec3(2.0f), glm::vec3(5.0f), glm::vec4(1, 1, 1, 1));
 
 		Renderer2D::EndScene();
 	}
@@ -359,6 +379,12 @@ namespace ModernEngine {
 
 	template<>
 	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
 	{
 
 	}
