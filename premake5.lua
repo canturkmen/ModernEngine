@@ -4,6 +4,7 @@ workspace "ModernEngine"
 	architecture "x86_64"
 	startproject "ModernEngine-Editor"
 	configurations {"Debug", "Release", "Dist"}
+	solution_items {".editorconfig"}
 	flags {"MultiProcessorCompile"}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"

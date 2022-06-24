@@ -34,7 +34,7 @@ namespace ModernEngine {
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
 		MN_PROFILE_FUNCTION();
-
+		
 		glDeleteVertexArrays(1, &m_RendererID); 
 	}
 
