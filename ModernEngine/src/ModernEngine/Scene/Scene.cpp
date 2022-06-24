@@ -34,7 +34,7 @@ namespace ModernEngine {
 
 	Scene::~Scene()
 	{
-		
+		delete m_ActivePhysicsWorld;
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
@@ -130,7 +130,7 @@ namespace ModernEngine {
 		m_Registery.destroy(entity);
 	}
 
-	void Scene::OnStartRuntime()
+	void Scene::OnPhysics2DStart()
 	{
 		m_ActivePhysicsWorld = new b2World({ 0.0f, -9.8f });
 		auto view = m_Registery.view<Rigidbody2DComponent>();
@@ -152,7 +152,7 @@ namespace ModernEngine {
 			if (entity.HasComponent<BoxCollider2DComponent>())
 			{
 				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
-				
+
 				b2PolygonShape shape;
 				shape.SetAsBox(bc2d.size.x * transform.Scale.x, bc2d.size.y * transform.Scale.y);
 
@@ -184,34 +184,35 @@ namespace ModernEngine {
 		}
 	}
 
-	void Scene::OnStopRuntime()
+	void Scene::OnPhysics2DStop()
 	{
 		delete m_ActivePhysicsWorld;
 		m_ActivePhysicsWorld = nullptr;
 	}
 
+	void Scene::OnStartRuntime()
+	{
+		OnPhysics2DStart();
+	}
+
+	void Scene::OnStopRuntime()
+	{
+		OnPhysics2DStop();
+	}
+
+	void Scene::OnSimulationStart()
+	{
+		OnPhysics2DStart();
+	}
+
+	void Scene::OnSimulationStop()
+	{
+		OnPhysics2DStop();
+	}
+
 	void Scene::OnUpdateEditor(DeltaTime dt, EditorCamera& camera)
 	{
-		Renderer2D::BeginScene(camera);
-		{
-			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
-			{
-				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-			}
-		}
-
-		{
-			auto view = m_Registery.view<TransformComponent, CircleRendererComponent>();
-			for (auto entity : view)
-			{
-				auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-			}
-		}
-
-		Renderer2D::EndScene();
+		RenderScene(camera);
 	}
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
@@ -289,6 +290,58 @@ namespace ModernEngine {
 					auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 				}
+			}
+		}
+
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnSimulationUpdate(DeltaTime dt, EditorCamera& camera)
+	{
+		// Physics 
+		{
+			const int32_t velocityIterations = 6;
+			const int32_t positionIterations = 6;
+			m_ActivePhysicsWorld->Step(dt, velocityIterations, positionIterations);
+
+			auto view = m_Registery.view<Rigidbody2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+				b2Body* body = (b2Body*)rb2d.RuntimeBody;
+				const auto& position = body->GetPosition();
+				transform.Translation.x = position.x;
+				transform.Translation.y = position.y;
+				transform.Rotation.z = body->GetAngle();
+			}
+		}
+
+		RenderScene(camera);
+	}
+
+	void Scene::RenderScene(EditorCamera& camera)
+	{
+
+		// Render the editor scene
+		Renderer2D::BeginScene(camera);
+		{
+			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+		}
+
+		{
+			auto view = m_Registery.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
+			{
+				auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+				Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
 			}
 		}
 

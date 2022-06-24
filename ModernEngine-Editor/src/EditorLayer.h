@@ -34,8 +34,11 @@ namespace ModernEngine {
 		void SerializeScene(Ref<Scene> scene, std::filesystem::path filepath);
 
 		void UI_Toolbar();
+
 		void ScenePlay();
+		void SimulatePlay();
 		void SceneStop();
+
 
 		void OnOverlayRender();
 
@@ -63,10 +66,10 @@ namespace ModernEngine {
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
 
-		Ref<Texture2D> m_StartButton, m_StopButton;
+		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton;
 		enum class SceneState 
 		{
-			Edit = 0, Play = 1	
+			Edit = 0, Play = 1, Simulate = 2	
 		};
 
 		SceneState m_SceneState = SceneState::Edit;

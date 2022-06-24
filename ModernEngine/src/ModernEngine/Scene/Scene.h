@@ -28,7 +28,11 @@ namespace ModernEngine {
 		void OnStartRuntime();
 		void OnStopRuntime();
 
+		void OnSimulationStart();
+		void OnSimulationStop();
+
 		void OnUpdateEditor(DeltaTime dt, EditorCamera& camera);
+		void OnSimulationUpdate(DeltaTime dt, EditorCamera& camera);
 		void OnUpdateRuntime(DeltaTime dt);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
@@ -46,6 +50,11 @@ namespace ModernEngine {
 	private: 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
+
+		void OnPhysics2DStart();
+		void OnPhysics2DStop();
+
+		void RenderScene(EditorCamera& camera);
 
 	private:
 		entt::registry m_Registery;
