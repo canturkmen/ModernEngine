@@ -42,26 +42,28 @@ namespace ModernEngine {
 		return CreateEntityWithUUID(UUID(), name);
 	}
 
-	template<typename Component>
+	template<typename... Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
-		auto view = src.view<Component>();
-		for (auto e : view)
-		{	
-			UUID id = src.get<IDComponent>(e).uuid;
-			MN_CORE_ASSERT(enttMap.find(id) != enttMap.end(), "Key value could not be found !")
-			entt::entity dstEnttId = enttMap.at(id);
-			
-			auto& component = src.get<Component>(e);
-			dst.emplace_or_replace<Component>(dstEnttId, component);
-		}
+		([&]()
+			{
+				auto view = src.view<Component>();
+				for (auto e : view)
+				{
+					UUID id = src.get<IDComponent>(e).uuid;
+					MN_CORE_ASSERT(enttMap.find(id) != enttMap.end(), "Key value could not be found !")
+					entt::entity dstEnttId = enttMap.at(id);
+
+					auto& component = src.get<Component>(e);
+					dst.emplace_or_replace<Component>(dstEnttId, component);
+				}
+			}(), ...);
 	}
 
-	template<typename Component>
-	static void CopyComponentIfExists(Entity dst, Entity src)
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component ...>,  entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
-		if (src.HasComponent<Component>())
-			dst.AddComponentOrReplace<Component>(src.GetComponent<Component>());
+		CopyComponent<Component ...>(dst, src, enttMap);
 	}
 	
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
@@ -86,32 +88,32 @@ namespace ModernEngine {
 			enttMap[uuid] = newEntity;
 		}
 
-		// Copy the components without the IDComponent and TagComponent.
-		CopyComponent<TransformComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<SpriteRendererComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<CircleRendererComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<CameraComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<NativeScriptComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<Rigidbody2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<BoxCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
-		CopyComponent<CircleCollider2DComponent>(dstSceneRegistery, srcSceneRegistery, enttMap);
+		// Copy the components into the new scene expect ID and Tag component.
+		CopyComponent(AllComponents{}, dstSceneRegistery, srcSceneRegistery, enttMap);
 
 		return newScene;
 	}
 
+	template<typename... Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		([&]() 
+		{
+			if (src.HasComponent<Component>())
+				dst.AddComponentOrReplace<Component>(src.GetComponent<Component>());
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component ...>,  Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component ...>(dst, src);
+	}
+
 	void Scene::DuplicateEntity(Entity entity)
 	{
-		std::string name = entity.GetName();
-		Entity newEntity = CreateEntity(name);
-
-		CopyComponentIfExists<TransformComponent>(newEntity, entity);
-		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CameraComponent>(newEntity, entity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+		Entity newEntity = CreateEntity(entity.GetName());
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
 	}
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
