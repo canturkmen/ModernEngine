@@ -1,4 +1,5 @@
 include "./vendor/premake/premake-customization/solution_items.lua"
+include "Dependencies.lua"
 
 workspace "ModernEngine"
 	architecture "x86_64"
@@ -21,14 +22,12 @@ IncludeDir["ImGuizmo"] = "%{wks.location}/ModernEngine/vendor/ImGuizmo"
 IncludeDir["Box2D"] = "%{wks.location}/ModernEngine/vendor/Box2D/include"
 
 group "Dependencies"
-
 include "vendor/premake"
 include "ModernEngine/vendor/GLFW"
 include "ModernEngine/vendor/Glad"
 include "ModernEngine/vendor/imgui"
 include "ModernEngine/vendor/yaml-cpp"
 include "ModernEngine/vendor/Box2D"
-
 group ""
 
 include "ModernEngine"
