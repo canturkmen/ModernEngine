@@ -22,22 +22,22 @@ namespace ModernEngine {
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(KeyCode keycode, int repeatCount)
-			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+		KeyPressedEvent(KeyCode keycode, bool isRepeat=false)
+			: KeyEvent(keycode), m_IsRepeat(isRepeat) {}
 
-		inline int GetRepeatCount() const { return m_RepeatCount; }
+		inline int IsRepeat() const { return m_IsRepeat; }
 
 		EVENT_CLASS_TYPE(KeyPressed)
 
 		std::string Debug() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << ", Repeat Count: " << m_RepeatCount;
+			ss << "KeyPressedEvent: " << m_KeyCode << ", (repeat = : " << m_IsRepeat << ")";
 			return ss.str();
 		}
 
 	private:
-		int m_RepeatCount;
+		bool m_IsRepeat;
 	};
 
 	class KeyReleasedEvent : public KeyEvent

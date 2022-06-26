@@ -376,7 +376,7 @@ namespace ModernEngine {
 
 	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)
 	{
-		if (e.GetRepeatCount() > 0)
+		if (e.IsRepeat())
 			return false;
 
 		bool isControlPressed = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL) || Input::IsKeyPressed(MN_KEY_RIGHT_CONTROL);

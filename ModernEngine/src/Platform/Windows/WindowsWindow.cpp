@@ -86,7 +86,7 @@ namespace ModernEngine {
 				}
 				case GLFW_REPEAT:
 				{
-					KeyPressedEvent e(static_cast<KeyCode>(key), 1);
+					KeyPressedEvent e(static_cast<KeyCode>(key), true);
 					data.EventCallback(e);
 					break;
 				}
