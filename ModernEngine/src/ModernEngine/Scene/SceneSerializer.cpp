@@ -290,7 +290,17 @@ namespace ModernEngine {
 
 	bool SceneSerializer::Deserialize(const std::string& filepath)
 	{
-		YAML::Node data = YAML::LoadFile(filepath);
+		YAML::Node data;
+
+		try
+		{
+			data = YAML::LoadFile(filepath);
+		}
+		catch(YAML::ParserException e)
+		{
+			MN_CORE_ERROR("Failed to load .modernengine file '{0}'\n", filepath, e.what());
+			return false;
+		}
 
 		if (!data["Scene"])
 			return false;

@@ -8,7 +8,7 @@ Entities:
       Rotation: [0, 0, 0]
       Scale: [9.90999985, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.252081156, 0.259215504, 0.274193525, 1]
     Rigidbody2DComponent:
       Body Type: Static
       Fixed Rotation: false
@@ -21,13 +21,13 @@ Entities:
       Restitution Threshold: 0.5
   - Entity: 1855907560
     TagComponent:
-      Tag: Square
+      Tag: Square4
     TransformComponent:
-      Translation: [-2.07535148, 4.33960915, 0]
+      Translation: [-2.2475152, 3.17208767, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.294354856, 0.151925087, 0.151925087, 1]
     Rigidbody2DComponent:
       Body Type: Dynamic
       Fixed Rotation: false
@@ -42,7 +42,7 @@ Entities:
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Translation: [0, 0, 6.17632246]
+      Translation: [0, 0, 11.1261873]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -58,13 +58,13 @@ Entities:
       FixedAspectRatio: false
   - Entity: 1294173075
     TagComponent:
-      Tag: Square
+      Tag: Square3
     TransformComponent:
       Translation: [-0.257263899, 2.6859858, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.788060486, 0.858870983, 0.0658005849, 1]
     Rigidbody2DComponent:
       Body Type: Dynamic
       Fixed Rotation: false
@@ -77,13 +77,13 @@ Entities:
       Restitution Threshold: 0.5
   - Entity: 2058984169
     TagComponent:
-      Tag: Square
+      Tag: Square2
     TransformComponent:
       Translation: [1.58720112, 3.76034975, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.247979239, 0.0122268582, 0.379032254, 1]
     Rigidbody2DComponent:
       Body Type: Dynamic
       Fixed Rotation: false
@@ -96,53 +96,15 @@ Entities:
       Restitution Threshold: 0.5
   - Entity: 1415792578
     TagComponent:
-      Tag: Square
+      Tag: Square1
     TransformComponent:
       Translation: [3.04393697, 1.05099106, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
+      Color: [0.939516127, 0.09092094, 0.767777681, 1]
     Rigidbody2DComponent:
       Body Type: Dynamic
-      Fixed Rotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.5
-      Restitution: 0
-      Restitution Threshold: 0.5
-  - Entity: 1196439118
-    TagComponent:
-      Tag: Floor
-    TransformComponent:
-      Translation: [0, -1.47698975, 0]
-      Rotation: [0, 0, 0]
-      Scale: [6.0089407, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-    Rigidbody2DComponent:
-      Body Type: Static
-      Fixed Rotation: false
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 1
-      Friction: 0.5
-      Restitution: 0
-      Restitution Threshold: 0.5
-  - Entity: 1060457030
-    TagComponent:
-      Tag: Floor
-    TransformComponent:
-      Translation: [0, -1.47698975, 0]
-      Rotation: [0, 0, 0]
-      Scale: [6.0089407, 1, 1]
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-    Rigidbody2DComponent:
-      Body Type: Static
       Fixed Rotation: false
     BoxCollider2DComponent:
       Offset: [0, 0]
