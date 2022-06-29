@@ -371,7 +371,8 @@ namespace ModernEngine {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(MN_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
-		m_EditorCamera.OnEvent(e);
+		if(m_SceneState == SceneState::Edit)
+			m_EditorCamera.OnEvent(e);
 	}
 
 	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)

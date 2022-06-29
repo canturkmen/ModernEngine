@@ -40,8 +40,7 @@ namespace ModernEngine {
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
 			const auto& path = directoryEntry.path();
-			const auto& relativePath = std::filesystem::relative(directoryEntry.path(), g_AssetsPath);
-			std::string fileNameString = relativePath.filename().string();
+			std::string fileNameString = path.filename().string();
 
 			ImGui::PushID(fileNameString.c_str());
 			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_FolderIcon : m_FileIcon;
@@ -50,6 +49,8 @@ namespace ModernEngine {
 
 			if (ImGui::BeginDragDropSource())
 			{
+				auto relativePath = std::filesystem::relative(path, g_AssetsPath);
+				MN_CORE_INFO(relativePath);
 				const wchar_t* payloadData = relativePath.c_str();
 				ImGui::SetDragDropPayload("Content Browser Item", payloadData, (wcslen(payloadData) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();
