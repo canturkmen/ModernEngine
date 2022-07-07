@@ -1,5 +1,29 @@
 Scene: Untitled Scene Name
 Entities:
+  - Entity: 2093115027
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Translation: [-7.48650646, 2.00184798, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CircleRendererComponent:
+      Color: [1, 1, 1, 1]
+      Thickness: 1
+      Fade: 0.00499999989
+  - Entity: 654064106
+    TagComponent:
+      Tag: Empty Entity
+    TransformComponent:
+      Translation: [0.119071841, 2.24244881, 0]
+      Rotation: [0, 0, 0]
+      Scale: [6, 2.5999999, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+    CircleRendererComponent:
+      Color: [1, 1, 1, 1]
+      Thickness: 1
+      Fade: 0.00499999989
   - Entity: 1373606779
     TagComponent:
       Tag: Floor
@@ -23,8 +47,8 @@ Entities:
     TagComponent:
       Tag: Square4
     TransformComponent:
-      Translation: [-2.2475152, 3.17208767, 0]
-      Rotation: [0, 0, 0]
+      Translation: [-2.24751592, -0.461989909, 0]
+      Rotation: [0, 0, 2.22419949e-08]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.294354856, 0.151925087, 0.151925087, 1]
@@ -60,8 +84,8 @@ Entities:
     TagComponent:
       Tag: Square3
     TransformComponent:
-      Translation: [-0.257263899, 2.6859858, 0]
-      Rotation: [0, 0, 0]
+      Translation: [-0.257263899, -0.461989909, 0]
+      Rotation: [0, 0, 2.76275198e-08]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.788060486, 0.858870983, 0.0658005849, 1]
@@ -79,7 +103,7 @@ Entities:
     TagComponent:
       Tag: Square2
     TransformComponent:
-      Translation: [1.58720112, 3.76034975, 0]
+      Translation: [1.58720112, -0.457843125, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
@@ -98,8 +122,8 @@ Entities:
     TagComponent:
       Tag: Square1
     TransformComponent:
-      Translation: [3.04393697, 1.05099106, 0]
-      Rotation: [0, 0, 0]
+      Translation: [3.04393697, -0.461989909, 0]
+      Rotation: [0, 0, 3.49159102e-09]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.939516127, 0.09092094, 0.767777681, 1]

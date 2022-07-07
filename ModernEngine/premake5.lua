@@ -14,12 +14,20 @@ project "ModernEngine"
 
 	defines {"_CRT_SECURE_NO_WARNINGS"}
 
-	includedirs {"src", "vendor/spdlog/include", "%{IncludeDir.GLFW}", "%{IncludeDir.Glad}", "%{IncludeDir.ImGui}", "%{IncludeDir.glm}", "%{IncludeDir.stb_image}", "%{IncludeDir.entt}", 
-				"%{IncludeDir.yaml_cpp}", 
-				"%{IncludeDir.ImGuizmo}",
-				"%{IncludeDir.Box2D}",
-				"%{IncludeDir.VulkanSDK}"
-				}
+	includedirs {
+		"src", 
+		"vendor/spdlog/include", 
+		"%{IncludeDir.GLFW}", 
+		"%{IncludeDir.Glad}", 
+		"%{IncludeDir.ImGui}", 
+		"%{IncludeDir.glm}", 
+		"%{IncludeDir.stb_image}", 
+		"%{IncludeDir.entt}", 
+		"%{IncludeDir.yaml_cpp}", 
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.Box2D}",
+		"%{IncludeDir.VulkanSDK}"
+	}
 
 	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp", "Box2D"}
 

@@ -50,7 +50,6 @@ namespace ModernEngine {
 			if (ImGui::BeginDragDropSource())
 			{
 				auto relativePath = std::filesystem::relative(path, g_AssetsPath);
-				MN_CORE_INFO(relativePath);
 				const wchar_t* payloadData = relativePath.c_str();
 				ImGui::SetDragDropPayload("Content Browser Item", payloadData, (wcslen(payloadData) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();

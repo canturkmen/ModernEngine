@@ -10,6 +10,7 @@ import Utils
 
 class VulkanConfiguration: 
     RequiredVulkanVersion = "1.3."
+    InstallVulkanVersion = "1.3.216.0"
     VulkanDirectory = "./ModernEngine/vendor/VulkanSDK"
 
     @classmethod
@@ -43,13 +44,13 @@ class VulkanConfiguration:
     def __InstallVulkanSDK(cls):
         PermissionGranted = False
         while not PermissionGranted:
-            reply = str(input("Would you like to install Vulkan SDK {0:s}? [Y/N]: ".format(cls.RequiredVulkanVersion))).lower().strip()[:-1]
+            reply = str(input("Would you like to install Vulkan SDK {0:s}? [Y/N]: ".format(cls.InstallVulkanVersion))).lower().strip()[:-1]
             if reply == 'n':
                 return
             PermissionGranted = (reply == 'y')
 
-        VulkanInstallURL = f"https://sdk.lunarg.com/sdk/download/{cls.RequiredVulkanVersion}/windows/VulkanSDK-{cls.RequiredVulkanVersion}-Installer.exe"
-        VulkanPath = f"{cls.VulkanDirectory}/VulkanSDK-{cls.RequiredVulkanVersion}-Installer.exe"
+        VulkanInstallURL = f"https://sdk.lunarg.com/sdk/download/{cls.InstallVulkanVersion}/windows/VulkanSDK-{cls.InstallVulkanVersion}-Installer.exe"
+        VulkanPath = f"{cls.VulkanDirectory}/VulkanSDK-{cls.InstallVulkanVersion}-Installer.exe"
         print("Downloading {0:s} to {1:s}".format(VulkanInstallURL, VulkanPath))
         Utils.DownloadFile(VulkanInstallURL, VulkanPath)
         print("Running Vulkan SDK installer...")
