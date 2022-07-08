@@ -1,7 +1,5 @@
 #pragma once
 
-#include <xhash>
-
 namespace ModernEngine {
 
 	class UUID
@@ -20,12 +18,14 @@ namespace ModernEngine {
 
 namespace std {
 
+	template <typename T> struct hash;
+
 	template<>
 	struct hash<ModernEngine::UUID>
 	{
 		size_t operator() (const ModernEngine::UUID& uuid) const
 		{
-			return hash<uint64_t>()((uint64_t)uuid);
+			return (uint64_t)uuid;
 		}
 	};
 	

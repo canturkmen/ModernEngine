@@ -566,10 +566,10 @@ namespace ModernEngine {
 		glm::vec3 p2 = glm::vec3(position.x + size.x, position.y + size.y, 0.0f);
 		glm::vec3 p3 = glm::vec3(position.x - size.x, position.y + size.y, 0.0f);
 
-		DrawLine(p0, p1, color);
-		DrawLine(p1, p2, color);
-		DrawLine(p2, p3, color);
-		DrawLine(p3, p0, color);
+		DrawLine(p0, p1, color, entityID);
+		DrawLine(p1, p2, color, entityID);
+		DrawLine(p2, p3, color, entityID);
+		DrawLine(p3, p0, color, entityID);
 	}
 
 	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID /*= -1*/)
@@ -579,10 +579,10 @@ namespace ModernEngine {
 		for (size_t i = 0; i < 4; i++)
 			LineVertices[i] = transform * s_Data.VertexPositions[i];
 
-		DrawLine(LineVertices[0], LineVertices[1], color);
-		DrawLine(LineVertices[1], LineVertices[2], color);
-		DrawLine(LineVertices[2], LineVertices[3], color);
-		DrawLine(LineVertices[3], LineVertices[0], color);
+		DrawLine(LineVertices[0], LineVertices[1], color, entityID);
+		DrawLine(LineVertices[1], LineVertices[2], color, entityID);
+		DrawLine(LineVertices[2], LineVertices[3], color, entityID);
+		DrawLine(LineVertices[3], LineVertices[0], color, entityID);
 	}
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
