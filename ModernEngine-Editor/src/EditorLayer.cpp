@@ -40,42 +40,7 @@ namespace ModernEngine {
 		m_ActiveScene = m_EditorScene;
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.01f, 1000.0f);
-#if 0
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			virtual void OnCreate() override
-			{
-				auto& transform = GetComponent<TransformComponent>();
-				transform.Translation.x = rand() % 10 - 5.0f; 
-			}
-
-		   virtual void OnDestroy() override
-			{
-
-			}
-
-			virtual void OnUpdate(DeltaTime dt) override
-			{
-				auto& transform = GetComponent<TransformComponent>();
-				float Speed = 5.0f;
-
-				if (Input::IsKeyPressed(MN_KEY_A))
-					transform.Translation.x -= Speed * dt;
-				if (Input::IsKeyPressed(MN_KEY_D))
-					transform.Translation.x += Speed * dt;
-				if (Input::IsKeyPressed(MN_KEY_W))
-					transform.Translation.y += Speed * dt;
-				if (Input::IsKeyPressed(MN_KEY_S))
-					transform.Translation.y -= Speed * dt;
-			}
-		};
-
-		m_Camera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-#endif
-
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		Renderer2D::SetLineWidth(4.0f);
 	}
 
 	void EditorLayer::OnDetach()
@@ -180,6 +145,13 @@ namespace ModernEngine {
 					Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.05f);
 				}
 			}
+		}
+
+		if (m_SceneHierarchyPanel.GetSelectedEntity())
+		{
+			Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+			const TransformComponent& transform = selectedEntity.GetComponent<TransformComponent>();
+			Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
 		}
 
 		Renderer2D::EndScene();

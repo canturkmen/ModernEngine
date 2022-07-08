@@ -10,17 +10,19 @@ namespace ModernEngine {
 
 	Application* Application::s_AppInstance = nullptr;
 
-	Application::Application(const std::string& name)
+	Application::Application(const ApplicationSpeficiation& specification)
+		:m_Specification(specification)
 	{
 		MN_PROFILE_FUNCTION();
 
 		s_AppInstance = this;
 
-		WindowProps props;
-		props.Title = name;
-		m_Window = std::unique_ptr<Window>(Window::Create(props));
-		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		if (!m_Specification.WorkingDirectory.empty())
+			std::filesystem::current_path(m_Specification.WorkingDirectory);
 
+		m_Window = Window::Create(WindowProps(m_Specification.Name));
+		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		 
 		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();

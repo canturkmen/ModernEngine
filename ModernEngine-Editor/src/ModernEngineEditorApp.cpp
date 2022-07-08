@@ -13,22 +13,20 @@ namespace ModernEngine {
 	class ModernEngineEditor : public Application
 	{
 	public:
-		ModernEngineEditor()
-			: Application("Modern Engine Editor")
+		ModernEngineEditor(const ApplicationSpeficiation& spec)
+			: Application(spec)
 		{
 			PushLayer(new EditorLayer());
 		}
-
-		~ModernEngineEditor()
-		{
-
-		}
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(ModernEngine::ApplicationCommandLineArgs args)
 	{
-		ModernEngineEditor* editor = new ModernEngineEditor;
-		return editor;
+		ApplicationSpeficiation spec;
+		spec.Name = "ModernEngine-Editor";
+		spec.CommandLineArgs = args;
+
+		return new ModernEngineEditor(spec);
 	}
 
 }

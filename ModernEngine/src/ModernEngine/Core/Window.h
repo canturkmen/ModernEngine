@@ -13,8 +13,8 @@ namespace ModernEngine {
 		uint32_t Width;
 		std::string Title;
 
-		WindowProps(uint32_t height = 900, uint32_t width = 1600, const std::string& title = "Modern Engine")
-			: Height(height), Width(width), Title(title) {}
+		WindowProps(const std::string& title = "Modern Engine", uint32_t height = 900, uint32_t width = 1600)
+			: Title(title), Height(height), Width(width) {}
 	};
 
 	// This class is an interface for the sub window classes such as WindowsWindow, LinuxWindow and MacWindow

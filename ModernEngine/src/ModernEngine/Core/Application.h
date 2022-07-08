@@ -11,10 +11,28 @@ int main(int argc, char** argv);
 
 namespace ModernEngine {
 
+	struct ApplicationCommandLineArgs 
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			return Args[index];
+		}
+	}; 
+
+	struct ApplicationSpeficiation
+	{
+		std::string Name = "Modern Engine Application";
+		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
+
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Modern Engine App");
+		Application(const ApplicationSpeficiation& specification);
 		virtual ~Application() = default;
  
 		void OnEvent(Event& e);
@@ -28,12 +46,15 @@ namespace ModernEngine {
 		Window& GetWindow() { return *m_Window; }
 		static Application& Get() { return *s_AppInstance; }
 
+		const ApplicationSpeficiation& GetSpecification() const { return m_Specification; }
+
 	private:
 		void Run();
 		bool OnCloseWindow(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
+		ApplicationSpeficiation m_Specification;
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
@@ -46,6 +67,6 @@ namespace ModernEngine {
 		friend int ::main(int argc, char** argv);
 	};
 
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 }
 
