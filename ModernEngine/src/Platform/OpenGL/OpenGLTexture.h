@@ -18,6 +18,8 @@ namespace ModernEngine {
 		virtual uint32_t GetHeight() const override { return m_Height; }
 		virtual uint32_t GetRendererID() const override { return m_RendererID; }
 
+		virtual const std::string& GetFilePath() const override { return m_FilePath; }
+
 		virtual void Bind(uint32_t slot) const override;
 
 	private:
