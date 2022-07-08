@@ -39,6 +39,14 @@ namespace ModernEngine {
 		m_EditorScene = CreateRef<Scene>(); 
 		m_ActiveScene = m_EditorScene;
 
+		auto& commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
+		if (commandLineArgs.Count > 1)
+		{
+			auto sceneFilePath = commandLineArgs[1];
+			SceneSerializer serialize(m_ActiveScene);
+			serialize.Deserialize(sceneFilePath);
+		}
+
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.01f, 1000.0f);
 		Renderer2D::SetLineWidth(4.0f);
 	}
@@ -227,6 +235,9 @@ namespace ModernEngine {
 
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
 					SaveSceneAs();
+
+				if (ImGui::MenuItem("Save...", "Ctrl+S"))
+					SaveScene();
 
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();

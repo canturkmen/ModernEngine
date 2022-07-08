@@ -1,3 +1,4 @@
+
 #pragma once
 
 #ifdef MN_PLATFORM_WINDOWS
