@@ -19,11 +19,6 @@ namespace ModernEngine {
 		Renderer2D::Init();
 	}
 
-	void Renderer::ShutDown()
-	{
-		Renderer2D::ShutDown();
-	}
-
 	void Renderer::BeginScene(const OrthographicCamera& camera)
 	{
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();

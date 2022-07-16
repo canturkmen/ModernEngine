@@ -26,11 +26,10 @@ project "ModernEngine"
 		"%{IncludeDir.yaml_cpp}", 
 		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.Box2D}",
-		"%{IncludeDir.mono}",
 		"%{IncludeDir.VulkanSDK}"
 	}
 
-	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp", "Box2D", "%{Library.mono}"}
+	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp", "Box2D"}
 
 	filter "files:vendor/ImGuizmo/**.cpp"
 		flags{"NoPCH"}	

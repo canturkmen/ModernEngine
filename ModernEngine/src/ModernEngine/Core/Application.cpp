@@ -2,8 +2,6 @@
 #include "Application.h"
 #include "Log.h"
 #include "ModernEngine/Renderer/Renderer.h"
-#include "ModernEngine/Scripting/ScriptEngine.h"
-
 #include <GLFW/glfw3.h>
 
 namespace ModernEngine {
@@ -26,18 +24,9 @@ namespace ModernEngine {
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		 
 		Renderer::Init();
-		ScriptEngine::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
-	}
-
-	Application::~Application()
-	{
-		MN_PROFILE_FUNCTION();
-
-		ScriptEngine::ShutDown();
-		Renderer::ShutDown();
 	}
 
 	void Application::PushLayer(Layer* layer)
