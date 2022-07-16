@@ -28,6 +28,9 @@
     <Filter Include="src\ModernEngine\Scene">
       <UniqueIdentifier>{347B7589-2075-9EDB-09E2-34ECF57A0448}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ModernEngine\Scripting">
+      <UniqueIdentifier>{99B67BCF-85C6-27A0-EE7F-8CBEDAAE1639}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\ModernEngine\Utils">
       <UniqueIdentifier>{770FA389-6309-CCDB-4C76-62EC380F3248}</UniqueIdentifier>
     </Filter>
@@ -191,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h">
       <Filter>src\ModernEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h">
+      <Filter>src\ModernEngine\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Utils\PlatformUtils.h">
       <Filter>src\ModernEngine\Utils</Filter>
@@ -1135,6 +1141,9 @@
     </ClCompile>
     <ClCompile Include="src\ModernEngine\Scene\SceneSerializer.cpp">
       <Filter>src\ModernEngine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ModernEngine\Scripting\ScriptEngine.cpp">
+      <Filter>src\ModernEngine\Scripting</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
