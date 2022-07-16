@@ -33,7 +33,7 @@ namespace ModernEngine {
 	{
 	public:
 		Application(const ApplicationSpeficiation& specification);
-		virtual ~Application() = default;
+		virtual ~Application();
  
 		void OnEvent(Event& e);
 		void Close();
