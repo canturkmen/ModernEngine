@@ -25,8 +25,8 @@ namespace ModernEngine {
 		m_Window = Window::Create(WindowProps(m_Specification.Name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 		 
-		Renderer::Init();
 		ScriptEngine::Init();
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		m_LayerStack.PushOverlay(m_ImGuiLayer);
@@ -36,7 +36,7 @@ namespace ModernEngine {
 	{
 		MN_PROFILE_FUNCTION();
 
-		ScriptEngine::ShutDown();
+		ScriptEngine::Shutdown();
 		Renderer::ShutDown();
 	}
 

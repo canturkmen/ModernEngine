@@ -5,43 +5,48 @@
 #include "mono/metadata/assembly.h"
 
 namespace ModernEngine {
-	
-	struct ScriptEngineData
+
+	struct ScriptEngineData 
 	{
-		MonoDomain* monoDomain;
-		MonoDomain* appDomain;
+		MonoDomain* RootDomain = nullptr;
+		MonoDomain* AppDomain = nullptr;
+		MonoAssembly* CoreAssembly = nullptr;
 	};
 
-	static ScriptEngineData* s_Data;
+	static ScriptEngineData* s_Data = nullptr;
 
 	void ScriptEngine::Init()
 	{
-		s_Data = new ScriptEngineData();
+		s_Data = new ScriptEngineData;
 
 		InitMono();
 	}
-	
-	void ScriptEngine::ShutDown()
+
+	void ScriptEngine::Shutdown()
 	{
 		delete s_Data;
 
-		ShutDownMono();
+		ShutdownMono();
 	}
-	
+
 	void ScriptEngine::InitMono()
 	{
-		mono_set_assemblies_path("mono/lib");
+		mono_set_assemblies_path("mono/lib/4.5");
 
-		MonoDomain* rootDomain = mono_jit_init("ModernEngineRuntime");
+		MonoDomain* rootDomain = mono_jit_init("ModernEngineJITRuntime");
+		s_Data->RootDomain = rootDomain;
 
-		s_Data->monoDomain = rootDomain;
-		s_Data->appDomain = mono_domain_create_appdomain("ModernEngineScriptRuntime", nullptr);
+		MonoDomain* appDomain = mono_domain_create_appdomain("ModernEngineRuntime", nullptr);
+		s_Data->AppDomain = appDomain;
+		mono_domain_set(s_Data->AppDomain, true);
+
 
 	}
 
-	void ScriptEngine::ShutDownMono()
+	void ScriptEngine::ShutdownMono()
 	{
-
+		s_Data->AppDomain = nullptr;
+		s_Data->RootDomain = nullptr;
 	}
-}
 
+}

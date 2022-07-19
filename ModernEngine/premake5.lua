@@ -2,7 +2,7 @@ project "ModernEngine"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/intermediate/" .. outputdir .. "/%{prj.name}")
@@ -10,27 +10,50 @@ project "ModernEngine"
 	pchheader "mnpch.h"
 	pchsource "src/mnpch.cpp"
 
-	files {"src/**.h", "src/**.cpp", "vendor/glm/glm/**.hpp", "vendor/glm/glm/**.ini", "vendor/stb_image/**.h", "vendor/stb_image/**.cpp", "vendor/ImGuizmo/ImGuizmo.h", "vendor/ImGuizmo/ImGuizmo.cpp"}
+	files  
+	{
+		"src/**.h", "src/**.cpp", 
+		"vendor/glm/glm/**.hpp", 
+		"vendor/glm/glm/**.ini", 
+		"vendor/stb_image/**.h", 
+		"vendor/stb_image/**.cpp", 
+		"vendor/ImGuizmo/ImGuizmo.h", 
+		"vendor/ImGuizmo/ImGuizmo.cpp",
+	}
 
-	defines {"_CRT_SECURE_NO_WARNINGS"}
+	defines 
+	{
+		"_CRT_SECURE_NO_WARNINGS", 
+		"GLFW_INCLUDE_NONE"
+	}
 
-	includedirs {
+	includedirs 
+	{
 		"src", 
 		"vendor/spdlog/include", 
+		"%{IncludeDir.Box2D}",
 		"%{IncludeDir.GLFW}", 
 		"%{IncludeDir.Glad}", 
 		"%{IncludeDir.ImGui}", 
 		"%{IncludeDir.glm}", 
-		"%{IncludeDir.stb_image}", 
+		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}", 
+		"%{IncludeDir.mono}",
 		"%{IncludeDir.yaml_cpp}", 
 		"%{IncludeDir.ImGuizmo}",
-		"%{IncludeDir.Box2D}",
-		"%{IncludeDir.mono}",
 		"%{IncludeDir.VulkanSDK}"
 	}
 
-	links { "GLFW", "opengl32.lib", "Glad", "ImGui", "yaml-cpp", "Box2D", "%{Library.mono}"}
+	links 
+	{ 
+		"Box2D", 
+		"GLFW", 
+		"Glad", 
+		"ImGui", 
+		"yaml-cpp", 
+		"opengl32.lib", 
+		"%{Library.mono}",
+	}
 
 	filter "files:vendor/ImGuizmo/**.cpp"
 		flags{"NoPCH"}	
@@ -38,7 +61,15 @@ project "ModernEngine"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL", "GLFW_INCLUDE_NONE"}
+		defines {"MN_PLATFORM_WINDOWS", "MN_BUILD_DLL"}
+
+		links 
+		{
+			"%{Library.WinSock}",
+			"%{Library.WinMM}",
+			"%{Library.WinVersion}",
+			"%{Library.BCrypt}",
+		}
 
 	filter "configurations:Debug" 
 		defines "MN_DEBUG"

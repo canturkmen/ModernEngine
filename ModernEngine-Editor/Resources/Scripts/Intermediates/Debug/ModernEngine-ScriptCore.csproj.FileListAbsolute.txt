@@ -1,0 +1,6 @@
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\Intermediates\Debug\ModernEngine-ScriptCore.csproj.AssemblyReference.cache
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\Intermediates\Debug\ModernEngine-ScriptCore.csproj.CoreCompileInputs.cache
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\Intermediates\Debug\ModernEngine-ScriptCore.dll
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\Intermediates\Debug\ModernEngine-ScriptCore.pdb
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\ModernEngine-ScriptCore.dll
+C:\dev\Computer-Graphics\ModernEngine\ModernEngine-Editor\Resources\Scripts\ModernEngine-ScriptCore.pdb

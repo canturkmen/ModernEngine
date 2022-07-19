@@ -6,12 +6,11 @@ namespace ModernEngine {
 	{
 	public:
 		static void Init();
-		static void ShutDown();
-
+		static void Shutdown();
 	private:
 		static void InitMono();
-		static void ShutDownMono();
+		static void ShutdownMono();
 	};
-}
 
+}
 
