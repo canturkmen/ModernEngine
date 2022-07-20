@@ -167,8 +167,6 @@ namespace ModernEngine {
 
 	void EditorLayer::OnImGuiRender()
 	{
-		MN_PROFILE_FUNCTION();
-
 		static bool dockspaceopen = true;
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;

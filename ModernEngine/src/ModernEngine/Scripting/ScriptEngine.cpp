@@ -25,9 +25,8 @@ namespace ModernEngine {
 
 	void ScriptEngine::Shutdown()
 	{
-		delete s_Data;
-
 		ShutdownMono();
+		delete s_Data;
 	}
 
 	char* ReadFileBytes(const std::string& filePath, uint32_t* outSize)
@@ -143,5 +142,4 @@ namespace ModernEngine {
 		s_Data->AppDomain = nullptr;
 		s_Data->RootDomain = nullptr;
 	}
-
 }

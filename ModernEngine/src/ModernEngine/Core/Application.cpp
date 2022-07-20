@@ -15,8 +15,6 @@ namespace ModernEngine {
 	Application::Application(const ApplicationSpeficiation& specification)
 		:m_Specification(specification)
 	{
-		MN_PROFILE_FUNCTION();
-
 		s_AppInstance = this;
 
 		if (!m_Specification.WorkingDirectory.empty())
@@ -34,8 +32,6 @@ namespace ModernEngine {
 
 	Application::~Application()
 	{
-		MN_PROFILE_FUNCTION();
-
 		ScriptEngine::Shutdown();
 		Renderer::ShutDown();
 	}
@@ -72,8 +68,6 @@ namespace ModernEngine {
 
 	void Application::Run()
 	{
-		MN_PROFILE_FUNCTION();
-
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();

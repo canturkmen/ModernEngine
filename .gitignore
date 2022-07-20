@@ -1,8 +1,9 @@
 # Binaries
 **/bin/
 intermediate/
+Intermediates/
 
-# ModernEngine files
+# ModernEngine files	
 *.log
 
 # VS Files
@@ -11,7 +12,10 @@ intermediate/
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+**.csproj
 
 #Directories
 ModernEngine/vendor/VulkanSDK
 scripts/__ppycachce__
+*.json
+ModernEngine-Editor/imgui.ini
