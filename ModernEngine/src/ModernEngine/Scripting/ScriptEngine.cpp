@@ -105,6 +105,37 @@ namespace ModernEngine {
 		
 		s_Data->CoreAssembly = LoadCAssembly("Resources/Scripts/ModernEngine-ScriptCore.dll");
 		PrintAssemblyTypes(s_Data->CoreAssembly);
+
+		MonoImage* assemblyImage = mono_assembly_get_image(s_Data->CoreAssembly);
+		MonoClass* monoClass = mono_class_from_name(assemblyImage, "ModernEngine", "Main");
+
+		MonoObject* instance = mono_object_new(s_Data->AppDomain, monoClass);
+		mono_runtime_object_init(instance);
+
+		MonoMethod* printMessageFunc = mono_class_get_method_from_name(monoClass, "PrintMessage", 0);
+		mono_runtime_invoke(printMessageFunc, instance, nullptr, nullptr);
+
+		MonoMethod* printParamIntFunc = mono_class_get_method_from_name(monoClass, "PrintInt", 1);
+
+		int value = 10;
+		void* param = &value;
+		mono_runtime_invoke(printParamIntFunc, instance, &param, nullptr);
+
+		MonoMethod* printParamIntsFunc = mono_class_get_method_from_name(monoClass, "PrintInts", 2);
+
+		int value2 = 20;
+		void* params[2] = {
+			&value,
+			&value2
+		};
+		mono_runtime_invoke(printParamIntsFunc, instance, params, nullptr);
+
+		MonoMethod* printParamMessageFunc = mono_class_get_method_from_name(monoClass, "PrintMessage", 1);
+
+		MonoString* monoString = mono_string_new(s_Data->AppDomain, "Hello World ");
+		void* stringParam = monoString;
+
+		mono_runtime_invoke(printParamMessageFunc, instance, &stringParam, nullptr);
 	}
 
 	void ScriptEngine::ShutdownMono()
