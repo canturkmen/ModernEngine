@@ -145,7 +145,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Base.h" />
@@ -187,6 +186,7 @@
     <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
     <ClInclude Include="src\ModernEngine\Scene\SceneSerializer.h" />
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h" />
     <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h" />
     <ClInclude Include="src\ModernEngine\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -478,7 +478,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ModernEngine\Scripting\ScripGlue.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />
@@ -505,6 +504,7 @@
     <ClCompile Include="src\ModernEngine\Scene\Scene.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\ModernEngine\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\ModernEngine\Scripting\ScripGlue.cpp" />
     <ClCompile Include="src\ModernEngine\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
