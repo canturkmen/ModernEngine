@@ -145,6 +145,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h" />
     <ClInclude Include="src\ModernEngine.h" />
     <ClInclude Include="src\ModernEngine\Core\Application.h" />
     <ClInclude Include="src\ModernEngine\Core\Base.h" />
@@ -477,6 +478,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ModernEngine\Scripting\ScripGlue.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Application.cpp" />
     <ClCompile Include="src\ModernEngine\Core\Layer.cpp" />
     <ClCompile Include="src\ModernEngine\Core\LayerStack.cpp" />

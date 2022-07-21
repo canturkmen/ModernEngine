@@ -18,4 +18,3 @@ Intermediates/
 ModernEngine/vendor/VulkanSDK
 scripts/__ppycachce__
 *.json
-ModernEngine-Editor/imgui.ini
