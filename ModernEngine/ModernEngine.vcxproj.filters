@@ -195,9 +195,6 @@
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h">
       <Filter>src\ModernEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h">
-      <Filter>src\ModernEngine\Scripting</Filter>
-    </ClInclude>
     <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h">
       <Filter>src\ModernEngine\Scripting</Filter>
     </ClInclude>
@@ -1065,6 +1062,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ModernEngine\Core\Application.cpp">
@@ -1145,9 +1143,6 @@
     <ClCompile Include="src\ModernEngine\Scene\SceneSerializer.cpp">
       <Filter>src\ModernEngine\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\ModernEngine\Scripting\ScripGlue.cpp">
-      <Filter>src\ModernEngine\Scripting</Filter>
-    </ClCompile>
     <ClCompile Include="src\ModernEngine\Scripting\ScriptEngine.cpp">
       <Filter>src\ModernEngine\Scripting</Filter>
     </ClCompile>
@@ -1190,5 +1185,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModernEngine\Scripting\ScripGlue.cpp" />
   </ItemGroup>
 </Project>
