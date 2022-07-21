@@ -35,7 +35,7 @@ class PremakeConfiguration:
     def InstallPremake(cls):
         PermissionGranted = False
         while not PermissionGranted:
-            reply = str(input("Would you like to install Premake {0:s}? [Y/N]: ".format(cls.premakeVersion))).lower().strip()[:-1]
+            reply = str(input("Premake not found. Would you like to download Premake {0:s}? [Y/N]: ".format(cls.premakeVersion))).lower().strip()[:1]
             if reply == 'n':
                 return
             PermissionGranted = (reply == 'y')

@@ -44,7 +44,7 @@ class VulkanConfiguration:
     def __InstallVulkanSDK(cls):
         PermissionGranted = False
         while not PermissionGranted:
-            reply = str(input("Would you like to install Vulkan SDK {0:s}? [Y/N]: ".format(cls.InstallVulkanVersion))).lower().strip()[:-1]
+            reply = str(input("Would you like to install VulkanSDK {0:s}? [Y/N]: ".format(cls.installVulkanVersion))).lower().strip()[:1]
             if reply == 'n':
                 return
             PermissionGranted = (reply == 'y')
