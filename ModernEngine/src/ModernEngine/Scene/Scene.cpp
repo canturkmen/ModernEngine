@@ -402,6 +402,12 @@ namespace ModernEngine {
 	}
 
 	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
+	{
+		
+	}
+
+	template<>
 	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
 	{
 		component.m_Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);

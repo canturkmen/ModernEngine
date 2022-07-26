@@ -80,6 +80,14 @@ namespace ModernEngine {
 		CameraComponent(const CameraComponent&) = default;
 	};
 	
+	struct ScriptComponent
+	{
+		std::string ClassName;
+		
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+	};
+	
 	class ScriptableEntity;
 
 	struct NativeScriptComponent
@@ -148,5 +156,5 @@ namespace ModernEngine {
 	};
 
 	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, 
-		CameraComponent, NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
+		CameraComponent, ScriptComponent, NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
 }

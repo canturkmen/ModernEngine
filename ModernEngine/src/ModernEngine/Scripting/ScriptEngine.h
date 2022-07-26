@@ -11,24 +11,7 @@ extern "C" {
 
 namespace ModernEngine {
 
-	class ScriptEngine
-	{
-	public:
-		static void Init();
-		static void Shutdown();
-
-		static void LoadAssembly(const std::filesystem::path& filePath);
-	private:
-		static void InitMono();
-		static void ShutdownMono();
-
-		static MonoObject* InstantiateClass(MonoClass* monoClass);
-		static void LoadAssemblyClasses(MonoAssembly* assembly);
-
-		friend class ScriptClass;
-	};
-
-	class ScriptClass 
+	class ScriptClass
 	{
 	public:
 		ScriptClass() = default;
@@ -43,6 +26,26 @@ namespace ModernEngine {
 		std::string m_ClassName;
 
 		MonoClass* m_MonoClass = nullptr;
+	};
+
+	class ScriptEngine
+	{
+	public:
+		static void Init();
+		static void Shutdown();
+
+		static void LoadAssembly(const std::filesystem::path& filePath);
+
+		static bool EntityClassExists(const std::string& fullClassName);
+		static std::unordered_map<std::string, Ref<ScriptClass>> GetClassEntities();
+	private:
+		static void InitMono();
+		static void ShutdownMono();
+
+		static MonoObject* InstantiateClass(MonoClass* monoClass);
+		static void LoadAssemblyClasses(MonoAssembly* assembly);
+
+		friend class ScriptClass;
 	};
 }
 

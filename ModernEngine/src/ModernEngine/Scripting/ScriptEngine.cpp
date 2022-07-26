@@ -132,8 +132,6 @@ namespace ModernEngine {
 
 		s_Data->EntityClass.InvokeMethod(printParamMessageFunc, instance, &stringParam);
 #endif
-
-
 	}
 
 	void ScriptEngine::Shutdown()
@@ -191,6 +189,16 @@ namespace ModernEngine {
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->CoreAssemblyImage = mono_assembly_get_image(s_Data->CoreAssembly);
 		// Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
+	}
+
+	bool ScriptEngine::EntityClassExists(const std::string& fullClassName)
+	{
+		return s_Data->EntityClasses.find(fullClassName) != s_Data->EntityClasses.end();
+	}
+
+	std::unordered_map<std::string, Ref<ScriptClass>> ScriptEngine::GetClassEntities()
+	{
+		return s_Data->EntityClasses;
 	}
 
 	MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)

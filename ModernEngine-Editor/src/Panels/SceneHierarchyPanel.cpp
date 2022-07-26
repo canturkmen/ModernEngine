@@ -5,6 +5,7 @@
 #include <cstring>
 #include <filesystem>
 
+#include "./ModernEngine/Scripting/ScriptEngine.h"
 
 // To avoid a compiler warning when the strncpy is used
 #ifdef _MSVC_LANG
@@ -229,6 +230,7 @@ namespace ModernEngine {
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			DisplayAddComponentEntry<CameraComponent>("Camera");
+			DisplayAddComponentEntry<ScriptComponent>("Script");
 			DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
 			DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
@@ -303,7 +305,24 @@ namespace ModernEngine {
 			}
 		});
 
-		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		{
+			bool classExists = ScriptEngine::EntityClassExists(component.ClassName);
+
+			static char buffer[64];
+			strcpy(buffer, component.ClassName.c_str());
+
+			if (!classExists)
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.9f, 0.1f, 0.1f, 1.0f });
+
+			if (ImGui::InputText("Class", buffer, sizeof(buffer)))
+				component.ClassName = buffer;
+
+			if (!classExists)
+				ImGui::PopStyleColor();
+		});
+
+		DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component) 
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 			ImGui::Button("Texture", ImVec2{ 100.0f, 0.0f });

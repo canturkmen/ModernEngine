@@ -189,6 +189,15 @@ namespace ModernEngine {
 			out << YAML::EndMap;
 		}
 
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap;
+
+			auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+			out << YAML::Key << "ClassName" << YAML::Value << scriptComponent.ClassName;
+		}
+
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
 			out << YAML::Key << "SpriteRendererComponent";
@@ -353,6 +362,13 @@ namespace ModernEngine {
 
 					cp.Primary = cameraComponent["Primary"].as<bool>();
 					cp.FixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
+				}
+
+				auto scriptComponent = entity["ScriptComponent"];
+				if (scriptComponent)
+				{
+					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
+					sc.ClassName = scriptComponent["ClassName"].as<std::string>();
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];
