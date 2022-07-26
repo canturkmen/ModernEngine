@@ -4,6 +4,7 @@
 
 #include "ModernEngine/Renderer/Renderer2D.h"
 #include "ModernEngine/Scene/ScriptableEntity.h"
+#include "ModernEngine/Scripting/ScriptEngine.h"
 #include "Entity.h"
 #include <glm/glm.hpp>
 
@@ -195,11 +196,26 @@ namespace ModernEngine {
 	void Scene::OnStartRuntime()
 	{
 		OnPhysics2DStart();
+
+		// Scripting
+		{
+			ScriptEngine::OnRuntimeStart(this);
+			
+			// Instantiate all script entities
+			auto view = m_Registery.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				ScriptEngine::OnCreateEntity(entity);			
+			}
+		}
 	}
 
 	void Scene::OnStopRuntime()
 	{
 		OnPhysics2DStop();
+
+		ScriptEngine::OnRuntimeStop();
 	}
 
 	void Scene::OnSimulationStart()
@@ -221,17 +237,26 @@ namespace ModernEngine {
 	{
 		// Update Scripts
 		{
-			m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
-				{
-					if (nsc.Instance == nullptr)
-					{
-						nsc.Instance = nsc.InstantiateScript();
-						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.Instance->OnCreate();
-					}
+			// Call C# OnUpdate Function.
+			auto view = m_Registery.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { e, this };
+				ScriptEngine::OnUpdateEntity(entity, dt);
+			}
 
-					nsc.Instance->OnUpdate(dt);
-				});
+			// Call Native Scripts.
+			m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
+			{
+				if (nsc.Instance == nullptr)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
+
+				nsc.Instance->OnUpdate(dt);
+			});
 		}
 
 		// Physics 

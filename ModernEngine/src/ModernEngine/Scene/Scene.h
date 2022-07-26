@@ -22,7 +22,7 @@ namespace ModernEngine {
 		Entity CreateEntity(const std::string& name);
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name);
 		entt::registry& Registery() { return m_Registery; }
-
+			
 		void DestroyEntity(Entity entity);
 
 		void OnStartRuntime();

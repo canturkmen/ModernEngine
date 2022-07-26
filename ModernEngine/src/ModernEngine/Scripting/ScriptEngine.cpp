@@ -87,6 +87,9 @@ namespace ModernEngine {
 		ScriptClass EntityClass;
 
 		std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
+		std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
+
+		Scene* SceneContext = nullptr;
 	};
 
 	static ScriptEngineData* s_Data = nullptr;
@@ -201,6 +204,36 @@ namespace ModernEngine {
 		return s_Data->EntityClasses;
 	}
 
+	void ScriptEngine::OnRuntimeStart(Scene* scene)
+	{
+		s_Data->SceneContext = scene;
+	}
+
+	void ScriptEngine::OnRuntimeStop()
+	{
+		s_Data->SceneContext = nullptr;
+		s_Data->EntityInstances.clear();
+	}
+
+	void ScriptEngine::OnCreateEntity(Entity entity)
+	{
+		const auto& sc = entity.GetComponent<ScriptComponent>();
+		if (ScriptEngine::EntityClassExists(sc.ClassName))
+		{
+			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName]); 
+			s_Data->EntityInstances[entity.GetUUID()] = instance;
+
+			instance->InvokeOnCreate();
+		}
+	}
+
+	void ScriptEngine::OnUpdateEntity(Entity entity, DeltaTime dt)
+	{
+		UUID entityUUID = entity.GetUUID();
+		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
+		instance->InvokeOnUpdate((float)dt);
+	}
+
 	MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
 	{
 		MonoObject* instance = mono_object_new(s_Data->AppDomain, monoClass);
@@ -236,4 +269,22 @@ namespace ModernEngine {
 		return mono_runtime_invoke(method, instance, params, nullptr);
 	}
 
+	ScriptInstance::ScriptInstance(Ref<ScriptClass> scriptClass)
+		: m_ScriptClass(scriptClass)
+	{
+		m_Instance = m_ScriptClass->Instantiate();
+		m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
+		m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 1);
+	}
+
+	void ScriptInstance::InvokeOnCreate()
+	{
+		m_ScriptClass->InvokeMethod(m_OnCreateMethod, m_Instance);
+	}
+
+	void ScriptInstance::InvokeOnUpdate(float dt)
+	{
+		void* params = &dt;
+		m_ScriptClass->InvokeMethod(m_OnUpdateMethod, m_Instance, &params);
+	}
 }

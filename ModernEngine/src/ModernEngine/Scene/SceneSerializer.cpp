@@ -196,6 +196,7 @@ namespace ModernEngine {
 
 			auto& scriptComponent = entity.GetComponent<ScriptComponent>();
 			out << YAML::Key << "ClassName" << YAML::Value << scriptComponent.ClassName;
+			out << YAML::EndMap;
 		}
 
 		if (entity.HasComponent<SpriteRendererComponent>())

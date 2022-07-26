@@ -10,9 +10,9 @@ namespace Sandbox
 {
     internal class Player : Entity
     {
-        void OnInit()
+        void OnCreate()
         {
-            Console.WriteLine("OnInit Called");
+            Console.WriteLine("OnCreate Called");
         }
 
         void OnUpdate(float ts)
