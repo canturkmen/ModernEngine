@@ -125,12 +125,15 @@ namespace ModernEngine {
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
 
+		m_EntityMap[uuid] = entity;
+
 		return entity;
 	}
 
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registery.destroy(entity);
+		m_EntityMap.erase(entity.GetUUID());
 	}
 
 	void Scene::OnPhysics2DStart()
@@ -400,6 +403,14 @@ namespace ModernEngine {
 		}
 
 		return {};
+	}
+
+	Entity Scene::GetEntityWithUUID(UUID entityID)
+	{
+		if (m_EntityMap.find(entityID) != m_EntityMap.end())
+			return Entity(m_EntityMap.at(entityID), this);
+
+		Entity();
 	}
 
 	template<typename T>

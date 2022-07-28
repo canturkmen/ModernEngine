@@ -21,11 +21,4 @@ namespace ModernEngine {
 	{
 
 	}
-
-	UUID::UUID(UUID& other)
-		:m_UUID(other.m_UUID)
-	{
-
-	}
-
 }

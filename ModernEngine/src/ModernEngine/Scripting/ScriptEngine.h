@@ -34,7 +34,7 @@ namespace ModernEngine {
 	class ScriptInstance
 	{
 	public:
-		ScriptInstance(Ref<ScriptClass> scriptClass);
+		ScriptInstance(Ref<ScriptClass> scriptClass, Entity entity);
 
 		void InvokeOnCreate();
 		void InvokeOnUpdate(float dt);
@@ -42,6 +42,7 @@ namespace ModernEngine {
 		Ref<ScriptClass> m_ScriptClass;
 
 		MonoObject* m_Instance = nullptr;
+		MonoMethod* m_EntityConstructor = nullptr;
 		MonoMethod* m_OnCreateMethod = nullptr;
 		MonoMethod* m_OnUpdateMethod = nullptr;
 	};
@@ -62,6 +63,8 @@ namespace ModernEngine {
 
 		static void OnCreateEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity, DeltaTime dt);
+
+		static Scene* GetSceneContext();
 	private:
 		static void InitMono();
 		static void ShutdownMono();

@@ -40,6 +40,7 @@ namespace ModernEngine {
 		void DuplicateEntity(Entity entity);
 
 		Entity GetPrimaryCamera();
+		Entity GetEntityWithUUID(UUID entityID);
 
 		template<typename... Components>
 		auto GetAllEntitiesWith()
@@ -58,8 +59,9 @@ namespace ModernEngine {
 
 	private:
 		entt::registry m_Registery;
-		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
+		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		b2World* m_ActivePhysicsWorld = nullptr;
 		
 		friend class Entity;

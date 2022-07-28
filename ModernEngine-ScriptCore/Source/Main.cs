@@ -13,10 +13,27 @@ namespace ModernEngine
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal static extern float NativeLog_VectorDot(ref Vector3 parameter);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal static extern void Entity_GetTranslation(ulong uuid, out Vector3 translation);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal static extern void Entity_SetTranslation(ulong uuid, ref Vector3 translation);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal static extern bool Input_IsKeyDown(KeyCode keycode);
     }
     public struct Vector3
     {
         public float X, Y, Z;
+        public static Vector3 Zero = new Vector3(0.0f);
+
+        public Vector3(float scalar)
+        {
+            X = scalar;
+            Y = scalar;
+            Z = scalar; 
+        }
 
         public Vector3(float x, float y, float z)
         {
@@ -24,51 +41,41 @@ namespace ModernEngine
             Y = y; 
             Z = z;
         }
+
+        public static Vector3 operator * (Vector3 vector, float scalar)
+        {
+            return new Vector3(vector.X * scalar, vector.Y * scalar, vector.Z * scalar);
+        }
+        public static Vector3 operator + (Vector3 lhs, Vector3 rhs)
+        {
+            return new Vector3(lhs.X + rhs.X, lhs.Y + rhs.Y, lhs.Z + rhs.Z);
+        }
     }
-    public class Entity 
+    public class Entity
     {
-        public float FloatVar { get; set; }
-    
-        public Entity()
+        protected Entity()
+        { 
+            ID = 0; 
+        }   
+        internal Entity(ulong id)
         {
-            Console.WriteLine("Main Constructor");
-
-            Log("Can T", 20);
-
-            Vector3 pos = new Vector3(2.5f, 1.0f, 4.0f);
-            Vector3 result = Log(pos);
-            Console.WriteLine($"{result.X} {result.Y} {result.Z}");
+            ID = id;
         }
 
-        public void PrintMessage()
-        {
-            Console.WriteLine("Hello World from C#");
-        }
+        readonly ulong ID;
 
-        public void PrintInt(int value)
+        public Vector3 Translation
         {
-            Console.WriteLine($"C# Says: {value}"); 
-        }
+            get
+            {
+                InternalCalls.Entity_GetTranslation(ID, out Vector3 translation); 
+                return translation;
+            }
 
-        public void PrintInts(int value1, int value2)
-        {
-            Console.WriteLine($"C# Says: {value1} and {value2}");
-        }
-
-        public void PrintMessage(string message)
-        {
-            Console.WriteLine($"C# Says: {message}");
-        }
-
-        private void Log(string text, int value)
-        {
-            InternalCalls.NativeLog(text, value);
-        }
-
-        private Vector3 Log(Vector3 parameter)
-        {
-            InternalCalls.NativeLog_Vector(ref parameter, out Vector3 result);
-            return result;
+            set
+            {
+                InternalCalls.Entity_SetTranslation(ID, ref value);
+            }
         }
     }
 }

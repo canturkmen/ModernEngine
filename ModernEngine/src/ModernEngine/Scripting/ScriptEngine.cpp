@@ -104,6 +104,8 @@ namespace ModernEngine {
 		
 		ScripGlue::RegisterFunctions();
 
+		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity");
+
 #if 0
 		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity");
 
@@ -220,7 +222,7 @@ namespace ModernEngine {
 		const auto& sc = entity.GetComponent<ScriptComponent>();
 		if (ScriptEngine::EntityClassExists(sc.ClassName))
 		{
-			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName]); 
+			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity); 
 			s_Data->EntityInstances[entity.GetUUID()] = instance;
 
 			instance->InvokeOnCreate();
@@ -232,6 +234,11 @@ namespace ModernEngine {
 		UUID entityUUID = entity.GetUUID();
 		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
 		instance->InvokeOnUpdate((float)dt);
+	}
+
+	Scene* ScriptEngine::GetSceneContext()
+	{
+		return s_Data->SceneContext;
 	}
 
 	MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
@@ -269,12 +276,21 @@ namespace ModernEngine {
 		return mono_runtime_invoke(method, instance, params, nullptr);
 	}
 
-	ScriptInstance::ScriptInstance(Ref<ScriptClass> scriptClass)
+	ScriptInstance::ScriptInstance(Ref<ScriptClass> scriptClass, Entity entity)
 		: m_ScriptClass(scriptClass)
 	{
-		m_Instance = m_ScriptClass->Instantiate();
+		m_Instance = scriptClass->Instantiate();
+
+		m_EntityConstructor = s_Data->EntityClass.GetMethod(".ctor", 1);
 		m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
 		m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 1);
+
+		// Call the entity constructor
+		{
+			UUID entityID = entity.GetUUID();
+			void* params = &entityID;
+			m_ScriptClass->InvokeMethod(m_EntityConstructor, m_Instance, &params);
+		}
 	}
 
 	void ScriptInstance::InvokeOnCreate()

@@ -1,0 +1,32 @@
+Scene: Untitled Scene Name
+Entities:
+  - Entity: 1513287361
+    TagComponent:
+      Tag: Square
+    TransformComponent:
+      Translation: [0, 0, 0.0678938925]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      ClassName: Sandbox.Player
+    SpriteRendererComponent:
+      Color: [0.447580636, 0.220180795, 0.220180795, 1]
+      TilingFactor: 1
+  - Entity: 243642711
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 11]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false

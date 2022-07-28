@@ -121,6 +121,9 @@ namespace ModernEngine {
 		if (m_SceneState == SceneState::Play)
 		{
 			Entity camera = m_ActiveScene->GetPrimaryCamera();
+			if (!camera)
+				return;
+
 			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().m_Camera, camera.GetComponent<TransformComponent>().GetTransform());
 		}
 		else
