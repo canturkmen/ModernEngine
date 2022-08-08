@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ModernEngine
+﻿namespace ModernEngine
 { 
     public struct Vector3
     {
@@ -23,6 +17,16 @@ namespace ModernEngine
             X = x;
             Y = y;
             Z = z;
+        }
+
+        public Vector2 XY
+        {
+            get { return new Vector2(X, Y); }
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
         }
 
         public static Vector3 operator *(Vector3 vector, float scalar)

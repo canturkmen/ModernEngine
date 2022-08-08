@@ -15,6 +15,12 @@ namespace ModernEngine
         internal static extern void TransformComponent_SetTranslation(ulong uuid, ref Vector3 translation);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal static extern void Rigidbody2DComponent_ApplyLinearImpulse(ulong uuid, ref Vector2 impulse, ref Vector2 point, bool wake);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal static extern void Rigidbody2DComponent_ApplyLinearImpulseToCenter(ulong uuid, ref Vector2 impulse, bool wake);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal static extern bool Input_IsKeyDown(KeyCode keycode);
     }
 }

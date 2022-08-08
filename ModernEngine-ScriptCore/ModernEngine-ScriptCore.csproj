@@ -59,14 +59,17 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Dist|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\ModernEngine\InternalCalls.cs" />
     <Compile Include="Source\ModernEngine\Input.cs" />
+    <Compile Include="Source\ModernEngine\InternalCalls.cs" />
     <Compile Include="Source\ModernEngine\KeyCode.cs" />
-    <Compile Include="Source\ModernEngine\Entity.cs" />
+    <Compile Include="Source\ModernEngine\Scene\Components.cs" />
+    <Compile Include="Source\ModernEngine\Scene\Entity.cs" />
+    <Compile Include="Source\ModernEngine\Vector2.cs" />
     <Compile Include="Source\ModernEngine\Vector3.cs" />
     <Compile Include="Source\Player.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

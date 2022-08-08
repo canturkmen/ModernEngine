@@ -195,10 +195,10 @@
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h">
       <Filter>src\ModernEngine\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h">
+    <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h">
       <Filter>src\ModernEngine\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h">
+    <ClInclude Include="src\ModernEngine\Scripting\ScriptGlue.h">
       <Filter>src\ModernEngine\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="src\ModernEngine\Utils\PlatformUtils.h">

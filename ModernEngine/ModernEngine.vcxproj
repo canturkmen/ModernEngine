@@ -186,8 +186,8 @@
     <ClInclude Include="src\ModernEngine\Scene\SceneCamera.h" />
     <ClInclude Include="src\ModernEngine\Scene\SceneSerializer.h" />
     <ClInclude Include="src\ModernEngine\Scene\ScriptableEntity.h" />
-    <ClInclude Include="src\ModernEngine\Scripting\ScripGlue.h" />
     <ClInclude Include="src\ModernEngine\Scripting\ScriptEngine.h" />
+    <ClInclude Include="src\ModernEngine\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\ModernEngine\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />

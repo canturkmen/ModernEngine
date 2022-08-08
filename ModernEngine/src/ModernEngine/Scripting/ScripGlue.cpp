@@ -13,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/geometric.hpp>
 
+#include "box2d/b2_body.h"
+
 namespace ModernEngine {
 
 	static std::unordered_map<MonoType*, std::function<bool(Entity&)>> s_EntityHasComponentFuncs;
@@ -41,6 +43,26 @@ namespace ModernEngine {
 		Entity entity = scene->GetEntityWithUUID(entityID);
 		entity.GetComponent<TransformComponent>().Translation = *translation; 
 	}
+
+	static void Rigidbody2DComponent_ApplyLinearImpulse(UUID entityID, glm::vec2* impulse, glm::vec2* point, bool wake)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityWithUUID(entityID);
+		
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		b2Body* body = (b2Body*)rb2d.RuntimeBody;
+		body->ApplyLinearImpulse(b2Vec2(impulse->x, impulse->y), b2Vec2(point->x, point->y), wake);
+	}
+
+	static void Rigidbody2DComponent_ApplyLinearImpulseToCenter(UUID entityID, glm::vec2* impulse, bool wake)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->GetEntityWithUUID(entityID);
+
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		b2Body* body = (b2Body*)rb2d.RuntimeBody;
+		body->ApplyLinearImpulseToCenter(b2Vec2(impulse->x, impulse->y), wake);
+	}
 	
 	static bool Input_IsKeyDown(KeyCode keycode)
 	{
@@ -55,7 +77,7 @@ namespace ModernEngine {
 			// Extract the managed type name
 			std::string_view typeName = typeid(Component).name();
 			size_t position = typeName.find_last_of(':');
-			std::string_view structName = typeName.substr(position + 1);
+			std::string_view structName = typeName.substr(position + 1); 
 			std::string managedTypeName = fmt::format("ModernEngine.{}", structName);
 
 			MonoType* managedType = mono_reflection_type_from_name(managedTypeName.data(), ScriptEngine::GetCoreAssemblyImage());
@@ -85,6 +107,10 @@ namespace ModernEngine {
 		MN_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 		MN_ADD_INTERNAL_CALL(TransformComponent_SetTranslation);
 
+		MN_ADD_INTERNAL_CALL(Rigidbody2DComponent_ApplyLinearImpulse);
+		MN_ADD_INTERNAL_CALL(Rigidbody2DComponent_ApplyLinearImpulseToCenter);
+
 		MN_ADD_INTERNAL_CALL(Input_IsKeyDown);
+
 	}
 }
