@@ -66,6 +66,7 @@
     <Compile Include="Source\ModernEngine\Scene\Entity.cs" />
     <Compile Include="Source\ModernEngine\Vector2.cs" />
     <Compile Include="Source\ModernEngine\Vector3.cs" />
+    <Compile Include="Source\Camera.cs" />
     <Compile Include="Source\Player.cs" />
   </ItemGroup>
   <ItemGroup>
