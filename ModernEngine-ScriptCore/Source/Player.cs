@@ -10,9 +10,12 @@ namespace Sandbox
 {
     internal class Player : Entity
     {
+        public TransformComponent m_TransformComponent;
+
         void OnCreate()
         {
             Console.WriteLine("OnCreate Called");
+            m_TransformComponent = GetComponent<TransformComponent>();
         }
 
         void OnUpdate(float ts)

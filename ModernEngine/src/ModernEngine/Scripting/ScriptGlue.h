@@ -1,9 +1,10 @@
 #pragma once
 
 namespace ModernEngine {
-	class ScripGlue
+	class ScriptGlue
 	{
 	public:
+		static void RegisterComponents();
 		static void RegisterFunctions();
 	};
 }

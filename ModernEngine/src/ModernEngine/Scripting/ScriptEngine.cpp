@@ -5,7 +5,7 @@
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/object.h"
 
-#include "ModernEngine/Scripting/ScripGlue.h"
+#include "ModernEngine/Scripting/ScriptGlue.h"
 
 namespace ModernEngine {
 
@@ -102,7 +102,8 @@ namespace ModernEngine {
 		LoadAssembly("Resources/Scripts/ModernEngine-ScriptCore.dll");
 		LoadAssemblyClasses(s_Data->CoreAssembly);
 		
-		ScripGlue::RegisterFunctions();
+		ScriptGlue::RegisterComponents();
+		ScriptGlue::RegisterFunctions();
 
 		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity");
 
@@ -234,6 +235,11 @@ namespace ModernEngine {
 		UUID entityUUID = entity.GetUUID();
 		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
 		instance->InvokeOnUpdate((float)dt);
+	}
+
+	MonoImage* ScriptEngine::GetCoreAssemblyImage()
+	{
+		return s_Data->CoreAssemblyImage;
 	}
 
 	Scene* ScriptEngine::GetSceneContext()

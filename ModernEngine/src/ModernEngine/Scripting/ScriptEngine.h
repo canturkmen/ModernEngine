@@ -10,6 +10,7 @@ extern "C" {
 	typedef struct _MonoObject MonoObject;
 	typedef struct _MonoMethod MonoMethod;
 	typedef struct _MonoAssembly MonoAssembly;
+	typedef struct _MonoImage MonoImage;
 }
 
 namespace ModernEngine {
@@ -61,10 +62,11 @@ namespace ModernEngine {
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 
-		static void OnCreateEntity(Entity entity);
+		static void OnCreateEntity(Entity entity)	;
 		static void OnUpdateEntity(Entity entity, DeltaTime dt);
 
 		static Scene* GetSceneContext();
+		static MonoImage* GetCoreAssemblyImage();
 	private:
 		static void InitMono();
 		static void ShutdownMono();
@@ -73,6 +75,7 @@ namespace ModernEngine {
 		static void LoadAssemblyClasses(MonoAssembly* assembly);
 
 		friend class ScriptClass;
+		friend class ScriptGlue;
 	};
 }
 
