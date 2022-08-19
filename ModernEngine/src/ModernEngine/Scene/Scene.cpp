@@ -270,7 +270,7 @@ namespace ModernEngine {
 
 			auto view = m_Registery.view<Rigidbody2DComponent>();
 			for (auto e : view)
-			{
+			{		
 				Entity entity = { e, this };
 				auto& transform = entity.GetComponent<TransformComponent>();
 				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();

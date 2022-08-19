@@ -3,8 +3,8 @@ project "ModernEngine-ScriptCore"
 	language "C#"
 	dotnetframework "4.7.2"
 
-	targetdir ("%{wks.location}/ModernEngine-Editor/Resources/Scripts")
-	objdir ("%{wks.location}/ModernEngine-Editor/Resources/Scripts/Intermediates")
+	targetdir ("../ModernEngine-Editor/Resources/Scripts")
+	objdir ("../ModernEngine-Editor/Resources/Scripts/Intermediates")
 
 	files 
 	{

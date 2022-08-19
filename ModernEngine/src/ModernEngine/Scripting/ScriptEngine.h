@@ -19,7 +19,7 @@ namespace ModernEngine {
 	{
 	public:
 		ScriptClass() = default;
-		ScriptClass(const std::string& nameSpace, const std::string& name);
+		ScriptClass(const std::string& nameSpace, const std::string& name, bool isCore = false);
 
 		MonoObject* Instantiate();
 		MonoMethod* GetMethod(const std::string& name, int parameterCount);
@@ -55,6 +55,7 @@ namespace ModernEngine {
 		static void Shutdown();
 
 		static void LoadAssembly(const std::filesystem::path& filePath);
+		static void LoadAppAssembly(const std::filesystem::path& filePath);
 
 		static bool EntityClassExists(const std::string& fullClassName);
 		static std::unordered_map<std::string, Ref<ScriptClass>> GetClassEntities();
@@ -72,7 +73,7 @@ namespace ModernEngine {
 		static void ShutdownMono();
 
 		static MonoObject* InstantiateClass(MonoClass* monoClass);
-		static void LoadAssemblyClasses(MonoAssembly* assembly);
+		static void LoadAssemblyClasses();
 
 		friend class ScriptClass;
 		friend class ScriptGlue;
