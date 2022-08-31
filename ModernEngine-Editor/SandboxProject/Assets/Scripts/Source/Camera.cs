@@ -10,7 +10,7 @@ namespace Sandbox
 {
     internal class Camera : Entity
     {
-        public TransformComponent m_TransformComponent;
+        private TransformComponent m_TransformComponent;
 
         void OnCreate()
         {

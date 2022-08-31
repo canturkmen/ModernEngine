@@ -4,12 +4,33 @@
 #include "mono/jit/jit.h"
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/object.h"
+#include "mono/metadata/tabledefs.h"
 
 #include "ModernEngine/Scripting/ScriptGlue.h"
 
 namespace ModernEngine {
 
+	static std::unordered_map<std::string, ScriptClassFieldType> s_ScriptFieldTypeMap =
+	{
+		{"System.Single",		 ScriptClassFieldType::Float  },
+		{"System.Double",		 ScriptClassFieldType::Double },
+		{"System.Boolean",		 ScriptClassFieldType::Bool	  },
+		{"System.Char",			 ScriptClassFieldType::Char	  },
+		{"System.Byte",			 ScriptClassFieldType::Byte	  },
+		{"System.Int16",		 ScriptClassFieldType::Short  },
+		{"System.Int32",		 ScriptClassFieldType::Int	  },
+		{"System.Int64",		 ScriptClassFieldType::Long	  },
+		{"System.UInt16",		 ScriptClassFieldType::UShort },
+		{"System.UInt32",		 ScriptClassFieldType::UInt   },
+		{"System.UInt64",		 ScriptClassFieldType::ULong  },
+		{"ModernEngine.Vector2", ScriptClassFieldType::Vector2},
+		{"ModernEngine.Vector3", ScriptClassFieldType::Vector3},
+		{"ModernEngine.Vector4", ScriptClassFieldType::Vector4},
+		{"ModernEngine.Entity",  ScriptClassFieldType::Entity },
+	};
+
 	namespace Utils {
+
 
 		static char* ReadFileBytes(const std::filesystem::path& filePath, uint32_t* outSize)
 		{
@@ -73,6 +94,42 @@ namespace ModernEngine {
 
 				MN_CORE_TRACE("{}.{}", nameSpace, name);
 			}
+		}
+
+		ScriptClassFieldType MonoTypeToScriptClassFieldType(MonoType* monoType)
+		{
+			std::string typeName = mono_type_get_name(monoType);
+			if (s_ScriptFieldTypeMap.find(typeName) == s_ScriptFieldTypeMap.end())
+			{
+				MN_CORE_ERROR("{} does not exist", typeName);
+				return ScriptClassFieldType::None;
+			}
+			return s_ScriptFieldTypeMap.at(typeName);
+		}
+
+		std::string ScriptClassFieldTypeToString(ScriptClassFieldType type)
+		{
+			switch (type)
+			{
+				case ModernEngine::ScriptClassFieldType::Float:		return "Float";
+				case ModernEngine::ScriptClassFieldType::Double:	return "Double";
+				case ModernEngine::ScriptClassFieldType::Bool:		return "Bool";
+				case ModernEngine::ScriptClassFieldType::Char:		return "Char";
+				case ModernEngine::ScriptClassFieldType::Byte:		return "Byte";
+				case ModernEngine::ScriptClassFieldType::Short:		return "Short";
+				case ModernEngine::ScriptClassFieldType::Int:		return "Int";
+				case ModernEngine::ScriptClassFieldType::Long:		return "Long";
+				case ModernEngine::ScriptClassFieldType::UByte:		return "UByte";
+				case ModernEngine::ScriptClassFieldType::UShort:	return "UShort";
+				case ModernEngine::ScriptClassFieldType::UInt:		return "UInt";
+				case ModernEngine::ScriptClassFieldType::ULong:		return "ULong";
+				case ModernEngine::ScriptClassFieldType::Vector2:	return "Vector2";
+				case ModernEngine::ScriptClassFieldType::Vector3:	return "Vector3";
+				case ModernEngine::ScriptClassFieldType::Vector4:	return "Vector4";
+				case ModernEngine::ScriptClassFieldType::Entity:	return "Entity";
+			}
+
+			return "Invalid";
 		}
 	}
 
@@ -176,8 +233,29 @@ namespace ModernEngine {
 			if(monoClass == entityClass ) continue;
 
 			bool isSubclass = mono_class_is_subclass_of(monoClass, entityClass, false);
-			if (isSubclass)
-				s_Data->EntityClasses[fullName] = CreateRef<ScriptClass>(nameSpace, name);
+			if (!isSubclass)
+				continue;
+
+			Ref<ScriptClass> scriptClass = CreateRef<ScriptClass>(nameSpace, name);
+			s_Data->EntityClasses[fullName] = scriptClass;
+
+			int fieldNum = mono_class_num_fields(monoClass);
+
+			void* iterator = nullptr;
+			MonoClassField* field;
+			while (field = mono_class_get_fields(monoClass, &iterator))
+			{
+				const char* fieldName = mono_field_get_name(field);
+				uint32_t flags = mono_field_get_flags(field);
+				if (flags & FIELD_ATTRIBUTE_PUBLIC)
+				{
+					MonoType* type = mono_field_get_type(field);
+					ScriptClassFieldType fieldType = Utils::MonoTypeToScriptClassFieldType(type);
+					MN_CORE_WARN("{}: type: {}", fieldName, Utils::ScriptClassFieldTypeToString(fieldType));
+
+					scriptClass->m_Fields[fieldName] = { fieldType, fieldName, field};
+				}
+			}
 		}
 	}
 
@@ -252,6 +330,15 @@ namespace ModernEngine {
 		return s_Data->CoreAssemblyImage;
 	}
 
+	Ref<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUID entityID)
+	{
+		auto it = s_Data->EntityInstances.find(entityID);
+		if (it == s_Data->EntityInstances.end())
+			return nullptr;
+
+		return it->second;
+	}
+
 	Scene* ScriptEngine::GetSceneContext()
 	{
 		return s_Data->SceneContext;
@@ -319,4 +406,29 @@ namespace ModernEngine {
 		void* params = &dt;
 		m_ScriptClass->InvokeMethod(m_OnUpdateMethod, m_Instance, &params);
 	}
+
+	bool ScriptInstance::GetValueInternal(const std::string& name, void* data)
+	{
+		const auto& fields = m_ScriptClass->GetFields();
+		auto it = fields.find(name);
+		if (it == fields.end())
+			return false;
+
+		const ScriptField& scriptField = it->second;
+		mono_field_get_value(m_Instance, scriptField.ClassField, data);
+		return true;
+	}
+
+	bool ScriptInstance::SetValueInternal(const std::string& name, const void* data)
+	{
+		const auto& fields = m_ScriptClass->GetFields();
+		auto it = fields.find(name);
+		if (it == fields.end())
+			return false;
+
+		const ScriptField& scriptField = it->second;
+		mono_field_set_value(m_Instance, scriptField.ClassField, (void*)data);
+		return true;
+	}
+
 }

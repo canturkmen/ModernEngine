@@ -172,19 +172,17 @@ namespace ModernEngine {
 		{
 			auto& component = entity.GetComponent<T>();
 			ImVec2& RegionAvailable = ImGui::GetContentRegionAvail();
-
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
 			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-
+			ImGui::Separator();
 			bool opened = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
+			ImGui::PopStyleVar();
 			ImGui::SameLine(RegionAvailable.x - lineHeight * 0.5f);
 
 			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
-
-			ImGui::PopStyleVar();
 
 			bool ComponentDeleted = false;
 			if (ImGui::BeginPopup("ComponentSettings"))
@@ -239,6 +237,8 @@ namespace ModernEngine {
 
 			ImGui::EndPopup();
 		}
+
+		ImGui::PopItemWidth();
 
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
 		{
@@ -305,7 +305,7 @@ namespace ModernEngine {
 			}
 		});
 
-		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("Script", entity, [entity](auto& component) mutable
 		{
 			bool classExists = ScriptEngine::EntityClassExists(component.ClassName);
 
@@ -317,6 +317,22 @@ namespace ModernEngine {
 
 			if (ImGui::InputText("Class", buffer, sizeof(buffer)))
 				component.ClassName = buffer;
+
+			// Fields
+			Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+			if (scriptInstance)
+			{
+				const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+				for (const auto& [name, field] : fields)
+				{
+					if (field.Type == ScriptClassFieldType::Float)
+					{
+						float data = scriptInstance->GetValue<float>(name); 
+						if (ImGui::DragFloat(name.c_str(), &data))
+							scriptInstance->SetValue(name, data);
+					}
+				}
+			}
 
 			if (!classExists)
 				ImGui::PopStyleColor();
