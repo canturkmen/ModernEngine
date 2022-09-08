@@ -198,6 +198,8 @@ namespace ModernEngine {
 
 	void Scene::OnStartRuntime()
 	{
+		m_IsRunning = true;
+
 		OnPhysics2DStart();
 
 		// Scripting
@@ -216,6 +218,8 @@ namespace ModernEngine {
 
 	void Scene::OnStopRuntime()
 	{
+		m_IsRunning = false;
+
 		OnPhysics2DStop();
 
 		ScriptEngine::OnRuntimeStop();

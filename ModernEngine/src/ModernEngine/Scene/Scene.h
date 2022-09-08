@@ -48,6 +48,7 @@ namespace ModernEngine {
 			return m_Registery.view<Components...>();
 		}
 	
+		bool GetIsRunning() const { return m_IsRunning; };
 	private: 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -63,6 +64,8 @@ namespace ModernEngine {
 
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		b2World* m_ActivePhysicsWorld = nullptr;
+
+		bool m_IsRunning = false;
 		
 		friend class Entity;
 		friend class SceneSerializer;

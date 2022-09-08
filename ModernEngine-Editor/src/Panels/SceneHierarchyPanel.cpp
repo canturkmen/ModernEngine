@@ -212,7 +212,7 @@ namespace ModernEngine {
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
-			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
+			strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
@@ -305,12 +305,12 @@ namespace ModernEngine {
 			}
 		});
 
-		DrawComponent<ScriptComponent>("Script", entity, [entity](auto& component) mutable
-		{
+		DrawComponent<ScriptComponent>("Script", entity, [entity, scene = m_Context](auto& component) mutable
+		{ 
 			bool classExists = ScriptEngine::EntityClassExists(component.ClassName);
 
 			static char buffer[64];
-			strcpy(buffer, component.ClassName.c_str());
+			strncpy_s(buffer, sizeof(buffer), component.ClassName.c_str(), sizeof(buffer));
 
 			if (!classExists)
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4{ 0.9f, 0.1f, 0.1f, 1.0f });
@@ -318,18 +318,58 @@ namespace ModernEngine {
 			if (ImGui::InputText("Class", buffer, sizeof(buffer)))
 				component.ClassName = buffer;
 
-			// Fields
-			Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
-			if (scriptInstance)
+			bool running = scene->GetIsRunning();
+			if (running)
 			{
-				const auto& fields = scriptInstance->GetScriptClass()->GetFields();
-				for (const auto& [name, field] : fields)
+				// Fields
+				Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+				if (scriptInstance)
 				{
-					if (field.Type == ScriptClassFieldType::Float)
+					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+					for (const auto& [name, field] : fields)
 					{
-						float data = scriptInstance->GetValue<float>(name); 
-						if (ImGui::DragFloat(name.c_str(), &data))
-							scriptInstance->SetValue(name, data);
+						if (field.Type == ScriptClassFieldType::Float)
+						{
+							float data = scriptInstance->GetValue<float>(name); 
+							if (ImGui::DragFloat(name.c_str(), &data))
+								scriptInstance->SetValue(name, data);
+						}
+					}
+				}
+			}
+			else
+			{
+				if (classExists)
+				{
+					Ref<ScriptClass> entityClass = ScriptEngine::GetEntityScriptClass(component.ClassName);
+					const auto& entityFields = entityClass->GetFields();
+					auto& fieldInstanceMap = ScriptEngine::GetScriptFieldMap(entity);
+					for (const auto& [name, field] : entityFields)
+					{
+						if (fieldInstanceMap.find(name) != fieldInstanceMap.end())
+						{
+							ScriptFieldInstance& scriptField = fieldInstanceMap.at(name);
+
+							if (field.Type == ScriptClassFieldType::Float)
+							{
+								float data = scriptField.GetValue<float>(); 
+								if (ImGui::DragFloat(name.c_str(), &data))
+									scriptField.SetValue(data);
+							}
+						}
+						else
+						{
+							if (field.Type == ScriptClassFieldType::Float)
+							{
+								float data = 0.0f;
+								if (ImGui::DragFloat(name.c_str(), &data))
+								{
+									ScriptFieldInstance& scriptField = fieldInstanceMap[name];
+									scriptField.Field = field;
+									scriptField.SetValue(data);
+								}
+							}
+						}
 					}
 				}
 			}

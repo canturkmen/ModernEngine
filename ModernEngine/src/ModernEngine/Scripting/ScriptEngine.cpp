@@ -148,6 +148,7 @@ namespace ModernEngine {
 
 		std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
 		std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
+		std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
 		Scene* SceneContext = nullptr;
 	};
@@ -311,9 +312,18 @@ namespace ModernEngine {
 		const auto& sc = entity.GetComponent<ScriptComponent>();
 		if (ScriptEngine::EntityClassExists(sc.ClassName))
 		{
-			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity); 
-			s_Data->EntityInstances[entity.GetUUID()] = instance;
+			UUID entityId = entity.GetUUID();
 
+			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity); 
+			s_Data->EntityInstances[entityId] = instance;
+
+			// Copy the script field instance values
+			if (s_Data->EntityScriptFields.find(entityId) != s_Data->EntityScriptFields.end())
+			{
+				const ScriptFieldMap& fieldInstances = s_Data->EntityScriptFields.at(entityId);
+				for (const auto [name, fieldInstance] : fieldInstances)
+					instance->SetValueInternal(name, fieldInstance.m_Buffer);
+			}
 			instance->InvokeOnCreate();
 		}
 	}
@@ -337,6 +347,19 @@ namespace ModernEngine {
 			return nullptr;
 
 		return it->second;
+	}
+
+	Ref<ScriptClass> ScriptEngine::GetEntityScriptClass(const std::string& name)
+	{
+		if (s_Data->EntityClasses.find(name) == s_Data->EntityClasses.end())
+			return nullptr;
+
+		return s_Data->EntityClasses.at(name);
+	}
+
+	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
+	{
+		return s_Data->EntityScriptFields[entity.GetUUID()];
 	}
 
 	Scene* ScriptEngine::GetSceneContext()

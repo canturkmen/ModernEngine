@@ -21,8 +21,7 @@
     <OutputPath>..\ModernEngine-Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\ModernEngine-Editor\Resources\Scripts\Intermediates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,8 +33,7 @@
     <OutputPath>..\ModernEngine-Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\ModernEngine-Editor\Resources\Scripts\Intermediates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -47,8 +45,7 @@
     <OutputPath>..\ModernEngine-Editor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\ModernEngine-Editor\Resources\Scripts\Intermediates\Dist\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -66,8 +63,6 @@
     <Compile Include="Source\ModernEngine\Scene\Entity.cs" />
     <Compile Include="Source\ModernEngine\Vector2.cs" />
     <Compile Include="Source\ModernEngine\Vector3.cs" />
-    <Compile Include="Source\Camera.cs" />
-    <Compile Include="Source\Player.cs" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

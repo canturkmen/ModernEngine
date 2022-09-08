@@ -1,11 +1,11 @@
 #pragma once
 
 #include <filesystem>
+#include <map>
 
 #include "ModernEngine/Scene/Scene.h"
 #include "ModernEngine/Scene/Entity.h"
 
-#include <map>;
 
 extern "C" {
 	typedef struct _MonoClass MonoClass;
@@ -33,7 +33,37 @@ namespace ModernEngine {
 		ScriptClassFieldType Type;
 		std::string Name;
 		MonoClassField* ClassField;
-	};	
+	};
+
+	struct ScriptFieldInstance
+	{
+		ScriptField Field;
+
+		ScriptFieldInstance()
+		{
+			memset(m_Buffer, 0, sizeof(m_Buffer));
+		}
+
+		template<typename T>
+		T GetValue()
+		{
+			static_assert(sizeof(T) <= 8, "Data type is too large !");
+			return *(T*)m_Buffer;
+		}
+
+		template<typename T>
+		void SetValue(const T& value)
+		{
+			static_assert(sizeof(T) <= 8, "Data type is too large !");
+			memcpy(m_Buffer, &value, sizeof(T));
+		}
+	private:
+		uint8_t m_Buffer[8];
+
+		friend class ScriptEngine;
+	};
+		
+	using ScriptFieldMap = std::unordered_map<std::string, ScriptFieldInstance>;
 
 	class ScriptClass
 	{
@@ -97,6 +127,8 @@ namespace ModernEngine {
 		MonoMethod* m_OnUpdateMethod = nullptr;
 		
 		inline static char FieldValueBuffer[8];
+
+		friend class ScriptEngine;
 	};
 
 	class ScriptEngine
@@ -114,13 +146,16 @@ namespace ModernEngine {
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 
-		static void OnCreateEntity(Entity entity)	;
+		static void OnCreateEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity, DeltaTime dt);
 
 		static Scene* GetSceneContext();
 		static MonoImage* GetCoreAssemblyImage();
 		
 		static Ref<ScriptInstance> GetEntityScriptInstance(UUID entityID);
+		static Ref<ScriptClass> GetEntityScriptClass(const std::string& name);
+		static ScriptFieldMap& GetScriptFieldMap(Entity entity);
+
 	private:
 		static void InitMono();
 		static void ShutdownMono();
