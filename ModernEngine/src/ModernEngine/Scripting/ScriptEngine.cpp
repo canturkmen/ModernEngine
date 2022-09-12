@@ -106,31 +106,6 @@ namespace ModernEngine {
 			}
 			return s_ScriptFieldTypeMap.at(typeName);
 		}
-
-		std::string ScriptClassFieldTypeToString(ScriptClassFieldType type)
-		{
-			switch (type)
-			{
-				case ModernEngine::ScriptClassFieldType::Float:		return "Float";
-				case ModernEngine::ScriptClassFieldType::Double:	return "Double";
-				case ModernEngine::ScriptClassFieldType::Bool:		return "Bool";
-				case ModernEngine::ScriptClassFieldType::Char:		return "Char";
-				case ModernEngine::ScriptClassFieldType::Byte:		return "Byte";
-				case ModernEngine::ScriptClassFieldType::Short:		return "Short";
-				case ModernEngine::ScriptClassFieldType::Int:		return "Int";
-				case ModernEngine::ScriptClassFieldType::Long:		return "Long";
-				case ModernEngine::ScriptClassFieldType::UByte:		return "UByte";
-				case ModernEngine::ScriptClassFieldType::UShort:	return "UShort";
-				case ModernEngine::ScriptClassFieldType::UInt:		return "UInt";
-				case ModernEngine::ScriptClassFieldType::ULong:		return "ULong";
-				case ModernEngine::ScriptClassFieldType::Vector2:	return "Vector2";
-				case ModernEngine::ScriptClassFieldType::Vector3:	return "Vector3";
-				case ModernEngine::ScriptClassFieldType::Vector4:	return "Vector4";
-				case ModernEngine::ScriptClassFieldType::Entity:	return "Entity";
-			}
-
-			return "Invalid";
-		}
 	}
 
 	struct ScriptEngineData 

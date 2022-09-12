@@ -4,6 +4,9 @@
 #include "Components.h"
 #include "Entity.h"
 
+#include "ModernEngine/Scripting/ScriptEngine.h"
+#include "ModernEngine/Core/UUID.h"
+
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 
@@ -83,9 +86,44 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<ModernEngine::UUID>
+	{
+		static Node encode(const ModernEngine::UUID& rhs)
+		{
+			Node node;
+			node.push_back((uint64_t)rhs);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, ModernEngine::UUID& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 2)
+				return false;
+
+			rhs = node[0].as<uint64_t>();
+			
+			return true;
+		}
+	};
 }
 
 namespace ModernEngine {
+
+	#define WRITE_SCRIPT_FIELD(FieldType, Type)					   \
+			case ScriptClassFieldType::FieldType:				   \
+				 out << scriptFieldInstance.GetValue<Type>();	   \
+				 break	
+
+	#define READ_SCRIPT_FIELD(FieldType, Type)					   \
+			case ScriptClassFieldType::FieldType:				   \
+			{													   \
+				Type data = scriptField["Data"].as<Type>();		   \
+				scriptFieldInstance.SetValue(data);                \
+				break;                                             \
+			}
 
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2 & value)
 	{
@@ -196,6 +234,51 @@ namespace ModernEngine {
 
 			auto& scriptComponent = entity.GetComponent<ScriptComponent>();
 			out << YAML::Key << "ClassName" << YAML::Value << scriptComponent.ClassName;
+
+			// Fields
+			Ref<ScriptClass> scriptClass = ScriptEngine::GetEntityScriptClass(scriptComponent.ClassName);
+			const auto& scriptFields = scriptClass->GetFields();
+			if (scriptFields.size() > 0)
+			{
+				out << YAML::Key << "ScriptFields" << YAML::Value;
+
+				auto& scriptFieldInstanceMap = ScriptEngine::GetScriptFieldMap(entity);
+				out << YAML::BeginSeq;
+				for (const auto& [name, field] : scriptFields)
+				{
+					if (scriptFieldInstanceMap.find(name) == scriptFieldInstanceMap.end())
+						continue;
+
+					out << YAML::BeginMap;
+
+					out << YAML::Key << "Name" << YAML::Value << name;
+					out << YAML::Key << "Type" << YAML::Value << Utils::ScriptClassFieldTypeToString(field.Type);
+					out << YAML::Key << "Data" << YAML::Value;
+
+					ScriptFieldInstance& scriptFieldInstance = scriptFieldInstanceMap.at(name);
+					switch (field.Type)
+					{
+						WRITE_SCRIPT_FIELD(Float, float);
+						WRITE_SCRIPT_FIELD(Double, double);
+						WRITE_SCRIPT_FIELD(Bool, bool);
+						WRITE_SCRIPT_FIELD(Char, char);
+						WRITE_SCRIPT_FIELD(Byte, int8_t);
+						WRITE_SCRIPT_FIELD(Short, int16_t);
+						WRITE_SCRIPT_FIELD(Int, int32_t);
+						WRITE_SCRIPT_FIELD(Long, int64_t);
+						WRITE_SCRIPT_FIELD(UByte, uint8_t);
+						WRITE_SCRIPT_FIELD(UShort, uint16_t);
+						WRITE_SCRIPT_FIELD(UInt, uint32_t);
+						WRITE_SCRIPT_FIELD(ULong, uint64_t);
+						WRITE_SCRIPT_FIELD(Vector2, glm::vec2);
+						WRITE_SCRIPT_FIELD(Vector3, glm::vec3);
+						WRITE_SCRIPT_FIELD(Vector4, glm::vec4);
+						WRITE_SCRIPT_FIELD(Entity, UUID);
+					}
+					out << YAML::EndMap;
+				}
+				out << YAML::EndSeq;
+				}
 			out << YAML::EndMap;
 		}
 
@@ -370,6 +453,45 @@ namespace ModernEngine {
 				{
 					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
 					sc.ClassName = scriptComponent["ClassName"].as<std::string>();
+
+					// Fields
+					auto scriptFields = scriptComponent["ScriptFields"];
+					if (scriptFields)
+					{
+						const auto& entityFields = ScriptEngine::GetEntityScriptClass(sc.ClassName)->GetFields();
+						auto& scriptFieldInstanceMap = ScriptEngine::GetScriptFieldMap(deserializedEntity);
+						for (auto scriptField : scriptFields)
+						{
+							std::string name = scriptField["Name"].as<std::string>();
+							std::string typeName = scriptField["Type"].as<std::string>();
+							ScriptClassFieldType type = Utils::ScriptClassFieldTypeFromString(typeName);
+							ScriptFieldInstance& scriptFieldInstance = scriptFieldInstanceMap[name];
+							
+							if(scriptFieldInstanceMap.find(name) == scriptFieldInstanceMap.end())
+								continue;
+
+							scriptFieldInstance.Field = entityFields.at(name);
+							switch (type)
+							{
+								READ_SCRIPT_FIELD(Float, float);
+								READ_SCRIPT_FIELD(Double, double);
+								READ_SCRIPT_FIELD(Bool, bool);
+								READ_SCRIPT_FIELD(Char, char);
+								READ_SCRIPT_FIELD(Byte, int8_t);
+								READ_SCRIPT_FIELD(Short, int16_t);
+								READ_SCRIPT_FIELD(Int, int32_t);
+								READ_SCRIPT_FIELD(Long, int64_t);
+								READ_SCRIPT_FIELD(UByte, uint8_t);
+								READ_SCRIPT_FIELD(UShort, uint16_t);
+								READ_SCRIPT_FIELD(UInt, uint32_t);
+								READ_SCRIPT_FIELD(ULong, uint64_t);
+								READ_SCRIPT_FIELD(Vector2, glm::vec2);
+								READ_SCRIPT_FIELD(Vector3, glm::vec3);
+								READ_SCRIPT_FIELD(Vector4, glm::vec4);
+								READ_SCRIPT_FIELD(Entity, UUID);
+							}
+						}
+					}
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];

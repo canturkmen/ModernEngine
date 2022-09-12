@@ -37,7 +37,7 @@ namespace ModernEngine {
 		void SetOrthographicCameraFar(float orthographicfar) { m_OrthographicFar = orthographicfar; RecalculateProjectionMatrix(); }
 
 		ProjectionType GetProjectionType() const { return m_ProjectionType; }
-		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; }
+		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; RecalculateProjectionMatrix(); }
 
 	private:
 		void RecalculateProjectionMatrix();
@@ -51,7 +51,7 @@ namespace ModernEngine {
 		float m_OrthographicSize = 10.0f;
 		float m_OrthographicNear = -1.0f, m_OrthographicFar = 1.0f;
 
-		float m_AspectRatio = 0.0f;
+		float m_AspectRatio = 1.778f;
 	};
 
 }

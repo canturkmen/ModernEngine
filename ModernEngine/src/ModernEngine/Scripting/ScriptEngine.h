@@ -47,18 +47,18 @@ namespace ModernEngine {
 		template<typename T>
 		T GetValue()
 		{
-			static_assert(sizeof(T) <= 8, "Data type is too large !");
+			static_assert(sizeof(T) <= 16, "Data type is too large !");
 			return *(T*)m_Buffer;
 		}
 
 		template<typename T>
 		void SetValue(const T& value)
 		{
-			static_assert(sizeof(T) <= 8, "Data type is too large !");
+			static_assert(sizeof(T) <= 16, "Data type is too large !");
 			memcpy(m_Buffer, &value, sizeof(T));
 		}
 	private:
-		uint8_t m_Buffer[8];
+		uint8_t m_Buffer[16];
 
 		friend class ScriptEngine;
 	};
@@ -126,7 +126,7 @@ namespace ModernEngine {
 		MonoMethod* m_OnCreateMethod = nullptr;
 		MonoMethod* m_OnUpdateMethod = nullptr;
 		
-		inline static char FieldValueBuffer[8];
+		inline static char FieldValueBuffer[16];
 
 		friend class ScriptEngine;
 	};
@@ -166,5 +166,56 @@ namespace ModernEngine {
 		friend class ScriptClass;
 		friend class ScriptGlue;
 	};
+
+	namespace Utils {
+		
+		inline const char* ScriptClassFieldTypeToString(ScriptClassFieldType type)
+		{
+			switch (type)
+			{
+				case ScriptClassFieldType::None:	return "None";
+				case ScriptClassFieldType::Float:	return "Float";
+				case ScriptClassFieldType::Double:	return "Double";
+				case ScriptClassFieldType::Bool:	return "Bool";
+				case ScriptClassFieldType::Char:	return "Char";
+				case ScriptClassFieldType::Byte:	return "Byte";
+				case ScriptClassFieldType::Short:	return "Short";
+				case ScriptClassFieldType::Int:		return "Int"; 
+				case ScriptClassFieldType::Long:	return "Long";
+				case ScriptClassFieldType::UByte:	return "UByte";
+				case ScriptClassFieldType::UShort:	return "UShort";
+				case ScriptClassFieldType::UInt:	return "UInt";
+				case ScriptClassFieldType::ULong:	return "ULong";
+				case ScriptClassFieldType::Vector2:	return "Vector2";
+				case ScriptClassFieldType::Vector3:	return "Vector3";
+				case ScriptClassFieldType::Vector4:	return "Vector4";
+				case ScriptClassFieldType::Entity:	return "Entity";
+			}
+			return "None";
+		}
+
+		inline ScriptClassFieldType ScriptClassFieldTypeFromString(std::string_view fieldName)
+		{
+			if (fieldName == "None")	return	ScriptClassFieldType::None;
+			if (fieldName == "Float")	return	ScriptClassFieldType::Float;
+			if (fieldName == "Double")	return	ScriptClassFieldType::Double;
+			if (fieldName == "Bool")	return	ScriptClassFieldType::Bool;
+			if (fieldName == "Char")	return	ScriptClassFieldType::Char;
+			if (fieldName == "Byte")	return	ScriptClassFieldType::Byte;
+			if (fieldName == "Short")	return	ScriptClassFieldType::Short;
+			if (fieldName == "Int")		return	ScriptClassFieldType::Int;
+			if (fieldName == "Long")	return	ScriptClassFieldType::Long;
+			if (fieldName == "UByte")	return	ScriptClassFieldType::UByte;
+			if (fieldName == "UShort")	return	ScriptClassFieldType::UShort;
+			if (fieldName == "UInt")	return	ScriptClassFieldType::UInt;
+			if (fieldName == "ULong")	return	ScriptClassFieldType::ULong;
+			if (fieldName == "Vector2")	return	ScriptClassFieldType::Vector2;
+			if (fieldName == "Vector3")	return	ScriptClassFieldType::Vector3;
+			if (fieldName == "Vector4")	return	ScriptClassFieldType::Vector4;
+			if (fieldName == "Entity")	return	ScriptClassFieldType::Entity;
+ 		}
+	}
+
+
 }
 
