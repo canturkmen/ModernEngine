@@ -114,6 +114,8 @@ namespace ModernEngine {
 			SetValueInternal(name, &value);	
 		}
 
+		MonoObject* GetManagedObject() { return m_Instance; }
+
 	private:
 		bool GetValueInternal(const std::string& name, void* data);
 		bool SetValueInternal(const std::string& name, const void* data);
@@ -151,6 +153,7 @@ namespace ModernEngine {
 
 		static Scene* GetSceneContext();
 		static MonoImage* GetCoreAssemblyImage();
+		static MonoObject* GetManagedInstance(UUID entityId);
 		
 		static Ref<ScriptInstance> GetEntityScriptInstance(UUID entityID);
 		static Ref<ScriptClass> GetEntityScriptClass(const std::string& name);

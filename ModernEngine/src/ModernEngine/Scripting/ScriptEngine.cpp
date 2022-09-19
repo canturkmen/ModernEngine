@@ -315,6 +315,11 @@ namespace ModernEngine {
 		return s_Data->CoreAssemblyImage;
 	}
 
+	MonoObject* ScriptEngine::GetManagedInstance(UUID entityId)
+	{
+		return s_Data->EntityInstances.at(entityId)->GetManagedObject();
+	}
+
 	Ref<ScriptInstance> ScriptEngine::GetEntityScriptInstance(UUID entityID)
 	{
 		auto it = s_Data->EntityInstances.find(entityID);
@@ -428,5 +433,4 @@ namespace ModernEngine {
 		mono_field_set_value(m_Instance, scriptField.ClassField, (void*)data);
 		return true;
 	}
-
 }

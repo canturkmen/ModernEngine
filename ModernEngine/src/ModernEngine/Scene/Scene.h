@@ -41,6 +41,7 @@ namespace ModernEngine {
 
 		Entity GetPrimaryCamera();
 		Entity GetEntityWithUUID(UUID entityID);
+		Entity FindEntityByName(std::string_view entityName);
 
 		template<typename... Components>
 		auto GetAllEntitiesWith()

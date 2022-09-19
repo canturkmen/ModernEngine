@@ -29,6 +29,21 @@ namespace ModernEngine {
 		MonoType* monoComponentType = mono_reflection_type_get_type(type);
 		return s_EntityHasComponentFuncs.at(monoComponentType)(entity);
 	}
+
+	static uint64_t Entity_FindEntityByName(MonoString* name)
+	{
+		char* entityNameCStr = mono_string_to_utf8(name);
+		Scene* scene = ScriptEngine::GetSceneContext();
+		Entity entity = scene->FindEntityByName(entityNameCStr);
+		mono_free(entityNameCStr);
+
+		return entity.GetUUID();
+	}
+
+	static MonoObject* Entity_GetScriptInstance(UUID entityId)
+	{
+		return ScriptEngine::GetManagedInstance(entityId);
+	}
 		
 	static void TransformComponent_GetTranslation(UUID entityID, glm::vec3* translation)
 	{
@@ -104,6 +119,9 @@ namespace ModernEngine {
 	void ScriptGlue::RegisterFunctions()
 	{
 		MN_ADD_INTERNAL_CALL(Entity_HasComponent);
+		MN_ADD_INTERNAL_CALL(Entity_FindEntityByName);
+		MN_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
+
 		MN_ADD_INTERNAL_CALL(TransformComponent_GetTranslation);
 		MN_ADD_INTERNAL_CALL(TransformComponent_SetTranslation);
 

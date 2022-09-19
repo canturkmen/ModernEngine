@@ -417,6 +417,19 @@ namespace ModernEngine {
 		Entity();
 	}
 
+	Entity Scene::FindEntityByName(std::string_view entityName)
+	{
+		auto view = m_Registery.view<TagComponent>();
+		for (auto entity : view)
+		{
+			const TagComponent& tc = view.get<TagComponent>(entity);
+			if (tc.Tag == entityName)
+				return Entity {entity, this};
+		}
+
+		return {};
+	}
+
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
