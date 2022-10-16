@@ -7,6 +7,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "ModernEngine/Scene/SceneSerializer.h"
+#include "ModernEngine/Scripting/ScriptEngine.h"
 
 #include "ModernEngine/Utils/PlatformUtils.h"
 #include "ImGuizmo.h"
@@ -244,6 +245,14 @@ namespace ModernEngine {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Script")) 
+			{
+				if (ImGui::MenuItem("Reload", "Ctrl+R"))
+					ScriptEngine::ReloadAssembly();
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenuBar();
 		}
 
@@ -412,8 +421,13 @@ namespace ModernEngine {
 			break;
 
 		case MN_KEY_R:
+		{
+			if (isControlPressed)
+				ScriptEngine::ReloadAssembly();
+
 			m_GizmoType = ImGuizmo::OPERATION::SCALE;
 			break;
+		}
 		}
 
 		if (Input::IsKeyPressed(MN_KEY_D))

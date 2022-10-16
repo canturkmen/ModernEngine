@@ -119,6 +119,9 @@ namespace ModernEngine {
 		MonoImage* AppAssemblyImage = nullptr;
 		MonoAssembly* AppAssembly = nullptr;
 
+		std::filesystem::path AppAssemblyFilepath;
+		std::filesystem::path CoreAssemblyFilepath;
+
 		ScriptClass EntityClass;
 
 		std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
@@ -249,6 +252,7 @@ namespace ModernEngine {
 		s_Data->AppDomain = appDomain;
 		mono_domain_set(s_Data->AppDomain, true);
 
+		s_Data->CoreAssemblyFilepath = filePath;
 		s_Data->CoreAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->CoreAssemblyImage = mono_assembly_get_image(s_Data->CoreAssembly);
 		// Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
@@ -256,6 +260,7 @@ namespace ModernEngine {
 
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filePath)
 	{
+		s_Data->AppAssemblyFilepath = filePath;
 		s_Data->AppAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 		// Utils::PrintAssemblyTypes(s_Data->AppAssembly);
@@ -271,13 +276,26 @@ namespace ModernEngine {
 		return s_Data->EntityClasses;
 	}
 
+	void ScriptEngine::ReloadAssembly()
+	{
+		mono_domain_set(mono_get_root_domain(), false);
+		mono_domain_unload(s_Data->AppDomain);
+		
+		LoadAssembly(s_Data->CoreAssemblyFilepath);
+		LoadAppAssembly(s_Data->AppAssemblyFilepath);
+		LoadAssemblyClasses();
+		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity", true);
+
+		ScriptGlue::RegisterComponents();
+	}
+
 	void ScriptEngine::OnRuntimeStart(Scene* scene)
 	{
 		s_Data->SceneContext = scene;
 	}
 
 	void ScriptEngine::OnRuntimeStop()
-	{
+	{	
 		s_Data->SceneContext = nullptr;
 		s_Data->EntityInstances.clear();
 	}
@@ -357,6 +375,9 @@ namespace ModernEngine {
 
 	void ScriptEngine::ShutdownMono()
 	{
+		mono_domain_set(mono_get_root_domain(), false);
+
+		mono_domain_unload(s_Data->AppDomain);
 		s_Data->AppDomain = nullptr;
 		s_Data->RootDomain = nullptr;
 	}

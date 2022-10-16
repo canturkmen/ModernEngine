@@ -145,6 +145,8 @@ namespace ModernEngine {
 		static bool EntityClassExists(const std::string& fullClassName);
 		static std::unordered_map<std::string, Ref<ScriptClass>> GetClassEntities();
 
+		static void ReloadAssembly();
+
 		static void OnRuntimeStart(Scene* scene);
 		static void OnRuntimeStop();
 
@@ -218,7 +220,5 @@ namespace ModernEngine {
 			if (fieldName == "Entity")	return	ScriptClassFieldType::Entity;
  		}
 	}
-
-
 }
 

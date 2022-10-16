@@ -113,6 +113,7 @@ namespace ModernEngine {
 
 	void ScriptGlue::RegisterComponents()
 	{
+		s_EntityHasComponentFuncs.clear();
 		RegisterComponent(AllComponents{});
 	}
 
@@ -129,6 +130,5 @@ namespace ModernEngine {
 		MN_ADD_INTERNAL_CALL(Rigidbody2DComponent_ApplyLinearImpulseToCenter);
 
 		MN_ADD_INTERNAL_CALL(Input_IsKeyDown);
-
 	}
 }

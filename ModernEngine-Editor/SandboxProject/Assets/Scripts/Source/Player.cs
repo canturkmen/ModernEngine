@@ -14,7 +14,8 @@ namespace Sandbox
         private Rigidbody2DComponent m_RigidbodyComponent;
 
         public float Speed;
-
+        public float Time;
+       
         void OnCreate()
         {
             m_TransformComponent = GetComponent<TransformComponent>();

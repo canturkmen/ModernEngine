@@ -42,6 +42,7 @@ namespace Sandbox
                 Velocity.X = -1.0f;
 
             Velocity *= Speed;
+            DistanceFromCamera += ts;
 
             Vector3 translation = m_TransformComponent.Translation;
             translation += Velocity * ts;
