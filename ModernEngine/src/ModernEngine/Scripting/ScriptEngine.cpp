@@ -5,8 +5,10 @@
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/object.h"
 #include "mono/metadata/tabledefs.h"
+#include "FileWatch.h"
 
 #include "ModernEngine/Scripting/ScriptGlue.h"
+#include "ModernEngine/Core/Application.h"
 
 namespace ModernEngine {
 
@@ -128,6 +130,9 @@ namespace ModernEngine {
 		std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
 		std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
+		Scope<filewatch::FileWatch<std::string>> FileWatchAppAssembly;
+		bool AssemblyReloadPending = false;
+
 		Scene* SceneContext = nullptr;
 	};
 
@@ -244,7 +249,7 @@ namespace ModernEngine {
 
 		MonoDomain* rootDomain = mono_jit_init("ModernEngineJITRuntime");
 		s_Data->RootDomain = rootDomain;
-	}
+	}	
 
 	void ScriptEngine::LoadAssembly(const std::filesystem::path& filePath)
 	{
@@ -258,12 +263,29 @@ namespace ModernEngine {
 		// Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
+	static void OnAppAssemblyFileEvent(const std::string& path, const filewatch::Event change_type)
+	{
+		if (!s_Data->AssemblyReloadPending && change_type == filewatch::Event::modified)
+		{
+			s_Data->AssemblyReloadPending = true;
+			
+			Application::Get().SubmitToMainThreadQueue([]() 
+			{
+				s_Data->FileWatchAppAssembly.reset();
+				ScriptEngine::ReloadAssembly();
+			});
+		}
+	}
+
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filePath)
 	{
 		s_Data->AppAssemblyFilepath = filePath;
 		s_Data->AppAssembly = Utils::LoadMonoAssembly(filePath);
 		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
 		// Utils::PrintAssemblyTypes(s_Data->AppAssembly);
+
+		s_Data->FileWatchAppAssembly = CreateScope<filewatch::FileWatch<std::string>>(filePath.string(), OnAppAssemblyFileEvent);
+		s_Data->AssemblyReloadPending = false;
 	}
 
 	bool ScriptEngine::EntityClassExists(const std::string& fullClassName)
@@ -285,7 +307,7 @@ namespace ModernEngine {
 		LoadAppAssembly(s_Data->AppAssemblyFilepath);
 		LoadAssemblyClasses();
 		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity", true);
-
+	
 		ScriptGlue::RegisterComponents();
 	}
 

@@ -41,6 +41,7 @@ project "ModernEngine"
 		"%{IncludeDir.mono}",
 		"%{IncludeDir.yaml_cpp}", 
 		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.filewatch}",
 		"%{IncludeDir.VulkanSDK}"
 	}
 

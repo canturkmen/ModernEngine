@@ -51,7 +51,7 @@ namespace Sandbox
                     camera.DistanceFromCamera += speed * 5 * ts;
             }
 
-            Velocity *= speed;
+            Velocity *= speed * 4.0f;
 
             m_RigidbodyComponent.ApplyLinearImpulse(Velocity.XY, true);
 

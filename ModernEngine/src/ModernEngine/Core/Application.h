@@ -48,8 +48,11 @@ namespace ModernEngine {
 
 		const ApplicationSpeficiation& GetSpecification() const { return m_Specification; }
 
+		void SubmitToMainThreadQueue(const std::function<void()>& func);
+
 	private:
 		void Run();
+		void ExecuteMainThreadQueue();
 		bool OnCloseWindow(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
@@ -61,6 +64,8 @@ namespace ModernEngine {
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;
+		std::vector<std::function<void()>> m_MainThreadQueue;
+		std::mutex m_MainThreadQueueMutex;
 
 	private:
 		static Application* s_AppInstance;

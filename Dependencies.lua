@@ -13,6 +13,7 @@ IncludeDir["entt"] = "%{wks.location}/ModernEngine/vendor/entt/include"
 IncludeDir["mono"] = "%{wks.location}/ModernEngine/vendor/mono/include"
 IncludeDir["shaderc"] = "%{wks.location}/ModernEngine/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/ModernEngine/vendor/SPIRV-Cross"
+IncludeDir["filewatch"] = "%{wks.location}/ModernEngine/vendor/filewatch"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}

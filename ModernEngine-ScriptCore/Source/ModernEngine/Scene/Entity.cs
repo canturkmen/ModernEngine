@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ModernEngine
 {   
-     public class Entity
+    public class Entity
     {
         protected Entity()
         { 

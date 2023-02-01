@@ -46,6 +46,12 @@ namespace ModernEngine {
 		m_LayerStack.PushOverlay(overlay);
 	}
 
+	void Application::SubmitToMainThreadQueue(const std::function<void()>& func)
+	{
+		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
+		m_MainThreadQueue.emplace_back(func);
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
@@ -74,6 +80,8 @@ namespace ModernEngine {
 			DeltaTime deltatime = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
+			ExecuteMainThreadQueue();
+
 			if (!m_Minimized)
 			{
 				for (Layer* layer : m_LayerStack)
@@ -87,6 +95,14 @@ namespace ModernEngine {
 
 			m_Window->OnUpdate();
 		}
+	}
+
+	void Application::ExecuteMainThreadQueue()
+	{
+		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex); 
+		for (auto& func : m_MainThreadQueue)
+			func();
+		m_MainThreadQueue.clear();
 	}
 
 	bool Application::OnCloseWindow(WindowCloseEvent& e)
