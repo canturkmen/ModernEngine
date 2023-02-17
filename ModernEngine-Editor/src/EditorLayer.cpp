@@ -31,6 +31,7 @@ namespace ModernEngine {
 		m_StopButton = Texture2D::Create("Resources/Icons/Stop_Button.png");
 		m_SimulateButton = Texture2D::Create("Resources/Icons/SimulationButton.png");
 		m_PauseButton = Texture2D::Create("Resources/Icons/Pause_Icon.png");
+		m_StepForwardButton = Texture2D::Create("Resources/Icons/Step_Forward_Button.png"); 
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
@@ -544,16 +545,6 @@ namespace ModernEngine {
 						SceneStop();
 				}
 			}
-			if (m_SceneState != SceneState::Edit)
-			{
-				ImGui::SameLine();
-				Ref<Texture2D> icon = m_PauseButton;
-				bool isPaused = m_ActiveScene->GetIsPaused();
-				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
-				{
-					m_ActiveScene->SetIsPaused(!isPaused);
-				}  
-			}
 			ImGui::SameLine();
 			{
 				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
@@ -564,6 +555,28 @@ namespace ModernEngine {
 						SimulatePlay();
 					else if (m_SceneState == SceneState::Simulate)
 						SceneStop();
+				}
+			}
+			if (m_SceneState != SceneState::Edit)
+			{
+				bool isPaused = m_ActiveScene->GetIsPaused();
+				ImGui::SameLine();
+				Ref<Texture2D> icon = m_PauseButton;
+				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+				{
+					m_ActiveScene->SetIsPaused(!isPaused);
+				}
+
+				if (isPaused)
+				{
+					ImGui::SameLine();
+					{
+						Ref<Texture2D> icon = m_StepForwardButton;
+						if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+						{
+							m_ActiveScene->Step(144);
+						}
+					}
 				}
 			}
 

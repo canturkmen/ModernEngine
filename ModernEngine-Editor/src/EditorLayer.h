@@ -67,7 +67,7 @@ namespace ModernEngine {
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
 
-		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton, m_PauseButton;
+		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton, m_PauseButton, m_StepForwardButton;
 		enum class SceneState 
 		{
 			Edit = 0, Play = 1, Simulate = 2	

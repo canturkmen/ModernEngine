@@ -53,6 +53,7 @@ namespace ModernEngine {
 		bool GetIsPaused() const { return m_IsPaused; }
 
 		void SetIsPaused(bool paused) { m_IsPaused = paused; }
+		void Step(int step);
 	private: 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -71,6 +72,7 @@ namespace ModernEngine {
 
 		bool m_IsRunning = false;
 		bool m_IsPaused = false;
+		int m_Step = 0;
 		
 		friend class Entity;
 		friend class SceneSerializer;

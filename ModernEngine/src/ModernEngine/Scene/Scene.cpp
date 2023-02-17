@@ -242,7 +242,7 @@ namespace ModernEngine {
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
-		if (!m_IsPaused) 
+		if (!m_IsPaused || m_Step-- > 0)
 		{
 			// Update Scripts
 			{
@@ -336,30 +336,32 @@ namespace ModernEngine {
 
 	void Scene::OnSimulationUpdate(DeltaTime dt, EditorCamera& camera)
 	{
-		// Physics 
+		if (!m_IsPaused || m_Step-- > 0)
 		{
-			const int32_t velocityIterations = 6;
-			const int32_t positionIterations = 6;
-			m_ActivePhysicsWorld->Step(dt, velocityIterations, positionIterations);
-
-			auto view = m_Registery.view<Rigidbody2DComponent>();
-			for (auto e : view)
+			// Physics 
 			{
-				Entity entity = { e, this };
-				auto& transform = entity.GetComponent<TransformComponent>();
-				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+				const int32_t velocityIterations = 6;
+				const int32_t positionIterations = 6;
+				m_ActivePhysicsWorld->Step(dt, velocityIterations, positionIterations);
 
-				b2Body* body = (b2Body*)rb2d.RuntimeBody;
-				const auto& position = body->GetPosition();
-				transform.Translation.x = position.x;
-				transform.Translation.y = position.y;
-				transform.Rotation.z = body->GetAngle();
+				auto view = m_Registery.view<Rigidbody2DComponent>();
+				for (auto e : view)
+				{
+					Entity entity = { e, this };
+					auto& transform = entity.GetComponent<TransformComponent>();
+					auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+					b2Body* body = (b2Body*)rb2d.RuntimeBody;
+					const auto& position = body->GetPosition();
+					transform.Translation.x = position.x;
+					transform.Translation.y = position.y;
+					transform.Rotation.z = body->GetAngle();
+				}
 			}
 		}
 
 		RenderScene(camera);
 	}
-
 	void Scene::RenderScene(EditorCamera& camera)
 	{
 
@@ -432,6 +434,11 @@ namespace ModernEngine {
 		}
 
 		return {};
+	}
+
+	void Scene::Step(int step)
+	{
+		m_Step = step;
 	}
 
 	template<typename T>
