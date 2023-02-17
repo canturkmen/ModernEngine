@@ -38,6 +38,7 @@ namespace ModernEngine {
 		void ScenePlay();
 		void SimulatePlay();
 		void SceneStop();
+		void ScenePause();
 
 
 		void OnOverlayRender();
@@ -66,7 +67,7 @@ namespace ModernEngine {
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ContentBrowserPanel m_ContentBrowserPanel;
 
-		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton;
+		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton, m_PauseButton;
 		enum class SceneState 
 		{
 			Edit = 0, Play = 1, Simulate = 2	

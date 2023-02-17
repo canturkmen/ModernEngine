@@ -138,6 +138,20 @@ namespace ModernEngine {
 
 	static ScriptEngineData* s_Data = nullptr;
 
+	static void OnAppAssemblyFileEvent(const std::string& path, const filewatch::Event change_type)
+	{
+		if (!s_Data->AssemblyReloadPending && change_type == filewatch::Event::modified)
+		{
+			s_Data->AssemblyReloadPending = true;
+
+			Application::Get().SubmitToMainThreadQueue([]()
+				{
+					s_Data->FileWatchAppAssembly.reset();
+					ScriptEngine::ReloadAssembly();
+				});
+		}
+	}
+
 	void ScriptEngine::Init()
 	{
 		s_Data = new ScriptEngineData;
@@ -263,20 +277,6 @@ namespace ModernEngine {
 		// Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
-	static void OnAppAssemblyFileEvent(const std::string& path, const filewatch::Event change_type)
-	{
-		if (!s_Data->AssemblyReloadPending && change_type == filewatch::Event::modified)
-		{
-			s_Data->AssemblyReloadPending = true;
-			
-			Application::Get().SubmitToMainThreadQueue([]() 
-			{
-				s_Data->FileWatchAppAssembly.reset();
-				ScriptEngine::ReloadAssembly();
-			});
-		}
-	}
-
 	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filePath)
 	{
 		s_Data->AppAssemblyFilepath = filePath;
@@ -302,12 +302,12 @@ namespace ModernEngine {
 	{
 		mono_domain_set(mono_get_root_domain(), false);
 		mono_domain_unload(s_Data->AppDomain);
-		
+
 		LoadAssembly(s_Data->CoreAssemblyFilepath);
 		LoadAppAssembly(s_Data->AppAssemblyFilepath);
 		LoadAssemblyClasses();
 		s_Data->EntityClass = ScriptClass("ModernEngine", "Entity", true);
-	
+
 		ScriptGlue::RegisterComponents();
 	}
 

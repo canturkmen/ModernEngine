@@ -242,50 +242,54 @@ namespace ModernEngine {
 
 	void Scene::OnUpdateRuntime(DeltaTime dt)
 	{
-		// Update Scripts
+		if (!m_IsPaused) 
 		{
-			// Call C# OnUpdate Function.
-			auto view = m_Registery.view<ScriptComponent>();
-			for (auto e : view)
+			// Update Scripts
 			{
-				Entity entity = { e, this };
-				ScriptEngine::OnUpdateEntity(entity, dt);
-			}
-
-			// Call Native Scripts.
-			m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
-			{
-				if (nsc.Instance == nullptr)
+				// Call C# OnUpdate Function.
+				auto view = m_Registery.view<ScriptComponent>();
+				for (auto e : view)
 				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->m_Entity = Entity{ entity, this };
-					nsc.Instance->OnCreate();
+					Entity entity = { e, this };
+					ScriptEngine::OnUpdateEntity(entity, dt);
 				}
 
-				nsc.Instance->OnUpdate(dt);
-			});
+				// Call Native Scripts.
+				m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
+				{
+					if (nsc.Instance == nullptr)
+					{
+						nsc.Instance = nsc.InstantiateScript();
+						nsc.Instance->m_Entity = Entity{ entity, this };
+						nsc.Instance->OnCreate();
+					}
+
+					nsc.Instance->OnUpdate(dt);
+				});
+			}
+
+			// Physics 
+			{
+				const int32_t velocityIterations = 6;
+				const int32_t positionIterations = 6;
+				m_ActivePhysicsWorld->Step(dt, velocityIterations, positionIterations);
+
+				auto view = m_Registery.view<Rigidbody2DComponent>();
+				for (auto e : view)
+				{		
+					Entity entity = { e, this };
+					auto& transform = entity.GetComponent<TransformComponent>();
+					auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+					b2Body* body = (b2Body*)rb2d.RuntimeBody;
+					const auto& position = body->GetPosition();
+					transform.Translation.x = position.x;
+					transform.Translation.y = position.y;
+					transform.Rotation.z = body->GetAngle();
+				}
+			} 
 		}
 
-		// Physics 
-		{
-			const int32_t velocityIterations = 6;
-			const int32_t positionIterations = 6;
-			m_ActivePhysicsWorld->Step(dt, velocityIterations, positionIterations);
-
-			auto view = m_Registery.view<Rigidbody2DComponent>();
-			for (auto e : view)
-			{		
-				Entity entity = { e, this };
-				auto& transform = entity.GetComponent<TransformComponent>();
-				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
-
-				b2Body* body = (b2Body*)rb2d.RuntimeBody;
-				const auto& position = body->GetPosition();
-				transform.Translation.x = position.x;
-				transform.Translation.y = position.y;
-				transform.Rotation.z = body->GetAngle();
-			}
-		} 
 
 		// 2D render
 		Camera* mainCamera = nullptr;

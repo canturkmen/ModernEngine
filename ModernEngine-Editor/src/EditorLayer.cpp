@@ -30,6 +30,7 @@ namespace ModernEngine {
 		m_StartButton = Texture2D::Create("Resources/Icons/Play_Button.png");
 		m_StopButton = Texture2D::Create("Resources/Icons/Stop_Button.png");
 		m_SimulateButton = Texture2D::Create("Resources/Icons/SimulationButton.png");
+		m_PauseButton = Texture2D::Create("Resources/Icons/Pause_Icon.png");
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::Depth };
@@ -531,27 +532,39 @@ namespace ModernEngine {
 
 			// Get the icon and center it in the available content
 			float size = ImGui::GetWindowHeight() - 4.0f;
-			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-
-			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
 			{
-				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
-					ScenePlay();
-				else if (m_SceneState == SceneState::Play)
-					SceneStop();
+				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
+				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+				{
+					if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
+						ScenePlay();
+					else if (m_SceneState == SceneState::Play)
+						SceneStop();
+				}
 			}
-
-			ImGui::SameLine();
-
-			Ref<Texture2D> icon2 = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
-
-			if (ImGui::ImageButton((ImTextureID)icon2->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+			if (m_SceneState != SceneState::Edit)
 			{
-				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
-					SimulatePlay();
-				else if (m_SceneState == SceneState::Simulate)
-					SceneStop();
+				ImGui::SameLine();
+				Ref<Texture2D> icon = m_PauseButton;
+				bool isPaused = m_ActiveScene->GetIsPaused();
+				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+				{
+					m_ActiveScene->SetIsPaused(!isPaused);
+				}  
+			}
+			ImGui::SameLine();
+			{
+				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
+
+				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+				{
+					if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
+						SimulatePlay();
+					else if (m_SceneState == SceneState::Simulate)
+						SceneStop();
+				}
 			}
 
 			ImGui::PopStyleVar(2);
@@ -592,4 +605,11 @@ namespace ModernEngine {
 			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 		}
 
+		void EditorLayer::ScenePause()
+		{
+			if (m_SceneState == SceneState::Edit)
+				return;
+
+			m_ActiveScene->SetIsPaused(true);
+		}
 }

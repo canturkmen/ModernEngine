@@ -50,6 +50,9 @@ namespace ModernEngine {
 		}
 	
 		bool GetIsRunning() const { return m_IsRunning; };
+		bool GetIsPaused() const { return m_IsPaused; }
+
+		void SetIsPaused(bool paused) { m_IsPaused = paused; }
 	private: 
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
@@ -67,6 +70,7 @@ namespace ModernEngine {
 		b2World* m_ActivePhysicsWorld = nullptr;
 
 		bool m_IsRunning = false;
+		bool m_IsPaused = false;
 		
 		friend class Entity;
 		friend class SceneSerializer;
