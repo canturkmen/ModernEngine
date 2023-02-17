@@ -533,6 +533,12 @@ namespace ModernEngine {
 
 			// Get the icon and center it in the available content
 			float size = ImGui::GetWindowHeight() - 4.0f;
+
+			bool hasPlayOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
+			bool hasSimulateOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
+			bool hasPauseButton = m_SceneState != SceneState::Edit;
+
+			if(hasPlayOrStopButton)
 			{
 				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
 				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
@@ -545,8 +551,11 @@ namespace ModernEngine {
 						SceneStop();
 				}
 			}
-			ImGui::SameLine();
+			if(hasSimulateOrStopButton)
 			{
+				if(hasPlayOrStopButton)
+					ImGui::SameLine();
+
 				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
 
 				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
@@ -557,7 +566,7 @@ namespace ModernEngine {
 						SceneStop();
 				}
 			}
-			if (m_SceneState != SceneState::Edit)
+			if (hasPauseButton)
 			{
 				bool isPaused = m_ActiveScene->GetIsPaused();
 				ImGui::SameLine();
