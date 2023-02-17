@@ -537,11 +537,11 @@ namespace ModernEngine {
 			bool hasPlayOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
 			bool hasSimulateOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
 			bool hasPauseButton = m_SceneState != SceneState::Edit;
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
 			if(hasPlayOrStopButton)
 			{
 				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
-				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
 				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
 				{
