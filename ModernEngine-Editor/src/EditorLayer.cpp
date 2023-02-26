@@ -583,7 +583,7 @@ namespace ModernEngine {
 						Ref<Texture2D> icon = m_StepForwardButton;
 						if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
 						{
-							m_ActiveScene->Step(144);
+							m_ActiveScene->Step(1);
 						}
 					}
 				}
