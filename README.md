@@ -1,1 +1,1 @@
-# ModernEngine
+A 2-D and 3-D game engine built with general game engine design and architecture. Core features such as: Layers, Event System, Input Polling and Window Abstraction are implemented. The main features that are currently implemented include 2-D rendering, an editor application that is fully supported, the ability to script the behavior of objects and scenes using C#, and 2-D physics. The engine is still in production.
