@@ -22,3 +22,6 @@
 [submodule "ModernEngine/vendor/Box2D"]
 	path = ModernEngine/vendor/Box2D
 	url = https://github.com/canturkmen/box2d
+[submodule "ModernEngine\\vendor\\msdf-atlas-gen"]
+	path = ModernEngine\\vendor\\msdf-atlas-gen
+	url = https://github.com/canturkmen/msdf-atlas-gen

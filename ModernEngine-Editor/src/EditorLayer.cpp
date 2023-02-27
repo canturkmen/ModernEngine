@@ -8,6 +8,7 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "ModernEngine/Scene/SceneSerializer.h"
 #include "ModernEngine/Scripting/ScriptEngine.h"
+#include "ModernEngine/Renderer/Font.h"
 
 #include "ModernEngine/Utils/PlatformUtils.h"
 #include "ImGuizmo.h"
@@ -21,7 +22,7 @@ namespace ModernEngine {
 	EditorLayer::EditorLayer()
 		: Layer("Editor Layer"), m_CameraController(1280.0f / 720.0f)
 	{
-
+		Font font("assets/fonts/comfortaa/Comfortaa-Regular.ttf");
 	}
 
 	void EditorLayer::OnAttach()

@@ -36,6 +36,8 @@ project "ModernEngine"
 		"%{IncludeDir.Glad}", 
 		"%{IncludeDir.ImGui}", 
 		"%{IncludeDir.glm}", 
+		"%{IncludeDir.msdfgen}", 
+		"%{IncludeDir.msdf_atlas_gen}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}", 
 		"%{IncludeDir.mono}",
@@ -53,7 +55,8 @@ project "ModernEngine"
 		"ImGui", 
 		"yaml-cpp", 
 		"opengl32.lib", 
-		"%{Library.mono}",
+		"msdf-atlas-gen",
+		"%{Library.mono}"
 	}
 
 	filter "files:vendor/ImGuizmo/**.cpp"

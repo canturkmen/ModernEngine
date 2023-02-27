@@ -14,6 +14,8 @@ IncludeDir["mono"] = "%{wks.location}/ModernEngine/vendor/mono/include"
 IncludeDir["shaderc"] = "%{wks.location}/ModernEngine/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/ModernEngine/vendor/SPIRV-Cross"
 IncludeDir["filewatch"] = "%{wks.location}/ModernEngine/vendor/filewatch"
+IncludeDir["msdfgen"] = "%{wks.location}/ModernEngine/vendor/msdf-atlas-gen/msdfgen"
+IncludeDir["msdf_atlas_gen"] = "%{wks.location}/ModernEngine/vendor/msdf-atlas-gen/msdf-atlas-gen"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}
