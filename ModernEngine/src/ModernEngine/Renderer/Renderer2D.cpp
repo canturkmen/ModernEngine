@@ -168,7 +168,7 @@ namespace ModernEngine {
 
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
 
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
+		s_Data.WhiteTexture = Texture2D::Create(TextureSpecification());
 		uint32_t data = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&data, sizeof(uint32_t));
 

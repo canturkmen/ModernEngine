@@ -8,9 +8,11 @@ namespace ModernEngine {
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(uint32_t width, uint32_t height);
+		OpenGLTexture2D(const TextureSpecification& specification);
 		OpenGLTexture2D(const std::string& filepath);
 		~OpenGLTexture2D();
+
+		virtual const TextureSpecification& GetSpecification() const override { return m_Specification; }
 
 		virtual void SetData(void* data, uint32_t size) override;
 
@@ -23,6 +25,8 @@ namespace ModernEngine {
 		virtual void Bind(uint32_t slot) const override;
 
 	private:
+		TextureSpecification m_Specification;
+
 		uint32_t m_RendererID;
 		uint32_t m_Width, m_Height;
 		std::string m_FilePath;

@@ -22,7 +22,7 @@ namespace ModernEngine {
 		}
 	}
 
-	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	Ref<Texture2D> Texture2D::Create(const TextureSpecification& specification)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -33,7 +33,7 @@ namespace ModernEngine {
 
 			case RendererAPI::API::OpenGL:
 			{
-				return CreateRef<OpenGLTexture2D>(width, height);
+				return CreateRef<OpenGLTexture2D>(specification);
 			}
 		}
 	}

@@ -5,6 +5,8 @@
 #include "msdf-atlas-gen.h"
 #include "GlyphGeometry.h"
 
+#include "ModernEngine/Renderer/Texture.h"
+
 namespace ModernEngine {
 
 	struct MSDFData
@@ -12,6 +14,33 @@ namespace ModernEngine {
 		std::vector<msdf_atlas::GlyphGeometry> Glyphs;
 		msdf_atlas::FontGeometry FontGeometry;
 	};
+
+	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
+	static Ref<Texture2D> CreateAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs, 
+		const msdf_atlas::FontGeometry& fontGeometry, uint32_t width, uint32_t height)
+	{
+		msdf_atlas::GeneratorAttributes attributes; 
+		attributes.config.overlapSupport = true;
+		attributes.scanlinePass = true;
+
+		msdf_atlas::ImmediateAtlasGenerator<S, N, GenFunc, msdf_atlas::BitmapAtlasStorage<T, N>> generator(width, height);
+		generator.setAttributes(attributes);
+		generator.setThreadCount(8);
+		generator.generate(glyphs.data(), (int)glyphs.size());
+
+		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
+
+		TextureSpecification specification;
+		specification.Height = bitmap.height;
+		specification.Width = bitmap.width;
+		specification.Format = ImageFormat::RGB8;
+		specification.GenerateMips = false;
+		
+		Ref<Texture2D> texture = Texture2D::Create(specification);
+		texture->SetData((void*)bitmap.pixels, bitmap.width * bitmap.height * 3);
+
+		return texture;
+	}
 
 	Font::Font(const std::filesystem::path& filePath)
 		: m_Data(new MSDFData())
@@ -48,6 +77,27 @@ namespace ModernEngine {
 			m_Data->FontGeometry = msdf_atlas::FontGeometry(&m_Data->Glyphs);
 			int glyphsLoaded = m_Data->FontGeometry.loadCharset(font, fontScale, charset);
 			MN_CORE_INFO("Loaded {} glyphs from font (out of {})", glyphsLoaded, charset.size());
+
+			double emSize = 40.0f;
+
+			msdf_atlas::TightAtlasPacker atlasPacker;
+			// atlasPacker.setDimensionsConstraint();
+			atlasPacker.setPixelRange(2.0);
+			atlasPacker.setMiterLimit(1.0);
+			atlasPacker.setPadding(0);
+			atlasPacker.setScale(emSize);
+			int remaining = atlasPacker.pack(m_Data->Glyphs.data(), (int)m_Data->Glyphs.size());
+
+			if (remaining > 0)
+				MN_CORE_ERROR("Failed to pack the glyphs");
+
+			int width, height;
+			atlasPacker.getDimensions(width, height);
+			emSize = atlasPacker.getScale();
+
+			m_AtlasTexture = CreateAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>("Test", (float)emSize, 
+				m_Data->Glyphs, m_Data->FontGeometry, width, height);
+			
 #if 0
 			msdfgen::Shape shape;
 			if (msdfgen::loadGlyph(shape, font, 'C')) {
@@ -60,10 +110,10 @@ namespace ModernEngine {
 				msdfgen::generateMSDF(msdf, shape, 4.0, 1.0, msdfgen::Vector2(4.0, 4.0));
 				msdfgen::savePng(msdf, "output.png");
 			}
-#endif
+#endif	
 			
 			msdfgen::destroyFont(font);
-			msdfgen::deinitializeFreetype(ft);
+			msdfgen::deinitializeFreetype(ft);	
 		}
 	}
 

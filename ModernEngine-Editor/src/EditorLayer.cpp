@@ -19,10 +19,12 @@ namespace ModernEngine {
 
 	extern const std::filesystem::path g_AssetsPath;
 
+	static Font* font;
+
 	EditorLayer::EditorLayer()
 		: Layer("Editor Layer"), m_CameraController(1280.0f / 720.0f)
 	{
-		Font font("assets/fonts/comfortaa/Comfortaa-Regular.ttf");
+		font = new Font("assets/fonts/comfortaa/Comfortaa-Regular.ttf");
 	}
 
 	void EditorLayer::OnAttach()
@@ -278,6 +280,7 @@ namespace ModernEngine {
 
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show Physics Colliders", &m_ShowPhysicsColliders);
+		ImGui::Image((ImTextureID)font->GetAtlasTexture()->GetRendererID(), {512, 512}, { 0, 1 }, { 1, 0 });
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
