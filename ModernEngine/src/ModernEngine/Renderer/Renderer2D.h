@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 #include "ModernEngine/Scene/Components.h"
+#include "ModernEngine/Renderer/Font.h"
 
 namespace ModernEngine {
 
@@ -48,6 +49,8 @@ namespace ModernEngine {
 		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thicknes = 1.0f, float fade = 0.005f, int entityID = -1);
 
 		static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& comp, int entityID);
+
+		static void DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const glm::vec4& color);
 	
 		static void SetLineWidth(float width);
 		static float GetLineWidth();

@@ -3,10 +3,10 @@
 
 #include "VertexArray.h"
 #include "Shader.h"
-
 #include "RenderCommand.h"
+#include "MSDFData.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>"
 
 namespace ModernEngine {
 
@@ -558,6 +558,48 @@ namespace ModernEngine {
 			DrawQuad(transform, comp.Color, entityID);
 	}
 
+
+	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const glm::vec4& color)
+	{
+		const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
+		const auto& metrics = fontGeometry.getMetrics();
+		Ref<Texture2D> fontAtlasTexture = font->GetAtlasTexture();
+
+		double x = 0.0;
+		double fScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+		double y = 0.0;
+
+		char character = 'C';
+		auto glyph = fontGeometry.getGlyph(character);
+		if (!glyph)
+			glyph = fontGeometry.getGlyph('?');
+		if (!glyph)
+			return;
+
+		double al, ab, ar, at;
+		glyph->getQuadAtlasBounds(al, ab, ar, at); 
+		glm::vec2 texCoordsMin(al, ab);
+		glm::vec2 texCoordsMax(ar, at);
+
+		double pl, pb, pr, pt;
+		glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+		glm::vec2 quadMin(pl, pb);
+		glm::vec2 quadMax(pr, pt);
+
+		quadMin *= fScale, quadMax *= fScale;
+		quadMin += glm::vec2(x, y), quadMax += glm::vec2(x, y);
+
+		float texelWidth = 1.0 / fontAtlasTexture->GetWidth();
+		float texelHeight = 1.0 / fontAtlasTexture->GetHeight();
+		texCoordsMin *= glm::vec2(texelWidth, texelHeight), texCoordsMax *= glm::vec2(texelWidth, texelHeight);
+
+		double advance = glyph->getAdvance();
+		char nextCharacter = 'C';
+		fontGeometry.getAdvance(advance, character, nextCharacter);
+
+		double kerningOffset = 0.0f;
+		x += fScale * advance + kerningOffset;
+	}	
 
 	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID /*= -1*/)
 	{

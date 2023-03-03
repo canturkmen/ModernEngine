@@ -3,17 +3,12 @@
 
 #undef INFINITE
 #include "msdf-atlas-gen.h"
+#include "FontGeometry.h"
 #include "GlyphGeometry.h"
 
-#include "ModernEngine/Renderer/Texture.h"
+#include "MSDFData.h"
 
 namespace ModernEngine {
-
-	struct MSDFData
-	{
-		std::vector<msdf_atlas::GlyphGeometry> Glyphs;
-		msdf_atlas::FontGeometry FontGeometry;
-	};
 
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
 	static Ref<Texture2D> CreateAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs, 

@@ -13,5 +13,4 @@ namespace ModernEngine {
 		
 		static Scope<GraphicsContext> Create(void* window);
 	};
-
 }
