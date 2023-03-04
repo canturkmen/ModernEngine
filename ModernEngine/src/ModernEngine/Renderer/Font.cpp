@@ -140,5 +140,15 @@ namespace ModernEngine {
 	{
 		delete m_Data;
 	}
+
+	Ref<Font> Font::GetDefault()
+	{
+		static Ref<Font> DefaultFont;
+		if (!DefaultFont)
+			DefaultFont = CreateRef<Font>("assets/fonts/opensans/OpenSans-Regular.ttf");
+
+		return DefaultFont;
+	}
+
 }
 

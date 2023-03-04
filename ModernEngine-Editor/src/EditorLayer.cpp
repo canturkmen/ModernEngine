@@ -19,12 +19,12 @@ namespace ModernEngine {
 
 	extern const std::filesystem::path g_AssetsPath;
 
-	static Font* font;
+	static Ref<Font> font;
 
 	EditorLayer::EditorLayer()
 		: Layer("Editor Layer"), m_CameraController(1280.0f / 720.0f)
 	{
-		font = new Font("assets/fonts/comfortaa/Comfortaa-Regular.ttf");
+		font = Font::GetDefault();
 	}
 
 	void EditorLayer::OnAttach()
@@ -120,8 +120,7 @@ namespace ModernEngine {
 
 		m_FrameBuffer->Unbind();
 	}
-
-
+	
 	void EditorLayer::OnOverlayRender()
 	{
 		if (m_SceneState == SceneState::Play)
@@ -264,7 +263,7 @@ namespace ModernEngine {
 		m_SceneHierarchyPanel.OnImGuiRender();
 		m_ContentBrowserPanel.OnImGuiRender();
 
-		/*ImGui::Begin("Stats");
+		ImGui::Begin("Stats");
 
 		std::string entityName = "None";
 		if (m_HoveredEntity)
@@ -276,7 +275,7 @@ namespace ModernEngine {
 		ImGui::Text("Vertex Count: %d", Renderer2D::GetStats().GetTotalVertexCount());
 		ImGui::Text("Index Count: %d", Renderer2D::GetStats().GetTotalIndexCount());
 
-		ImGui::End();*/
+		ImGui::End();
 
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show Physics Colliders", &m_ShowPhysicsColliders);
