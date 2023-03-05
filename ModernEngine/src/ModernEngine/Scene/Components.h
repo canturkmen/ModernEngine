@@ -3,6 +3,7 @@
 #include "ModernEngine/Scene/SceneCamera.h"
 #include "ModernEngine/Core/UUID.h"
 #include "ModernEngine/Renderer/Texture.h"
+#include "ModernEngine/Renderer/Font.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -149,6 +150,15 @@ namespace ModernEngine {
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
 	};
 
+	struct TextComponent
+	{
+		std::string TextString;
+		Ref<Font> FontAsset = Font::GetDefault();
+		glm::vec4 Color{ 1.0f };
+		float Kerning = 0.0f;
+		float LineSpacing = 0.0f;
+	};
+
 	template<typename... Component>
 	struct ComponentGroup
 	{
@@ -156,5 +166,5 @@ namespace ModernEngine {
 	};
 
 	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, 
-		CameraComponent, ScriptComponent, NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
+		CameraComponent, ScriptComponent, NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, TextComponent>;
 }

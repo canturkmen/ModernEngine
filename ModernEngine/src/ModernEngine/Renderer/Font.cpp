@@ -145,7 +145,7 @@ namespace ModernEngine {
 	{
 		static Ref<Font> DefaultFont;
 		if (!DefaultFont)
-			DefaultFont = CreateRef<Font>("assets/fonts/opensans/OpenSans-Regular.ttf");
+			DefaultFont = CreateRef<Font>("assets/fonts/comfortaa/Comfortaa-Regular.ttf");
 
 		return DefaultFont;
 	}

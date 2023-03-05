@@ -623,7 +623,7 @@ namespace ModernEngine {
 	}
 
 
-	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID)
 	{
 		const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
 		const auto& metrics = fontGeometry.getMetrics();
@@ -634,8 +634,6 @@ namespace ModernEngine {
 		double x = 0.0;
 		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
 		double y = 0.0;
-		float lineHeightOffset = 0.0f;
-		float kerningOffset = 0.0f;
 
 		const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 
@@ -649,7 +647,7 @@ namespace ModernEngine {
 			if (character == '\n')
 			{
 				x = 0;
-				y -= fsScale * metrics.lineHeight + lineHeightOffset;
+				y -= fsScale * metrics.lineHeight + textParams.LineSpacing;
 				continue;
 			}
 
@@ -664,7 +662,7 @@ namespace ModernEngine {
 					advance = (float)dAdvance;
 				}
 
-				x += fsScale * advance + kerningOffset;
+				x += fsScale * advance + textParams.Kerning;
 				continue;
 			}
 
@@ -676,7 +674,7 @@ namespace ModernEngine {
 
 			if (character == '\t')
 			{
-				x += 4.0 * (fsScale * spaceGlyphAdvance + kerningOffset);
+				x += 4.0 * (fsScale * spaceGlyphAdvance + textParams.Kerning);
 				continue;
 			}
 
@@ -700,27 +698,27 @@ namespace ModernEngine {
 			// Rendering
 
 			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->Color = textParams.Color;
 			s_Data.TextVertexBufferPtr->TexCoord = texCoordsMin;
-			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr->EntityID = entityID;
 			s_Data.TextVertexBufferPtr++;
 
 			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->Color = textParams.Color;
 			s_Data.TextVertexBufferPtr->TexCoord = { texCoordsMin.x, texCoordsMax.y };
-			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr->EntityID = entityID;
 			s_Data.TextVertexBufferPtr++;
 
 			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->Color = textParams.Color;
 			s_Data.TextVertexBufferPtr->TexCoord = texCoordsMax;
-			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr->EntityID = entityID;
 			s_Data.TextVertexBufferPtr++;
 
 			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
-			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->Color = textParams.Color;
 			s_Data.TextVertexBufferPtr->TexCoord = { texCoordsMax.x, texCoordsMin.y };
-			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr->EntityID = entityID;
 			s_Data.TextVertexBufferPtr++;
 
 			s_Data.TextQuadIndexCount += 6;
@@ -731,10 +729,15 @@ namespace ModernEngine {
 				double advance = glyph->getAdvance();
 				char nextCharacter = string[i + 1];
 				fontGeometry.getAdvance(advance, character, nextCharacter);
-				x += fsScale * advance + kerningOffset;
+				x += fsScale * advance + textParams.Kerning;
 			}
 		}
 	}	
+
+	void Renderer2D::DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextComponent& textComponent, int entityID)
+	{
+		DrawString(string, font, transform, {textComponent.Color, textComponent.Kerning, textComponent.LineSpacing}, entityID);
+	}
 
 	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID /*= -1*/)
 	{

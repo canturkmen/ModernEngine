@@ -352,7 +352,21 @@ namespace ModernEngine {
 			out << YAML::Key << "Restitution" << YAML::Value << cc2d.Restitution;
 			out << YAML::Key << "Restitution Threshold" << YAML::Value << cc2d.RestitutionThreshold;
 
-			out << YAML::EndMap;
+			out << YAML::EndMap; // Circle Collider 2D Component
+		}
+
+		if (entity.HasComponent<TextComponent>())
+		{
+			out << YAML::Key << "TextComponent";
+			out << YAML::BeginMap;
+
+			auto& text = entity.GetComponent<TextComponent>();
+			out << YAML::Key << "TextString" << YAML::Value << text.TextString;
+			out << YAML::Key << "Color" << YAML::Value << text.Color;
+			out << YAML::Key << "Kerning" << YAML::Value << text.Kerning;
+			out << YAML::Key << "LineSpacing" << YAML::Value << text.LineSpacing;
+
+			out << YAML::EndMap; // Text Component
 		}
 
 		out << YAML::EndMap;
@@ -546,6 +560,16 @@ namespace ModernEngine {
 					cc2d.Friction = cc2dComponent["Friction"].as<float>();
 					cc2d.Restitution = cc2dComponent["Restitution"].as<float>();
 					cc2d.RestitutionThreshold = cc2dComponent["Restitution Threshold"].as<float>();
+				}
+
+				auto textComponent = entity["TextComponent"];
+				if (textComponent)
+				{
+					auto& tc = deserializedEntity.AddComponent<TextComponent>();
+					tc.TextString = textComponent["TextString"].as<std::string>();
+					tc.Color = textComponent["Color"].as<glm::vec4>();
+					tc.Kerning = textComponent["Kerning"].as<float>();
+					tc.LineSpacing = textComponent["LineSpacing"].as<float>();
 				}
 			}
 		}

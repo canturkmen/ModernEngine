@@ -20,9 +20,9 @@ namespace ModernEngine {
 	{
 		switch (bodyType)
 		{
-			case Rigidbody2DComponent::BodyType::Static:  return b2BodyType::b2_staticBody;
-			case Rigidbody2DComponent::BodyType::Dynamic:  return b2BodyType::b2_dynamicBody;
-			case Rigidbody2DComponent::BodyType::Kinematic:  return b2BodyType::b2_kinematicBody;
+		case Rigidbody2DComponent::BodyType::Static:  return b2BodyType::b2_staticBody;
+		case Rigidbody2DComponent::BodyType::Dynamic:  return b2BodyType::b2_dynamicBody;
+		case Rigidbody2DComponent::BodyType::Kinematic:  return b2BodyType::b2_kinematicBody;
 		}
 
 		return b2BodyType::b2_staticBody;
@@ -30,7 +30,7 @@ namespace ModernEngine {
 
 	Scene::Scene()
 	{
-	
+
 	}
 
 	Scene::~Scene()
@@ -53,7 +53,7 @@ namespace ModernEngine {
 				{
 					UUID id = src.get<IDComponent>(e).uuid;
 					MN_CORE_ASSERT(enttMap.find(id) != enttMap.end(), "Key value could not be found !")
-					entt::entity dstEnttId = enttMap.at(id);
+						entt::entity dstEnttId = enttMap.at(id);
 
 					auto& component = src.get<Component>(e);
 					dst.emplace_or_replace<Component>(dstEnttId, component);
@@ -62,11 +62,11 @@ namespace ModernEngine {
 	}
 
 	template<typename... Component>
-	static void CopyComponent(ComponentGroup<Component ...>,  entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(ComponentGroup<Component ...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
 		CopyComponent<Component ...>(dst, src, enttMap);
 	}
-	
+
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
 	{
 		Ref<Scene> newScene = CreateRef<Scene>();
@@ -98,15 +98,15 @@ namespace ModernEngine {
 	template<typename... Component>
 	static void CopyComponentIfExists(Entity dst, Entity src)
 	{
-		([&]() 
-		{
-			if (src.HasComponent<Component>())
-				dst.AddComponentOrReplace<Component>(src.GetComponent<Component>());
-		}(), ...);
+		([&]()
+			{
+				if (src.HasComponent<Component>())
+					dst.AddComponentOrReplace<Component>(src.GetComponent<Component>());
+			}(), ...);
 	}
 
 	template<typename... Component>
-	static void CopyComponentIfExists(ComponentGroup<Component ...>,  Entity dst, Entity src)
+	static void CopyComponentIfExists(ComponentGroup<Component ...>, Entity dst, Entity src)
 	{
 		CopyComponentIfExists<Component ...>(dst, src);
 	}
@@ -160,7 +160,7 @@ namespace ModernEngine {
 				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
 
 				b2PolygonShape shape;
-				shape.SetAsBox(bc2d.size.x * transform.Scale.x, bc2d.size.y * transform.Scale.y);
+				shape.SetAsBox(bc2d.size.x * transform.Scale.x, bc2d.size.y * transform.Scale.y, b2Vec2(bc2d.offset.x, bc2d.offset.y), 0.0f);
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &shape;
@@ -205,13 +205,13 @@ namespace ModernEngine {
 		// Scripting
 		{
 			ScriptEngine::OnRuntimeStart(this);
-			
+
 			// Instantiate all script entities
 			auto view = m_Registery.view<ScriptComponent>();
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
-				ScriptEngine::OnCreateEntity(entity);			
+				ScriptEngine::OnCreateEntity(entity);
 			}
 		}
 	}
@@ -256,16 +256,16 @@ namespace ModernEngine {
 
 				// Call Native Scripts.
 				m_Registery.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
-				{
-					if (nsc.Instance == nullptr)
 					{
-						nsc.Instance = nsc.InstantiateScript();
-						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.Instance->OnCreate();
-					}
+						if (nsc.Instance == nullptr)
+						{
+							nsc.Instance = nsc.InstantiateScript();
+							nsc.Instance->m_Entity = Entity{ entity, this };
+							nsc.Instance->OnCreate();
+						}
 
-					nsc.Instance->OnUpdate(dt);
-				});
+						nsc.Instance->OnUpdate(dt);
+					});
 			}
 
 			// Physics 
@@ -276,7 +276,7 @@ namespace ModernEngine {
 
 				auto view = m_Registery.view<Rigidbody2DComponent>();
 				for (auto e : view)
-				{		
+				{
 					Entity entity = { e, this };
 					auto& transform = entity.GetComponent<TransformComponent>();
 					auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
@@ -287,7 +287,7 @@ namespace ModernEngine {
 					transform.Translation.y = position.y;
 					transform.Rotation.z = body->GetAngle();
 				}
-			} 
+			}
 		}
 
 
@@ -312,6 +312,9 @@ namespace ModernEngine {
 		if (mainCamera != nullptr)
 		{
 			Renderer2D::BeginScene(*mainCamera, cameraTransform);
+
+
+			// Draw Sprite
 			{
 				auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 				for (auto entity : group)
@@ -320,13 +323,24 @@ namespace ModernEngine {
 					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 				}
 			}
-			
+
+			// Draw Circle
 			{
 				auto view = m_Registery.view<TransformComponent, CircleRendererComponent>();
 				for (auto entity : view)
 				{
 					auto& [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 					Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+				}
+			}
+
+			// Draw Font
+			{
+				auto view = m_Registery.view<TransformComponent, TextComponent>();
+				for (auto entity : view)
+				{
+					auto& [transform, text] = view.get<TransformComponent, TextComponent>(entity);
+					Renderer2D::DrawString(text.TextString, text.FontAsset, transform.GetTransform(), text, int(entity));
 				}
 			}
 		}
@@ -367,6 +381,7 @@ namespace ModernEngine {
 
 		// Render the editor scene
 		Renderer2D::BeginScene(camera);
+
 		{
 			auto group = m_Registery.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
@@ -385,73 +400,15 @@ namespace ModernEngine {
 			}
 		}
 
-		Renderer2D::DrawString("Can", Font::GetDefault(), glm::mat4(1.0f), glm::vec4(1.0f));
-		Renderer2D::DrawString(
-			R"(
-			// MSDF text shader
-#type vertex
-#version 450 core
-layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec4 a_Color;
-layout(location = 2) in vec2 a_TexCoord;
-layout(location = 3) in int a_EntityID;
-layout(std140, binding = 0) uniform Camera
-{
-	mat4 u_ViewProjection;
-};
-struct VertexOutput
-{
-	vec4 Color;
-	vec2 TexCoord;
-};
-layout (location = 0) out VertexOutput Output;
-layout (location = 2) out flat int v_EntityID;
-void main()
-{
-	Output.Color = a_Color;
-	Output.TexCoord = a_TexCoord;
-	v_EntityID = a_EntityID;
-	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-}
-#type fragment
-#version 450 core
-layout(location = 0) out vec4 o_Color;
-layout(location = 1) out int o_EntityID;
-struct VertexOutput
-{
-	vec4 Color;
-	vec2 TexCoord;
-};
-layout (location = 0) in VertexOutput Input;
-layout (location = 2) in flat int v_EntityID;
-layout (binding = 0) uniform sampler2D u_FontAtlas;
-float screenPxRange() {
-	const float pxRange = 2.0; // set to distance field's pixel range
-    vec2 unitRange = vec2(pxRange)/vec2(textureSize(u_FontAtlas, 0));
-    vec2 screenTexSize = vec2(1.0)/fwidth(Input.TexCoord);
-    return max(0.5*dot(unitRange, screenTexSize), 1.0);
-}
-float median(float r, float g, float b) {
-    return max(min(r, g), min(max(r, g), b));
-}
-void main()
-{
-	vec4 texColor = Input.Color * texture(u_FontAtlas, Input.TexCoord);
-	vec3 msd = texture(u_FontAtlas, Input.TexCoord).rgb;
-    float sd = median(msd.r, msd.g, msd.b);
-    float screenPxDistance = screenPxRange()*(sd - 0.5);
-    float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
-	if (opacity == 0.0)
-		discard;
-	vec4 bgColor = vec4(0.0);
-    o_Color = mix(bgColor, Input.Color, opacity);
-	if (o_Color.a == 0.0)
-		discard;
-	
-	o_EntityID = v_EntityID;
-}
-)"
-, Font::GetDefault(), glm::mat4(1.0f), glm::vec4(1.0f));
+		{
+			auto view = m_Registery.view<TransformComponent, TextComponent>();
+			for (auto entity : view)
+			{
+				auto& [transform, text] = view.get<TransformComponent, TextComponent>(entity);
+				Renderer2D::DrawString(text.TextString, text.FontAsset, transform.GetTransform(), text, int(entity));
+			}
+		}
+
 		Renderer2D::EndScene();
 	}
 
@@ -497,7 +454,7 @@ void main()
 		{
 			const TagComponent& tc = view.get<TagComponent>(entity);
 			if (tc.Tag == entityName)
-				return Entity {entity, this};
+				return Entity{ entity, this };
 		}
 
 		return {};
@@ -511,7 +468,7 @@ void main()
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
-		static_assert(false);
+		static_assert(sizeof(T) == 0);
 	}
 
 	template<>
@@ -529,13 +486,13 @@ void main()
 	template<>
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 	{
-		
+
 	}
 
 	template<>
 	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
-		
+
 	}
 
 	template<>
@@ -556,11 +513,10 @@ void main()
 
 	}
 
-
 	template<>
 	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
 	{
-		
+
 	}
 
 	template<>
@@ -577,6 +533,12 @@ void main()
 
 	template<>
 	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TextComponent>(Entity entity, TextComponent& component)
 	{
 
 	}
