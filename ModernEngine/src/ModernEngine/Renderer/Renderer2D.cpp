@@ -635,6 +635,9 @@ namespace ModernEngine {
 		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
 		double y = 0.0;
 		float lineHeightOffset = 0.0f;
+		float kerningOffset = 0.0f;
+
+		const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 
 		for (size_t i = 0; i < string.size(); i++)
 		{
@@ -650,6 +653,21 @@ namespace ModernEngine {
 				continue;
 			}
 
+			if (character == ' ')
+			{
+				float advance = spaceGlyphAdvance;
+				if (i < string.size() - 1)
+				{
+					char nextCharacter = string[i + 1];
+					double dAdvance;
+					fontGeometry.getAdvance(dAdvance, character, nextCharacter);
+					advance = (float)dAdvance;
+				}
+
+				x += fsScale * advance + kerningOffset;
+				continue;
+			}
+
 			auto glyph = fontGeometry.getGlyph(character);
 			if (!glyph)
 				glyph = fontGeometry.getGlyph('?');
@@ -657,7 +675,10 @@ namespace ModernEngine {
 				return;
 
 			if (character == '\t')
-				glyph = fontGeometry.getGlyph(' ');
+			{
+				x += 4.0 * (fsScale * spaceGlyphAdvance + kerningOffset);
+				continue;
+			}
 
 			double al, ab, ar, at;
 			glyph->getQuadAtlasBounds(al, ab, ar, at);
@@ -710,8 +731,6 @@ namespace ModernEngine {
 				double advance = glyph->getAdvance();
 				char nextCharacter = string[i + 1];
 				fontGeometry.getAdvance(advance, character, nextCharacter);
-
-				double kerningOffset = 0.0f;
 				x += fsScale * advance + kerningOffset;
 			}
 		}
