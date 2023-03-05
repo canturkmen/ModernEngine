@@ -6,7 +6,7 @@
 #include "FontGeometry.h"
 #include "GlyphGeometry.h"
 
-#include "MSDFData.h"
+#include "ModernEngine/Renderer/MSDFData.h"
 
 namespace ModernEngine {
 
@@ -149,6 +149,5 @@ namespace ModernEngine {
 
 		return DefaultFont;
 	}
-
 }
 

@@ -115,6 +115,7 @@ namespace ModernEngine {
 		MN_PROFILE_FUNCTION();
 
 		// Rendering Quads
+
 		s_Data.QuadVA = VertexArray::Create();
 		s_Data.QuadVB = VertexBuffer::Create(s_Data.MaxQuads * sizeof(QuadVertex));
 
@@ -153,6 +154,7 @@ namespace ModernEngine {
 		delete[] QuadIndices;
 
 		// Rendering Circles
+
 		s_Data.CircleQuadVA = VertexArray::Create();
 		s_Data.CircleQuadVB = VertexBuffer::Create(s_Data.MaxQuads * sizeof(CircleQuadVertex));
 
@@ -173,6 +175,7 @@ namespace ModernEngine {
 		s_Data.CircleQuadVertexBufferBase = new CircleQuadVertex[s_Data.MaxVertices];
 
 		// Rendering lines
+
 		s_Data.LineVA = VertexArray::Create();
 		s_Data.LineVB = VertexBuffer::Create(s_Data.MaxQuads * sizeof(LineVertex));
 
@@ -197,7 +200,7 @@ namespace ModernEngine {
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"},
 			{ShaderDataType::Float2, "a_TexCoord"},
-			{ShaderDataType::Int, "a_EntityID"}
+			{ShaderDataType::Int,    "a_EntityID"}
 		};
 
 		s_Data.TextVB->SetBufferLayout(TextLayout);
@@ -251,6 +254,9 @@ namespace ModernEngine {
 		s_Data.LineShader->Bind();
 		s_Data.LineShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
 
+		s_Data.TextShader->Bind();
+		s_Data.TextShader->SetMat4("u_ViewProjectionMatrix", camera.GetViewProjectionMatrix());
+
 		StartBatch();
 	}
 
@@ -269,6 +275,9 @@ namespace ModernEngine {
 		s_Data.LineShader->Bind();
 		s_Data.LineShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
 
+		s_Data.TextShader->Bind();
+		s_Data.TextShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+
 		StartBatch();
 	}
 
@@ -286,6 +295,9 @@ namespace ModernEngine {
 
 		s_Data.LineShader->Bind();
 		s_Data.LineShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
+
+		s_Data.TextShader->Bind();
+		s_Data.TextShader->SetMat4("u_ViewProjectionMatrix", viewProjectionMatrix);
 
 		StartBatch();
 	}
@@ -622,66 +634,87 @@ namespace ModernEngine {
 		double x = 0.0;
 		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
 		double y = 0.0;
+		float lineHeightOffset = 0.0f;
 
-		char character = 'C';
-		auto glyph = fontGeometry.getGlyph(character);
-		if (!glyph)
-			glyph = fontGeometry.getGlyph('?');
-		if (!glyph)
-			return;
+		for (size_t i = 0; i < string.size(); i++)
+		{
+			char character = string[i];
+	
+			if(character == '\r')
+				continue;
 
-		double al, ab, ar, at;
-		glyph->getQuadAtlasBounds(al, ab, ar, at);
-		glm::vec2 texCoordsMin((float)al, (float)ab);
-		glm::vec2 texCoordsMax((float)ar, (float)at);
+			if (character == '\n')
+			{
+				x = 0;
+				y -= fsScale * metrics.lineHeight + lineHeightOffset;
+				continue;
+			}
 
-		double pl, pb, pr, pt;
-		glyph->getQuadPlaneBounds(pl, pb, pr, pt);
-		glm::vec2 quadMin((float)pl, (float)pb);
-		glm::vec2 quadMax((float)pr, (float)pt);
+			auto glyph = fontGeometry.getGlyph(character);
+			if (!glyph)
+				glyph = fontGeometry.getGlyph('?');
+			if (!glyph)
+				return;
 
-		quadMin *= fsScale, quadMax *= fsScale;
-		quadMin += glm::vec2(x, y), quadMax += glm::vec2(x, y);
+			if (character == '\t')
+				glyph = fontGeometry.getGlyph(' ');
 
-		float texelWidth = 1.0 / fontAtlasTexture->GetWidth();
-		float texelHeight = 1.0 / fontAtlasTexture->GetHeight();
-		texCoordsMin *= glm::vec2(texelWidth, texelHeight), texCoordsMax *= glm::vec2(texelWidth, texelHeight);
+			double al, ab, ar, at;
+			glyph->getQuadAtlasBounds(al, ab, ar, at);
+			glm::vec2 texCoordsMin((float)al, (float)ab);
+			glm::vec2 texCoordsMax((float)ar, (float)at);
 
-		// Rendering
+			double pl, pb, pr, pt;
+			glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+			glm::vec2 quadMin((float)pl, (float)pb);
+			glm::vec2 quadMax((float)pr, (float)pt);
 
-		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
-		s_Data.TextVertexBufferPtr->Color = color;
-		s_Data.TextVertexBufferPtr->TexCoord = {0.0f, 0.0f};
-		s_Data.TextVertexBufferPtr->EntityID = 0;
-		s_Data.TextVertexBufferPtr++;
+			quadMin *= fsScale, quadMax *= fsScale;
+			quadMin += glm::vec2(x, y), quadMax += glm::vec2(x, y);
 
-		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
-		s_Data.TextVertexBufferPtr->Color = color;
-		s_Data.TextVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
-		s_Data.TextVertexBufferPtr->EntityID = 0;
-		s_Data.TextVertexBufferPtr++;
+			float texelWidth = 1.0 / fontAtlasTexture->GetWidth();
+			float texelHeight = 1.0 / fontAtlasTexture->GetHeight();
+			texCoordsMin *= glm::vec2(texelWidth, texelHeight), texCoordsMax *= glm::vec2(texelWidth, texelHeight);
 
-		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
-		s_Data.TextVertexBufferPtr->Color = color;
-		s_Data.TextVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
-		s_Data.TextVertexBufferPtr->EntityID = 0;
-		s_Data.TextVertexBufferPtr++;
+			// Rendering
 
-		s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
-		s_Data.TextVertexBufferPtr->Color = color;
-		s_Data.TextVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
-		s_Data.TextVertexBufferPtr->EntityID = 0;
-		s_Data.TextVertexBufferPtr++;
+			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
+			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->TexCoord = texCoordsMin;
+			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr++;
 
-		s_Data.TextQuadIndexCount += 6;
-		s_Data.Stats.QuadCount++;
+			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
+			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->TexCoord = { texCoordsMin.x, texCoordsMax.y };
+			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr++;
 
-		double advance = glyph->getAdvance();
-		char nextCharacter = 'C';
-		fontGeometry.getAdvance(advance, character, nextCharacter);
+			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
+			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->TexCoord = texCoordsMax;
+			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr++;
 
-		double kerningOffset = 0.0f;
-		x += fsScale * advance + kerningOffset;
+			s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
+			s_Data.TextVertexBufferPtr->Color = color;
+			s_Data.TextVertexBufferPtr->TexCoord = { texCoordsMax.x, texCoordsMin.y };
+			s_Data.TextVertexBufferPtr->EntityID = 0;
+			s_Data.TextVertexBufferPtr++;
+
+			s_Data.TextQuadIndexCount += 6;
+			s_Data.Stats.QuadCount++;
+
+			if (i < string.size() - 1)
+			{
+				double advance = glyph->getAdvance();
+				char nextCharacter = string[i + 1];
+				fontGeometry.getAdvance(advance, character, nextCharacter);
+
+				double kerningOffset = 0.0f;
+				x += fsScale * advance + kerningOffset;
+			}
+		}
 	}	
 
 	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID /*= -1*/)

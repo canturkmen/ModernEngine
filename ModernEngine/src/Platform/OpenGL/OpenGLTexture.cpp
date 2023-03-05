@@ -7,6 +7,7 @@
 namespace ModernEngine {
 
 	namespace Utils {
+
 		static GLenum ModernEngineFormatToGLDataFormat(ImageFormat format)
 		{
 			switch (format)
@@ -33,13 +34,11 @@ namespace ModernEngine {
 	OpenGLTexture2D::OpenGLTexture2D(const TextureSpecification& specification)
 		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
 	{
-		GLenum internalformat = GL_RGBA8, dataformat = GL_RGBA;
-
 		m_InternalFormat = Utils::ModernEngineFormatToGLInternalFormat(m_Specification.Format);
 		m_DataFormat = Utils::ModernEngineFormatToGLDataFormat(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, internalformat, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
