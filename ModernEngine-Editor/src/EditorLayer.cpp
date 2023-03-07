@@ -282,7 +282,7 @@ namespace ModernEngine {
 
 		ImGui::Begin("Settings");
 		ImGui::Checkbox("Show Physics Colliders", &m_ShowPhysicsColliders);
-		ImGui::Image((ImTextureID)s_Font->GetAtlasTexture()->GetRendererID(), {512, 512}, { 0, 1 }, { 1, 0 });
+		ImGui::Image((ImTextureID)(uint64_t)s_Font->GetAtlasTexture()->GetRendererID(), {512, 512}, { 0, 1 }, { 1, 0 });
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -383,261 +383,279 @@ namespace ModernEngine {
 
 		bool isControlPressed = Input::IsKeyPressed(MN_KEY_LEFT_CONTROL) || Input::IsKeyPressed(MN_KEY_RIGHT_CONTROL);
 		bool isShiftPressed = Input::IsKeyPressed(MN_KEY_LEFT_SHIFT) || Input::IsKeyPressed(MN_KEY_RIGHT_SHIFT);
-
-		// Gizmos Shortcut
+		
+		// Shortcuts
 		switch (e.GetKeyCode())
 		{
-		case MN_KEY_N:
-		{
-			if (isControlPressed)
-				NewScene();
-
-			break;
-		}
-
-		case MN_KEY_O:
-		{
-			if (isControlPressed)
-				OpenScene();
-
-			break;
-		}
-
-		case MN_KEY_S:
-		{
-			if (isControlPressed)
+			case Key::N:
 			{
-				if (isShiftPressed)
-					SaveSceneAs();
+				if (isControlPressed)
+					NewScene();
+
+				break;
+			}
+
+			case Key::O:
+			{
+				if (isControlPressed)
+					OpenScene();
+
+				break;
+			}
+
+			case Key::S:
+			{
+				if (isControlPressed)
+				{
+					if (isShiftPressed)
+						SaveSceneAs();
+					else
+						SaveScene();
+
+					break;
+				}
+			}
+
+			case Key::D:
+			{
+				if (isControlPressed)
+					OnDuplicateSelectedEntity();
+
+				break;
+			}
+
+			case Key::Q:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = -1;
+
+				break;
+			}
+
+			case Key::W:
+			{
+				if(!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+
+				break;
+			}
+
+			case Key::E:
+			{
+				if(!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+
+				break;
+			}
+
+			case Key::R:
+			{
+				if (isControlPressed)
+					ScriptEngine::ReloadAssembly();
 				else
-					SaveScene();
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
 
 				break;
 			}
 		}
 
-		case MN_KEY_Q:
-			m_GizmoType = -1;
-			break;
+		return false;
+	}
 
-		case MN_KEY_W:
-			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-			break;
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent & e)
+	{
+		if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
+			m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
 
-		case MN_KEY_E:
-			m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-			break;
+		return false;
+	}
 
-		case MN_KEY_R:
+	void EditorLayer::OnDuplicateSelectedEntity()
+	{
+		if (m_SceneState != SceneState::Edit)
+			return;
+
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity)
+			m_EditorScene->DuplicateEntity(selectedEntity);
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		m_EditorPath = std::filesystem::path();
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+		if (!filepath.empty())
+			OpenScene(filepath);
+	}
+
+	void EditorLayer::OpenScene(const std::filesystem::path & filepath)
+	{
+		if (m_SceneState != SceneState::Edit)
+			SceneStop();
+
+		m_EditorScene = CreateRef<Scene>();
+		m_ActiveScene = m_EditorScene;
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		SceneSerializer Serializer(m_ActiveScene);
+		Serializer.Deserialize(filepath.string());
+
+		m_EditorPath = filepath;
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		if (!m_EditorPath.empty())
+			SerializeScene(m_ActiveScene, m_EditorPath);
+		else
+			SaveSceneAs();
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
+		if (!filepath.empty())
 		{
-			if (isControlPressed)
-				ScriptEngine::ReloadAssembly();
-
-			m_GizmoType = ImGuizmo::OPERATION::SCALE;
-			break;
-		}
-		}
-
-		if (Input::IsKeyPressed(MN_KEY_D))
-			OnDuplicateSelectedEntity();
-
-		return true;
-		}
-
-		bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent & e)
-		{
-			if (e.GetMouseButton() == MN_MOUSE_BUTTON_LEFT && m_ViewportHovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(MN_KEY_LEFT_CONTROL))
-				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
-
-			return false;
-		}
-
-		void EditorLayer::OnDuplicateSelectedEntity()
-		{
-			if (m_SceneState != SceneState::Edit)
-				return;
-
-			Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
-			if (selectedEntity)
-				m_EditorScene->DuplicateEntity(selectedEntity);
-		}
-
-		void EditorLayer::NewScene()
-		{
-			m_ActiveScene = CreateRef<Scene>();
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-			m_EditorPath = std::filesystem::path();
-		}
-
-		void EditorLayer::OpenScene()
-		{
-			std::string filepath = FileDialogs::OpenFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-			if (!filepath.empty())
-				OpenScene(filepath);
-		}
-
-		void EditorLayer::OpenScene(const std::filesystem::path & filepath)
-		{
-			if (m_SceneState != SceneState::Edit)
-				SceneStop();
-
-			m_EditorScene = CreateRef<Scene>();
-			m_ActiveScene = m_EditorScene;
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-			SceneSerializer Serializer(m_ActiveScene);
-			Serializer.Deserialize(filepath.string());
-
+			SerializeScene(m_ActiveScene, filepath);
 			m_EditorPath = filepath;
 		}
+	}
 
-		void EditorLayer::SaveScene()
-		{
-			if (!m_EditorPath.empty())
-				SerializeScene(m_ActiveScene, m_EditorPath);
-			else
-				SaveSceneAs();
-		}
+	void EditorLayer::SerializeScene(Ref<Scene> scene, std::filesystem::path filepath)
+	{
+		SceneSerializer Serializer(scene);
+		Serializer.Serialize(filepath.string());
+	}
 
-		void EditorLayer::SaveSceneAs()
+	void EditorLayer::UI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0 ,2 });
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0 , 0 });
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0, 0, 0, 0 });
+		auto& colors = ImGui::GetStyle().Colors;
+		const auto& hoveredButton = colors[ImGuiCol_ButtonHovered];
+		const auto& activeButton = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f });
+
+		ImGui::Begin("##type", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		bool toolbarEnable = (bool)m_ActiveScene;
+
+		ImVec4 tintColor = ImVec4(1, 1, 1, 1);
+		if (!toolbarEnable)
+			tintColor.w = 0.5f; 
+
+		// Get the icon and center it in the available content
+		float size = ImGui::GetWindowHeight() - 4.0f;
+
+		bool hasPlayOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
+		bool hasSimulateOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
+		bool hasPauseButton = m_SceneState != SceneState::Edit;
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		if(hasPlayOrStopButton)
 		{
-			std::string filepath = FileDialogs::SaveFile("ModernEngine Scene (*.modernengine)\0*.modernengine\0");
-			if (!filepath.empty())
+			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
+
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
 			{
-				SerializeScene(m_ActiveScene, filepath);
-				m_EditorPath = filepath;
+				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
+					ScenePlay();
+				else if (m_SceneState == SceneState::Play)
+					SceneStop();
 			}
 		}
-
-		void EditorLayer::SerializeScene(Ref<Scene> scene, std::filesystem::path filepath)
+		if(hasSimulateOrStopButton)
 		{
-			SceneSerializer Serializer(scene);
-			Serializer.Serialize(filepath.string());
-		}
-
-		void EditorLayer::UI_Toolbar()
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0 ,2 });
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2{ 0 , 0 });
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0, 0, 0, 0 });
-			auto& colors = ImGui::GetStyle().Colors;
-			const auto& hoveredButton = colors[ImGuiCol_ButtonHovered];
-			const auto& activeButton = colors[ImGuiCol_ButtonActive];
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ hoveredButton.x, hoveredButton.y, hoveredButton.z, 0.5f });
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ activeButton.x , activeButton.y, activeButton.z, 0.5f });
-
-			ImGui::Begin("##type", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-
-			bool toolbarEnable = (bool)m_ActiveScene;
-
-			ImVec4 tintColor = ImVec4(1, 1, 1, 1);
-			if (!toolbarEnable)
-				tintColor.w = 0.5f; 
-
-			// Get the icon and center it in the available content
-			float size = ImGui::GetWindowHeight() - 4.0f;
-
-			bool hasPlayOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
-			bool hasSimulateOrStopButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
-			bool hasPauseButton = m_SceneState != SceneState::Edit;
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-
 			if(hasPlayOrStopButton)
-			{
-				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_StartButton : m_StopButton;
-
-				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
-				{
-					if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
-						ScenePlay();
-					else if (m_SceneState == SceneState::Play)
-						SceneStop();
-				}
-			}
-			if(hasSimulateOrStopButton)
-			{
-				if(hasPlayOrStopButton)
-					ImGui::SameLine();
-
-				Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
-
-				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
-				{
-					if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
-						SimulatePlay();
-					else if (m_SceneState == SceneState::Simulate)
-						SceneStop();
-				}
-			}
-			if (hasPauseButton)
-			{
-				bool isPaused = m_ActiveScene->GetIsPaused();
 				ImGui::SameLine();
-				Ref<Texture2D> icon = m_PauseButton;
-				if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
-				{
-					m_ActiveScene->SetIsPaused(!isPaused);
-				}
 
-				if (isPaused)
+			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_SimulateButton : m_StopButton;
+
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+			{
+				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
+					SimulatePlay();
+				else if (m_SceneState == SceneState::Simulate)
+					SceneStop();
+			}
+		}
+		if (hasPauseButton)
+		{
+			bool isPaused = m_ActiveScene->GetIsPaused();
+			ImGui::SameLine();
+			Ref<Texture2D> icon = m_PauseButton;
+			if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
+			{
+				m_ActiveScene->SetIsPaused(!isPaused);
+			}
+
+			if (isPaused)
+			{
+				ImGui::SameLine();
 				{
-					ImGui::SameLine();
+					Ref<Texture2D> icon = m_StepForwardButton;
+					if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
 					{
-						Ref<Texture2D> icon = m_StepForwardButton;
-						if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0, 0, 0, 0), tintColor) && toolbarEnable)
-						{
-							m_ActiveScene->Step(1);
-						}
+						m_ActiveScene->Step(1);
 					}
 				}
 			}
-
-			ImGui::PopStyleVar(2);
-			ImGui::PopStyleColor(3);
-			ImGui::End();
 		}
 
-		void EditorLayer::ScenePlay()
-		{
-			if (m_SceneState == SceneState::Simulate)
-				SceneStop();
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
+		ImGui::End();
+	}
 
-			m_SceneState = SceneState::Play;
-			m_ActiveScene = Scene::Copy(m_EditorScene);
-			m_ActiveScene->OnStartRuntime();
+	void EditorLayer::ScenePlay()
+	{
+		if (m_SceneState == SceneState::Simulate)
+			SceneStop();
 
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-		}
+		m_SceneState = SceneState::Play;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
+		m_ActiveScene->OnStartRuntime();
 
-		void EditorLayer::SimulatePlay()
-		{
-			if (m_SceneState == SceneState::Play)
-				SceneStop();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
 
-			m_SceneState = SceneState::Simulate;
-			m_ActiveScene = Scene::Copy(m_EditorScene);
-			m_ActiveScene->OnSimulationStart();
+	void EditorLayer::SimulatePlay()
+	{
+		if (m_SceneState == SceneState::Play)
+			SceneStop();
 
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-		}
+		m_SceneState = SceneState::Simulate;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
+		m_ActiveScene->OnSimulationStart();
 
-		void EditorLayer::SceneStop()
-		{
-			m_SceneState = SceneState::Edit;
-			m_ActiveScene = m_EditorScene;
-			m_ActiveScene->OnStopRuntime();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
 
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-		}
+	void EditorLayer::SceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+		m_ActiveScene = m_EditorScene;
+		m_ActiveScene->OnStopRuntime();
 
-		void EditorLayer::ScenePause()
-		{
-			if (m_SceneState == SceneState::Edit)
-				return;
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
 
-			m_ActiveScene->SetIsPaused(true);
-		}
+	void EditorLayer::ScenePause()
+	{
+		if (m_SceneState == SceneState::Edit)
+			return;
+
+		m_ActiveScene->SetIsPaused(true);
+	}
 }
