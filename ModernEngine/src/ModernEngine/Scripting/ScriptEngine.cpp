@@ -11,6 +11,7 @@
 
 #include "ModernEngine/Scripting/ScriptGlue.h"
 #include "ModernEngine/Core/Application.h"
+#include "ModernEngine/Core/FileSystem.h"
 
 namespace ModernEngine {
 
@@ -35,35 +36,12 @@ namespace ModernEngine {
 
 	namespace Utils {
 
-
-		static char* ReadFileBytes(const std::filesystem::path& filePath, uint32_t* outSize)
-		{
-			std::ifstream inputFile(filePath, std::ios::binary | std::ios::ate);
-			if (!inputFile)
-				return nullptr;
-
-			std::streampos end = inputFile.tellg();
-			inputFile.seekg(0, std::ios::beg);
-			uint64_t size = end - inputFile.tellg();
-
-			if (size == 0)
-				return nullptr;
-
-			char* buffer = new char[size];
-			inputFile.read((char*)buffer, size);
-			inputFile.close();
-
-			*outSize = (uint32_t)size;
-			return buffer;
-		}
-
 		static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath, bool loadPDB = false)
 		{
-			uint32_t fileSize = 0;
-			char* fileData = ReadFileBytes(assemblyPath, &fileSize);
+			ScopedBuffer fileData = FileSystem::ReadFileBinary(assemblyPath);
 
 			MonoImageOpenStatus status;
-			MonoImage* image = mono_image_open_from_data_full(fileData, fileSize, 1, &status, 0);
+			MonoImage* image = mono_image_open_from_data_full(fileData.As<char>(), fileData.Size(), 1, &status, 0);
 
 			if (status != MONO_IMAGE_OK)
 			{
@@ -79,19 +57,16 @@ namespace ModernEngine {
 				pdbPath.replace_extension(".pdb");
 				if (std::filesystem::exists(pdbPath))
 				{
-					uint32_t pdbFileSize = 0;
-					char* pdbFileData = ReadFileBytes(pdbPath, &pdbFileSize);
-					mono_debug_open_image_from_memory(image, (const mono_byte*)pdbFileData, pdbFileSize);
-					delete[] pdbFileData;
+					ScopedBuffer pdbFileData = FileSystem::ReadFileBinary(pdbPath);
+					mono_debug_open_image_from_memory(image, pdbFileData.As<const mono_byte>(), pdbFileData.Size());
 				}
 			}
 
-			std::string strAssemblyPath = assemblyPath.string(); 
+			std::string strAssemblyPath = assemblyPath.string();
 
 			MonoAssembly* assembly = mono_assembly_load_from_full(image, strAssemblyPath.c_str(), &status, 0);
 			mono_image_close(image);
 
-			delete[] fileData;
 			return assembly;
 		}
 
@@ -125,7 +100,7 @@ namespace ModernEngine {
 		}
 	}
 
-	struct ScriptEngineData 
+	struct ScriptEngineData
 	{
 		MonoDomain* RootDomain = nullptr;
 		MonoDomain* AppDomain = nullptr;
@@ -243,9 +218,9 @@ namespace ModernEngine {
 				fullName = fmt::format("{}.{}", nameSpace, name);
 			else
 				fullName = name;
-				
+
 			MonoClass* monoClass = mono_class_from_name(s_Data->AppAssemblyImage, nameSpace, name);
-			if(monoClass == entityClass ) continue;
+			if (monoClass == entityClass) continue;
 
 			bool isSubclass = mono_class_is_subclass_of(monoClass, entityClass, false);
 			if (!isSubclass)
@@ -268,7 +243,7 @@ namespace ModernEngine {
 					ScriptClassFieldType fieldType = Utils::MonoTypeToScriptClassFieldType(type);
 					MN_CORE_WARN("{}: type: {}", fieldName, Utils::ScriptClassFieldTypeToString(fieldType));
 
-					scriptClass->m_Fields[fieldName] = { fieldType, fieldName, field};
+					scriptClass->m_Fields[fieldName] = { fieldType, fieldName, field };
 				}
 			}
 		}
@@ -296,7 +271,7 @@ namespace ModernEngine {
 			mono_debug_domain_create(s_Data->RootDomain);
 
 		mono_thread_set_main(mono_thread_current());
-	}	
+	}
 
 	void ScriptEngine::LoadAssembly(const std::filesystem::path& filePath)
 	{
@@ -350,7 +325,7 @@ namespace ModernEngine {
 	}
 
 	void ScriptEngine::OnRuntimeStop()
-	{	
+	{
 		s_Data->SceneContext = nullptr;
 		s_Data->EntityInstances.clear();
 	}
@@ -362,7 +337,7 @@ namespace ModernEngine {
 		{
 			UUID entityId = entity.GetUUID();
 
-			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity); 
+			Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity);
 			s_Data->EntityInstances[entityId] = instance;
 
 			// Copy the script field instance values
@@ -454,7 +429,7 @@ namespace ModernEngine {
 	}
 
 	MonoObject* ScriptClass::InvokeMethod(MonoMethod* method, MonoObject* instance, void** params)
-	{	
+	{
 		MonoObject* exception = nullptr;
 		return mono_runtime_invoke(method, instance, params, &exception);
 	}
