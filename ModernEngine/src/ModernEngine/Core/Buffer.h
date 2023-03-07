@@ -5,31 +5,79 @@
 
 namespace ModernEngine {
 
-	class Buffer
+	struct Buffer
 	{
-	public:
-		uint8_t* m_Data = nullptr;
-		uint64_t m_Size = 0;
+		uint8_t* Data = nullptr;
+		uint64_t Size = 0;
+
+		Buffer() = default;
 
 		Buffer(uint64_t size)
 		{
 			Allocate(size);
 		}
 
+		Buffer(const Buffer&) = default;
+
+		static Buffer Copy(Buffer other)
+		{
+			Buffer result(other.Size);
+			memcpy(result.Data, other.Data, other.Size);
+			return result;
+		}
+
 		void Allocate(uint64_t size)
 		{
 			Release();
 
-			m_Data = new uint8_t[size];
-			m_Size = size;
+			Data = new uint8_t[size];
+			Size = size;
 		}
 
 		void Release()
 		{
-			delete m_Data;
-			m_Data = nullptr;
-			m_Size = 0;
+			delete[] Data;
+			Data = nullptr;
+			Size = 0;
+		}
+
+		template<typename T>
+		T* As()
+		{
+			return (T*)Data;
+		}
+
+		operator bool()
+		{
+			return (bool)Data;
 		}
 	};
 
+	struct ScopedBuffer
+	{
+		ScopedBuffer(Buffer buffer)
+			:m_Buffer(buffer)
+		{
+
+		}
+
+		~ScopedBuffer()
+		{
+			m_Buffer.Release();
+		}
+
+		uint8_t* Data() const { return m_Buffer.Data; }
+		uint64_t Size() const { return m_Buffer.Size; }
+
+		template<typename T>
+		T* As()
+		{
+			return m_Buffer.As<T>();
+		}
+
+		operator bool() { return m_Buffer; }
+
+	private:
+		Buffer m_Buffer;
+	};
 }
