@@ -15,8 +15,6 @@
 
 namespace ModernEngine {
 
-	extern const std::filesystem::path g_AssetsPath;
-
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 	{
 		SetContext(scene);
@@ -389,7 +387,7 @@ namespace ModernEngine {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content Browser Item"))
 				{
 					const wchar_t* data = (const wchar_t*)payload->Data;
-					std::filesystem::path texturePath = std::filesystem::path(g_AssetsPath) / data;
+					std::filesystem::path texturePath(data);
 					component.Texture = Texture2D::Create(texturePath.string());
 				}
 				ImGui::EndDragDropTarget();

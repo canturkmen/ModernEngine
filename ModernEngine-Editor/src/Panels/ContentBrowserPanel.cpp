@@ -1,5 +1,6 @@
 #include "mnpch.h"
 #include "ContentBrowserPanel.h"
+#include "ModernEngine/Project/Project.h"
 
 #include <imgui/imgui.h>
 
@@ -8,7 +9,7 @@ namespace ModernEngine {
 	extern const std::filesystem::path g_AssetsPath = "assets";
 
 	ContentBrowserPanel::ContentBrowserPanel()
-		:m_CurrentDirectory(g_AssetsPath)
+		: m_BaseDirectory(Project::GetAssetDirectory()), m_CurrentDirectory(Project::GetAssetDirectory())
 	{
 		m_FolderIcon = Texture2D::Create("Resources/Icons/ContentBrowser/FolderIcon.png");
 		m_FileIcon = Texture2D::Create("Resources/Icons/ContentBrowser/FileIcon.png");
@@ -18,7 +19,7 @@ namespace ModernEngine {
 	{
 		ImGui::Begin("Content Browser");
 		
-		if (m_CurrentDirectory != std::filesystem::path(g_AssetsPath))
+		if (m_CurrentDirectory != std::filesystem::path(m_BaseDirectory))
 		{
 			if (ImGui::Button("<-"))
 			{
@@ -49,7 +50,7 @@ namespace ModernEngine {
 
 			if (ImGui::BeginDragDropSource())
 			{
-				auto relativePath = std::filesystem::relative(path, g_AssetsPath);
+				std::filesystem::path relativePath(path);
 				const wchar_t* payloadData = relativePath.c_str();
 				ImGui::SetDragDropPayload("Content Browser Item", payloadData, (wcslen(payloadData) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();

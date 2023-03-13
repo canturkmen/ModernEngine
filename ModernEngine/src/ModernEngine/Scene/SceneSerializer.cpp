@@ -6,6 +6,7 @@
 
 #include "ModernEngine/Scripting/ScriptEngine.h"
 #include "ModernEngine/Core/UUID.h"
+#include "ModernEngine/Project/Project.h"
 
 #include <yaml-cpp/yaml.h>
 #include <fstream>
@@ -104,7 +105,7 @@ namespace YAML {
 				return false;
 
 			rhs = node[0].as<uint64_t>();
-			
+
 			return true;
 		}
 	};
@@ -112,12 +113,12 @@ namespace YAML {
 
 namespace ModernEngine {
 
-	#define WRITE_SCRIPT_FIELD(FieldType, Type)					   \
+#define WRITE_SCRIPT_FIELD(FieldType, Type)					   \
 			case ScriptClassFieldType::FieldType:				   \
 				 out << scriptFieldInstance.GetValue<Type>();	   \
 				 break	
 
-	#define READ_SCRIPT_FIELD(FieldType, Type)					   \
+#define READ_SCRIPT_FIELD(FieldType, Type)					   \
 			case ScriptClassFieldType::FieldType:				   \
 			{													   \
 				Type data = scriptField["Data"].as<Type>();		   \
@@ -125,7 +126,7 @@ namespace ModernEngine {
 				break;                                             \
 			}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2 & value)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& value)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << value.x << value.y << YAML::EndSeq;
@@ -168,20 +169,20 @@ namespace ModernEngine {
 		if (bodyTypeString == "Static")			return Rigidbody2DComponent::BodyType::Static;
 		if (bodyTypeString == "Dynamic")		return Rigidbody2DComponent::BodyType::Dynamic;
 		if (bodyTypeString == "Kinematic")		return Rigidbody2DComponent::BodyType::Kinematic;
-	
+
 		return Rigidbody2DComponent::BodyType::Static;
 	}
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	{
 		out << YAML::BeginMap;
-		out << YAML::Key << "Entity" << YAML::Value <<  entity.GetUUID();
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
 		if (entity.HasComponent<TagComponent>())
 		{
 			out << YAML::Key << "TagComponent";
 			out << YAML::BeginMap;
-			
+
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
 			out << YAML::Key << "Tag" << YAML::Value << tag.c_str();
 
@@ -278,7 +279,7 @@ namespace ModernEngine {
 					out << YAML::EndMap;
 				}
 				out << YAML::EndSeq;
-				}
+			}
 			out << YAML::EndMap;
 		}
 
@@ -287,12 +288,12 @@ namespace ModernEngine {
 			out << YAML::Key << "SpriteRendererComponent";
 			out << YAML::BeginMap;
 
-			auto&  spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
+			auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
 
-			if(spriteRendererComponent.Texture)
+			if (spriteRendererComponent.Texture)
 				out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Texture->GetFilePath();
-			
+
 			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.TilingFactor;
 
 			out << YAML::EndMap;
@@ -380,17 +381,17 @@ namespace ModernEngine {
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 
 		m_Scene->m_Registery.each([&](auto entityID)
-		{
-			Entity entity = { entityID, m_Scene.get() };
-			if (!entity)
-				return;
+			{
+				Entity entity = { entityID, m_Scene.get() };
+				if (!entity)
+					return;
 
-			SerializeEntity(out, entity);
-		});
+				SerializeEntity(out, entity);
+			});
 
 		out << YAML::EndSeq;
 		out << YAML::EndMap;
-		
+
 		std::ofstream fout(filepath);
 		fout << out.c_str();
 	}
@@ -408,7 +409,7 @@ namespace ModernEngine {
 		{
 			data = YAML::LoadFile(filepath);
 		}
-		catch(YAML::ParserException e)
+		catch (YAML::ParserException e)
 		{
 			MN_CORE_ERROR("Failed to load .modernengine file '{0}'\n", filepath, e.what());
 			return false;
@@ -425,11 +426,13 @@ namespace ModernEngine {
 			for (auto entity : entities)
 			{
 				uint64_t uuid = entity["Entity"].as<uint64_t>();
-				
+
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
+
+				MN_CORE_INFO("Name is: {0}", name);
 
 				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 
@@ -480,8 +483,8 @@ namespace ModernEngine {
 							std::string typeName = scriptField["Type"].as<std::string>();
 							ScriptClassFieldType type = Utils::ScriptClassFieldTypeFromString(typeName);
 							ScriptFieldInstance& scriptFieldInstance = scriptFieldInstanceMap[name];
-							
-							if(scriptFieldInstanceMap.find(name) == scriptFieldInstanceMap.end())
+
+							if (scriptFieldInstanceMap.find(name) == scriptFieldInstanceMap.end())
 								continue;
 
 							scriptFieldInstance.Field = entityFields.at(name);
@@ -515,7 +518,11 @@ namespace ModernEngine {
 					spriteRenderer.Color = spriteRendererComponent["Color"].as<glm::vec4>();
 
 					if (spriteRendererComponent["TexturePath"])
-						spriteRenderer.Texture = Texture2D::Create(spriteRendererComponent["TexturePath"].as<std::string>());
+					{
+						std::string texturePath = spriteRendererComponent["TexturePath"].as<std::string>();
+						auto path = Project::GetAssetFileSystemPath(texturePath);
+						spriteRenderer.Texture = Texture2D::Create(path.string());
+					}
 
 					if (spriteRendererComponent["TilingFactor"])
 						spriteRenderer.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
@@ -529,7 +536,7 @@ namespace ModernEngine {
 					circleRenderer.Thickness = circleRendererComponent["Thickness"].as<float>();
 					circleRenderer.Fade = circleRendererComponent["Fade"].as<float>();
 				}
-				
+
 				auto rb2dComponent = entity["Rigidbody2DComponent"];
 				if (rb2dComponent)
 				{

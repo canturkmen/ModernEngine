@@ -17,8 +17,6 @@
 
 namespace ModernEngine {
 
-	extern const std::filesystem::path g_AssetsPath;
-
 	static Ref<Font> s_Font;
 
 	EditorLayer::EditorLayer()
@@ -48,9 +46,13 @@ namespace ModernEngine {
 		auto& commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			SceneSerializer serialize(m_ActiveScene);
-			serialize.Deserialize(sceneFilePath);
+			auto filePath = commandLineArgs[1];
+			MN_CORE_INFO("Filepath: {0}", filePath);
+			OpenProject(filePath);
+		}
+		else
+		{
+			NewProject();
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.01f, 1000.0f);
@@ -264,7 +266,7 @@ namespace ModernEngine {
 		}
 
 		m_SceneHierarchyPanel.OnImGuiRender();
-		m_ContentBrowserPanel.OnImGuiRender();
+		m_ContentBrowserPanel->OnImGuiRender();
 
 		ImGui::Begin("Stats");
 
@@ -305,7 +307,7 @@ namespace ModernEngine {
 			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content Browser Item"))
 			{
 				const wchar_t* data = (const wchar_t*)payload->Data;
-				OpenScene(std::filesystem::path(g_AssetsPath /data));
+				OpenScene(data);
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -480,6 +482,26 @@ namespace ModernEngine {
 			m_EditorScene->DuplicateEntity(selectedEntity);
 	}
 
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+
+	void EditorLayer::OpenProject(const std::filesystem::path& filepath)
+	{
+		if (Project::Load(filepath))
+		{
+			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startScenePath);
+			m_ContentBrowserPanel = CreateScope<ContentBrowserPanel>();
+		}
+	}
+
+	void EditorLayer::SaveProject()
+	{
+		
+	}
+
 	void EditorLayer::NewScene()
 	{
 		m_ActiveScene = CreateRef<Scene>();
@@ -501,15 +523,16 @@ namespace ModernEngine {
 		if (m_SceneState != SceneState::Edit)
 			SceneStop();
 
-		m_EditorScene = CreateRef<Scene>();
-		m_ActiveScene = m_EditorScene;
-		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+		Ref<Scene> newScene = CreateRef<Scene>();
+		SceneSerializer serializer(newScene);
+		if (serializer.Deserialize(filepath.string()))
+		{
+			m_EditorScene = newScene;
+			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 
-		SceneSerializer Serializer(m_ActiveScene);
-		Serializer.Deserialize(filepath.string());
-
-		m_EditorPath = filepath;
+			m_ActiveScene = m_EditorScene;
+			m_EditorPath = filepath;
+		}
 	}
 
 	void EditorLayer::SaveScene()

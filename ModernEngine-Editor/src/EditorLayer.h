@@ -26,6 +26,10 @@ namespace ModernEngine {
 
 		void OnDuplicateSelectedEntity();
 
+		void NewProject();
+		void OpenProject(const std::filesystem::path& filepath);
+		void SaveProject();
+
 		void NewScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& filepath);
@@ -65,7 +69,7 @@ namespace ModernEngine {
 		bool m_ShowPhysicsColliders = false;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
-		ContentBrowserPanel m_ContentBrowserPanel;
+		Scope<ContentBrowserPanel> m_ContentBrowserPanel;
 
 		Ref<Texture2D> m_StartButton, m_StopButton, m_SimulateButton, m_PauseButton, m_StepForwardButton;
 		enum class SceneState 

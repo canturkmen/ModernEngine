@@ -136,10 +136,6 @@ Entities:
       Translation: [-7.91351604, -0.255172849, 0]
       Rotation: [0, 0, 2.76275198e-08]
       Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.104657516, 0.0995057076, 0.145161271, 1]
-      TexturePath: assets\textures\NetflixLogo.png
-      TilingFactor: 1
     Rigidbody2DComponent:
       Body Type: Dynamic
       Fixed Rotation: false

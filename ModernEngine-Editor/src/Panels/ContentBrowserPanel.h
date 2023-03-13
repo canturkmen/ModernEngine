@@ -15,6 +15,7 @@ namespace ModernEngine {
 		Ref<Texture2D> m_FolderIcon;
 		Ref<Texture2D> m_FileIcon;
 
+		std::filesystem::path m_BaseDirectory;
 		std::filesystem::path m_CurrentDirectory;
 	};
 }

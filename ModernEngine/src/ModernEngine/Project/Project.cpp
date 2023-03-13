@@ -17,6 +17,7 @@ namespace ModernEngine {
 		ProjectSerializer serializer(project);
 		if (serializer.Deserialize(filepath))
 		{
+			project->m_ProjectDirectory = filepath.parent_path();
 			s_ActiveProject = project;
 			return s_ActiveProject;
 		}
@@ -26,9 +27,12 @@ namespace ModernEngine {
 
 	bool Project::Save(const std::filesystem::path& filepath)
 	{
-		ProjectSerializer deserializer(s_ActiveProject);
-		if (deserializer.Serialize(filepath))
+		ProjectSerializer serializer(s_ActiveProject);
+		if (serializer.Serialize(filepath))
+		{
+			s_ActiveProject->m_ProjectDirectory = filepath.parent_path();
 			return true;
+		}
 
 		return false;
 	}
