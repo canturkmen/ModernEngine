@@ -306,7 +306,7 @@ namespace ModernEngine {
 		{
 			if(const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content Browser Item"))
 			{
-				const wchar_t* data = (const wchar_t*)payload->Data;
+				const wchar_t* data = (const wchar_t*)payload->Data; 
 				OpenScene(data);
 			}
 			ImGui::EndDragDropTarget();
@@ -491,6 +491,7 @@ namespace ModernEngine {
 	{
 		if (Project::Load(filepath))
 		{
+			auto assetDirectory = Project::GetAssetDirectory();
 			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
 			OpenScene(startScenePath);
 			m_ContentBrowserPanel = CreateScope<ContentBrowserPanel>();

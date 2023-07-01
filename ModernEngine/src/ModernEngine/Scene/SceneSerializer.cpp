@@ -293,6 +293,7 @@ namespace ModernEngine {
 
 			if (spriteRendererComponent.Texture)
 				out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Texture->GetFilePath();
+			
 
 			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.TilingFactor;
 
@@ -520,8 +521,7 @@ namespace ModernEngine {
 					if (spriteRendererComponent["TexturePath"])
 					{
 						std::string texturePath = spriteRendererComponent["TexturePath"].as<std::string>();
-						auto path = Project::GetAssetFileSystemPath(texturePath);
-						spriteRenderer.Texture = Texture2D::Create(path.string());
+						spriteRenderer.Texture = Texture2D::Create(texturePath);
 					}
 
 					if (spriteRendererComponent["TilingFactor"])
