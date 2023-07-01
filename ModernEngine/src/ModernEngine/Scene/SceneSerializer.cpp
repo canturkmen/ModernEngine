@@ -450,7 +450,6 @@ namespace ModernEngine {
 				{
 					auto& cp = deserializedEntity.AddComponent<CameraComponent>();
 					auto& cameraProps = cameraComponent["Camera"];
-
 					cp.m_Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					cp.m_Camera.SetPerspectiveCameraFOV(cameraProps["PerspectiveFOV"].as<float>());
@@ -463,6 +462,7 @@ namespace ModernEngine {
 
 					cp.Primary = cameraComponent["Primary"].as<bool>();
 					cp.FixedAspectRatio = cameraComponent["FixedAspectRatio"].as<bool>();
+
 				}
 
 				auto scriptComponent = entity["ScriptComponent"];

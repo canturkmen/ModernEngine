@@ -1,12 +1,38 @@
 Scene: Untitled Scene Name
 Entities:
-  - Entity: 652161454
+  - Entity: 1139708777
     TagComponent:
-      Tag: Square Player
+      Tag: wqeqweqwe
     TransformComponent:
       Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
-    SpriteRendererComponent:
-      Color: [0.160672471, 0.34245947, 0.65322578, 1]
-      TilingFactor: 1
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 652161454
+    TagComponent:
+      Tag: Square Player
+    TransformComponent:
+      Translation: [-1.43153, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      ClassName: Sandbox.Player
+      ScriptFields:
+        - Name: Speed
+          Type: Float
+          Data: 11
+    TextComponent:
+      TextString: ewfgwefe
+      Color: [1, 1, 1, 1]
+      Kerning: 0
+      LineSpacing: 0
